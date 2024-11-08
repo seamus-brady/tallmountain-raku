@@ -1,0 +1,17 @@
+{
+    "name": "TallMountain",
+    "description": "An AI agent platform",
+    "version": "0.1",
+    "raku": "6.*",
+    "auth": "Seamus Brady <seamus@corvideon.ie>",
+    "depends": [
+        "Env::Dotenv",
+        "OO::Actors"
+    ],
+    "provides": {
+        "tallmountain": "lib/tallmountain.rakumod",
+        "DotEnv": "lib/DotEnv.rakumod"
+    },
+    "license": "Proprietary",
+    "source-url": "http://www.tallmountain.io"
+}

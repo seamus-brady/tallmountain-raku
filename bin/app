@@ -1,0 +1,37 @@
+#!/usr/bin/env raku
+use v6.d;
+use lib 'lib';
+use DotEnv;
+use OO::Actors;
+
+DotEnv.load_env_file();
+
+for %*ENV.kv -> $key, $value {
+    "$key: $value".say;
+}
+
+my %dotenv = DotEnv.dotenv_values();
+
+say %dotenv{"OPENAI_API_KEY"};
+
+enum Severity <Fatal Error Warning Notice>;
+
+actor EventLog {
+    has %!events-by-level{Severity};
+
+    method log(Severity $level, Str $message) {
+        push %!events-by-level{$level}, $message;
+    }
+
+    method latest-entries(Severity $level-limit) {
+        my @found;
+        for %!events-by-level.kv -> $level, @messages {
+            next if $level > $level-limit;
+            push @found, @messages;
+        }
+        return @found;
+    }
+}
+my $log = EventLog.new;
+$log.log(Error, "Something went wrong");
+say await $log.latest-entries(Error);

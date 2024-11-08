@@ -5,3 +5,9 @@
 .precomp
 lib/.precomp
 
+# env file
+.env
+
+# intellij
+.idea/
+tallmountain-raku.iml
