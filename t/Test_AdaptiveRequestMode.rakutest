@@ -1,0 +1,45 @@
+use v6;
+use Test;
+use AdaptiveRequestMode;
+
+plan 5;
+
+subtest 'Precision Mode' => {
+    my $precision = AdaptiveRequestMode.precision-mode;
+    is $precision.mode, AdaptiveRequestMode::Mode::PRECISION_MODE, 'Mode should be Precision Mode';
+    is $precision.temperature, 0.2, 'Temperature should be 0.2';
+    is $precision.top-p, 0.1, 'Top-p should be 0.1';
+    is $precision.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+}
+
+subtest 'Controlled Creative Mode' => {
+    my $creative = AdaptiveRequestMode.controlled-creative-mode;
+    is $creative.mode, AdaptiveRequestMode::Mode::CONTROLLED_CREATIVE_MODE, 'Mode should be Controlled Creative Mode';
+    is $creative.temperature, 0.2, 'Temperature should be 0.2';
+    is $creative.top-p, 0.9, 'Top-p should be 0.9';
+    is $creative.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+}
+
+subtest 'Dynamic Focused Mode' => {
+    my $focused = AdaptiveRequestMode.dynamic-focused-mode;
+    is $focused.mode, AdaptiveRequestMode::Mode::DYNAMIC_FOCUSED_MODE, 'Mode should be Dynamic Focused Mode';
+    is $focused.temperature, 0.9, 'Temperature should be 0.9';
+    is $focused.top-p, 0.2, 'Top-p should be 0.2';
+    is $focused.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+}
+
+subtest 'Exploratory Mode' => {
+    my $exploratory = AdaptiveRequestMode.exploratory-mode;
+    is $exploratory.mode, AdaptiveRequestMode::Mode::EXPLORATORY_MODE, 'Mode should be Exploratory Mode';
+    is $exploratory.temperature, 0.9, 'Temperature should be 0.9';
+    is $exploratory.top-p, 0.9, 'Top-p should be 0.9';
+    is $exploratory.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+}
+
+subtest 'Balanced Mode' => {
+    my $balanced = AdaptiveRequestMode.balanced-mode;
+    is $balanced.mode, AdaptiveRequestMode::Mode::BALANCED_MODE, 'Mode should be Balanced Mode';
+    is $balanced.temperature, 0.5, 'Temperature should be 0.5';
+    is $balanced.top-p, 0.5, 'Top-p should be 0.5';
+    is $balanced.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+}

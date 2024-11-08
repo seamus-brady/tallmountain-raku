@@ -10,7 +10,8 @@
     ],
     "provides": {
         "tallmountain": "lib/tallmountain.rakumod",
-        "DotEnv": "lib/DotEnv.rakumod"
+        "DotEnv": "lib/DotEnv.rakumod",
+        "AdaptiveRequestMode": "lib/AdaptiveRequestMode.rakumod"
     },
     "license": "Proprietary",
     "source-url": "http://www.tallmountain.io"
