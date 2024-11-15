@@ -1,45 +1,54 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 use v6;
 use Test;
-use AdaptiveRequestMode;
+use LLM::AdaptiveRequestMode;
 
 plan 5;
 
-subtest 'Precision Mode' => {
-    my $precision = AdaptiveRequestMode.precision-mode;
-    is $precision.mode, AdaptiveRequestMode::Mode::PRECISION_MODE, 'Mode should be Precision Mode';
+subtest 'LLM::AdaptiveRequestMode Precision Mode' => {
+    my $precision = LLM::AdaptiveRequestMode.precision-mode;
+    is $precision.mode, LLM::AdaptiveRequestMode::Mode::PRECISION_MODE, 'Mode should be Precision Mode';
     is $precision.temperature, 0.2, 'Temperature should be 0.2';
     is $precision.top-p, 0.1, 'Top-p should be 0.1';
-    is $precision.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $precision.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
 }
 
-subtest 'Controlled Creative Mode' => {
-    my $creative = AdaptiveRequestMode.controlled-creative-mode;
-    is $creative.mode, AdaptiveRequestMode::Mode::CONTROLLED_CREATIVE_MODE, 'Mode should be Controlled Creative Mode';
+subtest 'LLM::AdaptiveRequestMode Controlled Creative Mode' => {
+    my $creative = LLM::AdaptiveRequestMode.controlled-creative-mode;
+    is $creative.mode, LLM::AdaptiveRequestMode::Mode::CONTROLLED_CREATIVE_MODE, 'Mode should be Controlled Creative Mode';
     is $creative.temperature, 0.2, 'Temperature should be 0.2';
     is $creative.top-p, 0.9, 'Top-p should be 0.9';
-    is $creative.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $creative.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
 }
 
-subtest 'Dynamic Focused Mode' => {
-    my $focused = AdaptiveRequestMode.dynamic-focused-mode;
-    is $focused.mode, AdaptiveRequestMode::Mode::DYNAMIC_FOCUSED_MODE, 'Mode should be Dynamic Focused Mode';
+subtest 'LLM::AdaptiveRequestMode Dynamic Focused Mode' => {
+    my $focused = LLM::AdaptiveRequestMode.dynamic-focused-mode;
+    is $focused.mode, LLM::AdaptiveRequestMode::Mode::DYNAMIC_FOCUSED_MODE, 'Mode should be Dynamic Focused Mode';
     is $focused.temperature, 0.9, 'Temperature should be 0.9';
     is $focused.top-p, 0.2, 'Top-p should be 0.2';
-    is $focused.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $focused.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
 }
 
-subtest 'Exploratory Mode' => {
-    my $exploratory = AdaptiveRequestMode.exploratory-mode;
-    is $exploratory.mode, AdaptiveRequestMode::Mode::EXPLORATORY_MODE, 'Mode should be Exploratory Mode';
+subtest 'LLM::AdaptiveRequestMode Exploratory Mode' => {
+    my $exploratory = LLM::AdaptiveRequestMode.exploratory-mode;
+    is $exploratory.mode, LLM::AdaptiveRequestMode::Mode::EXPLORATORY_MODE, 'Mode should be Exploratory Mode';
     is $exploratory.temperature, 0.9, 'Temperature should be 0.9';
     is $exploratory.top-p, 0.9, 'Top-p should be 0.9';
-    is $exploratory.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $exploratory.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
 }
 
-subtest 'Balanced Mode' => {
-    my $balanced = AdaptiveRequestMode.balanced-mode;
-    is $balanced.mode, AdaptiveRequestMode::Mode::BALANCED_MODE, 'Mode should be Balanced Mode';
+subtest 'LLM::AdaptiveRequestMode Balanced Mode' => {
+    my $balanced = LLM::AdaptiveRequestMode.balanced-mode;
+    is $balanced.mode, LLM::AdaptiveRequestMode::Mode::BALANCED_MODE, 'Mode should be Balanced Mode';
     is $balanced.temperature, 0.5, 'Temperature should be 0.5';
     is $balanced.top-p, 0.5, 'Top-p should be 0.5';
-    is $balanced.max-tokens, AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $balanced.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
 }

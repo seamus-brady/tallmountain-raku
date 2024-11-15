@@ -1,0 +1,40 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+use v6.d;
+use Test;
+use lib 'lib';
+use LLM::Messages;
+
+subtest 'LLM::Messages test initialise' => {
+    my $messages = LLM::Messages.new();
+    ok $messages, 'LLM::Messages initialised';
+}
+
+# Test build method
+subtest 'LLM::Messages test build-messages' => {
+    my @test_messages = (
+        { role => 'system', content => 'You are a helpful assistant.' },
+        { role => 'user', content => 'Knock knock.' },
+        { role => 'assistant', content => "Who's there?" },
+        { role => 'user', content => 'Orange.' }
+    );
+
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build-messages('Knock knock.', LLM::Messages.USER);
+    $messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
+    $messages.build-messages('Orange.', LLM::Messages.USER);
+
+    is-deeply $messages.get-messages, @test_messages, 'build method should correctly build messages';
+}
+
+
+
+done-testing;

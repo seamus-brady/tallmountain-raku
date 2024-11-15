@@ -1,18 +1,22 @@
 {
-    "name": "TallMountain",
-    "description": "An AI agent platform",
-    "version": "0.1",
-    "raku": "6.*",
-    "auth": "Seamus Brady <seamus@corvideon.ie>",
-    "depends": [
-        "Env::Dotenv",
-        "OO::Actors"
-    ],
-    "provides": {
-        "tallmountain": "lib/tallmountain.rakumod",
-        "DotEnv": "lib/DotEnv.rakumod",
-        "AdaptiveRequestMode": "lib/AdaptiveRequestMode.rakumod"
-    },
-    "license": "Proprietary",
-    "source-url": "http://www.tallmountain.io"
+  "name": "TallMountain",
+  "description": "An AI agent platform",
+  "version": "0.1",
+  "auth": "Seamus Brady <seamus@corvideon.ie>",
+  "depends": [
+    "Env::Dotenv",
+    "OO::Actors",
+    "HTTP::Tinyish",
+    "JSON::Fast",
+    "Logger"
+  ],
+  "provides": {
+    "DotEnv": "lib/Util/DotEnv.rakumod",
+    "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
+    "LLM::Client::OpenAI": "lib/LLM/Client/OpenAI.rakumod",
+    "LLM::Messages": "lib/LLM/Messages.rakumod"
+  },
+  "license": "Proprietary",
+  "source-url": "http://www.tallmountain.io",
+  "raku": "6.*"
 }

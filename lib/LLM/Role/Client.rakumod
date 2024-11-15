@@ -1,5 +1,3 @@
-#!/usr/bin/env raku
-
 #  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
 #
 #  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
@@ -10,13 +8,13 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
-use lib 'lib';
-use LLM::Messages;
+use LLM::AdaptiveRequestMode;
 
-my $messages = LLM::Messages.new;
-$messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-$messages.build-messages('Knock knock.', LLM::Messages.USER);
-$messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
-$messages.build-messages('Orange.', LLM::Messages.USER);
-
-say $messages.get-messages();
+role LLM::Role::Client {
+    method completion-string(
+            @messages,
+            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+            --> Str) {
+        die X::AdHoc.new(:payload("This method is not implemented."));
+    }
+}
