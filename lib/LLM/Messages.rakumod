@@ -52,7 +52,6 @@ class LLM::Messages {
     method build-messages(Str $content, Str $type) {
         my %message;
         if $type eq LLM::Messages.SYSTEM {
-            say "Building system prompt";
             %message = self.build-system-prompt($content);
         }
         elsif $type eq LLM::Messages.USER {
