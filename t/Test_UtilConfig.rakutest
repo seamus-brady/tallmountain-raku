@@ -1,0 +1,38 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+use v6.d;
+use Test;
+use lib 'lib';
+use Util::Config;
+
+plan 4;
+
+subtest 'Util::Config loaded' => {
+    my $config = Util::Config.new;
+    isa-ok $config, Util::Config;
+}
+
+subtest 'Util::Config string test configuration loaded' => {
+    my $config = Util::Config.new;
+    is $config.get_config('for_testing', 'test_string_value'), 'Hello world!', 'Test config string loaded.';
+}
+
+subtest 'Util::Config number test configuration loaded' => {
+    my $config = Util::Config.new;
+    is $config.get_config('for_testing', 'test_numeric_value'), 42, 'Test config number loaded.';
+}
+
+subtest 'Util::Config exception thrown' => {
+    my $config = Util::Config.new;
+    dies-ok { $config.get_config('OMG!!', 'wtf??!!') }, 'Exception thrown for missing config key';
+}
+
+done-testing;
+

@@ -12,6 +12,8 @@ use Test;
 use lib 'lib';
 use LLM::Messages;
 
+plan 2;
+
 subtest 'LLM::Messages test initialise' => {
     my $messages = LLM::Messages.new();
     ok $messages, 'LLM::Messages initialised';

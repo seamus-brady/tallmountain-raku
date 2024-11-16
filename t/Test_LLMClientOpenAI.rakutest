@@ -16,7 +16,6 @@ use LLM::Messages;
 
 plan 2;
 
-
 # Create an instance of the OpenAIClient
 my $client = LLM::Client::OpenAI.new();
 

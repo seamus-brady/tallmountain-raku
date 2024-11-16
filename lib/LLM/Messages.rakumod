@@ -12,11 +12,11 @@ use Util::Logger;
 
 class LLM::Messages {
 
-    my $.ASSISTANT = 'assistant';
-    my $.USER      = 'user';
-    my $.SYSTEM    = 'system';
+    our $.ASSISTANT = 'assistant';
+    our $.USER      = 'user';
+    our $.SYSTEM    = 'system';
 
-    has $.LOGGER = Util::Logger.new(namespace => "<LLMMessages>");
+    has $.LOGGER = Util::Logger.new(namespace => "<LLM::Messages>");
 
     has @!messages;
 
@@ -50,30 +50,18 @@ class LLM::Messages {
     }
 
     method build-messages(Str $content, Str $type) {
-        try {
-            my %message;
-            if $type eq LLM::Messages.SYSTEM {
-                say "Building system prompt";
-                %message = self.build-system-prompt($content);
-            }
-            elsif $type eq LLM::Messages.USER {
-                %message = self.build-user-prompt($content);
-            }
-            elsif $type eq LLM::Messages.ASSISTANT {
-                %message = self.build-assistant-prompt($content);
-            }
-            @!messages.push(%message) if %message;
-            return self;
+        my %message;
+        if $type eq LLM::Messages.SYSTEM {
+            say "Building system prompt";
+            %message = self.build-system-prompt($content);
         }
-        CATCH {
-            default {
-                self.LOGGER.error($_.message);
-                die X::TallMountain::LLMException.new(message => $_.message);
-            }
+        elsif $type eq LLM::Messages.USER {
+            %message = self.build-user-prompt($content);
         }
+        elsif $type eq LLM::Messages.ASSISTANT {
+            %message = self.build-assistant-prompt($content);
+        }
+        @!messages.push(%message) if %message;
+        return self;
     }
-}
-
-class X::TallMountain::LLMException is Exception {
-    has Str $.message;
 }

@@ -12,6 +12,7 @@ use HTTP::Tinyish;
 use JSON::Fast;
 use Util::DotEnv;
 use Util::Logger;
+use Util::Config;
 use LLM::Role::Client;
 use LLM::AdaptiveRequestMode;
 
@@ -19,10 +20,15 @@ use LLM::AdaptiveRequestMode;
 
 Util::DotEnv.load_env_file();
 
+# exception class for OpenAI API errors
+class LLM::Client::OpenAIException is Exception {
+	has Str $.message;
+}
+
 class LLM::Client::OpenAI does LLM::Role::Client {
 	has Str $.api-key = %*ENV{"OPENAI_API_KEY"};
 	has Str $.api-url = "https://api.openai.com/v1/chat/completions";
-	has Str $.model = "gpt-4o";
+	has Str $.model = Util::Config.get_config('openai', 'openai_chat_completion_model');
 
 	has $.LOGGER = Util::Logger.new(namespace => "<LLM::Client::OpenAI>");
 
@@ -64,11 +70,8 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";
 			self.LOGGER.error($message);
-			die X::TallMountain::LLMException.new(message => $message;);
+			LLM::Client::OpenAIException.new(message => $message).throw;
 		}
 	}
 }
 
-class X::TallMountain::OpenAIException is Exception {
-	has Str $.message;
-}

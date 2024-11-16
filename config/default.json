@@ -1,0 +1,9 @@
+{
+  "openai": {
+    "openai_chat_completion_model": "gpt-4o"
+  },
+  "for_testing": {
+    "test_string_value": "Hello world!",
+    "test_numeric_value": "42"
+  }
+}

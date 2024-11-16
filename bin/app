@@ -11,12 +11,4 @@
 
 use v6.d;
 use lib 'lib';
-use LLM::Messages;
 
-my $messages = LLM::Messages.new;
-$messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-$messages.build-messages('Knock knock.', LLM::Messages.USER);
-$messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
-$messages.build-messages('Orange.', LLM::Messages.USER);
-
-say $messages.get-messages();

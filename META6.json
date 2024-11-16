@@ -8,7 +8,8 @@
     "OO::Actors",
     "HTTP::Tinyish",
     "JSON::Fast",
-    "Logger"
+    "Logger",
+    "Config::Clever"
   ],
   "provides": {
     "DotEnv": "lib/Util/DotEnv.rakumod",
