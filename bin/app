@@ -11,4 +11,29 @@
 
 use v6.d;
 use lib 'lib';
+use LLM::Messages;
+use LLM::Client::OpenAI;
 
+my $client = LLM::Client::OpenAI.new();
+
+my $content = q:to/END/;
+My cat is called Daisy and she is a tabby.
+Please answer in JSON in the format below:
+{
+  "name": "Daisy",
+  "species": "cat",
+  "breed": "tabby"
+}
+END
+
+my $messages = LLM::Messages.new;
+$messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+$messages.build-messages($content, LLM::Messages.USER);
+my $response = $client.completion-structured-output($messages.get-messages);
+say $response;
+
+if $response ~~ / \{ .*? \} / {
+    say "Found JSON: " ~ $/;
+} else {
+    say "No JSON found";
+}

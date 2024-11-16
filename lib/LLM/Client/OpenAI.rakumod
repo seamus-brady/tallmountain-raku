@@ -73,5 +73,46 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 			LLM::Client::OpenAIException.new(message => $message).throw;
 		}
 	}
+
+	method completion-structured-output(
+			@messages,
+			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+			--> Str) {
+		my $client = HTTP::Tinyish.new;
+
+		self.LOGGER.debug("completion-string starting...");
+
+		# Prepare the payload for the OpenAI API
+		my %payload = (
+		model => $.model,
+		messages => @messages,
+		temperature => $mode.temperature,
+		max_tokens => $mode.max-tokens,
+		);
+
+		# Prepare headers with API key for authorization
+		my %headers = (
+		"Content-Type" => "application/json",
+		"Authorization" => "Bearer " ~ $.api-key
+		);
+
+		# Send a POST request with the JSON-encoded payload
+		my $response = $client.post(
+				$.api-url,
+				headers => %headers,
+				content => to-json(%payload)
+				);
+
+		# Handle the response
+		if $response<success> {
+			my %result = from-json($response<content>);
+			return %result<choices>[0]<message><content>;
+		}
+		else {
+			my Str $message = "Error: { $response<status> } - { $response<reason> }";
+			self.LOGGER.error($message);
+			LLM::Client::OpenAIException.new(message => $message).throw;
+		}
+	}
 }
 
