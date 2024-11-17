@@ -5,7 +5,6 @@
   "auth": "Seamus Brady <seamus@corvideon.ie>",
   "depends": [
     "Env::Dotenv",
-    "OO::Actors",
     "HTTP::Tinyish",
     "JSON::Fast",
     "Logger",
@@ -15,7 +14,8 @@
     "DotEnv": "lib/Util/DotEnv.rakumod",
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
     "LLM::Client::OpenAI": "lib/LLM/Client/OpenAI.rakumod",
-    "LLM::Messages": "lib/LLM/Messages.rakumod"
+    "LLM::Messages": "lib/LLM/Messages.rakumod",
+    "LLM::Util::Instructor": "lib/LLM/Util/Instructor.rakumod"
   },
   "license": "Proprietary",
   "source-url": "http://www.tallmountain.io",

@@ -14,7 +14,7 @@ use lib 'lib';
 use LLM::Client::OpenAI;
 use LLM::Messages;
 
-plan 2;
+plan 5;
 
 # Create an instance of the OpenAIClient
 my $client = LLM::Client::OpenAI.new();
@@ -40,6 +40,139 @@ subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     my $response = $client.completion-string($messages.get-messages());
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
+}
+
+
+subtest 'LLM::Client::OpenAI structured output' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="family">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" maxOccurs="2"/>
+            <xs:element name="child" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="age" type="xs:integer"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+      <child>
+        <name>Bob</name>
+        <age>7</age>
+      </child>
+    </family>
+    END
+
+    my $client = LLM::Client::OpenAI.new();
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
+
+    my %family = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    is %family<parent>, 'Mary', 'Test parent.';
+    is %family<child>[0]<name>, 'Tom', 'Test child name.';
+    is %family<child>[1]<name>, 'Laura', 'Test child name.';
+    is %family<child>[0]<age>, 10, 'Test child age.';
+    is %family<child>[1]<age>, 2, 'Test child age.';
+}
+
+
+subtest 'LLM::Client::OpenAI structured output extracts string' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="engine-part">
+            <xs:complexType>
+            <xs:sequence>
+            <xs:element name="part-number" type="xs:string" />
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="manufacturer" type="xs:string" />
+            <xs:element name="price" type="xs:decimal" />
+            <xs:element name="weight" type="xs:decimal" />
+            <xs:element name="material" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-doc = q:to/END/;
+    <engine-part>
+    <part-number>ENG12345</part-number>
+    <name>Piston</name>
+    <manufacturer>EngineCo</manufacturer>
+    <price>150.75</price>
+    <weight>1.2</weight>
+    <material>Aluminum</material>
+    </engine-part>
+    END
+
+            my $client = LLM::Client::OpenAI.new();
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    my $prompt = q:to/END/;
+    The engine part has been ordered as follows:
+    part-number: ENG65765876
+    name: Steering Wheel
+    Made by BigWheel Ltd
+    €2000
+    It weights 4kg.
+    It is made from bright mild steel and vegan leather
+    END
+    $messages.build-messages($prompt, LLM::Messages.USER);
+    my %response = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    is %response<name>, 'Steering Wheel', 'Test string extracted.';
+}
+
+subtest 'LLM::Client::OpenAI structured output invalid schema' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="family">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" maxOccurs="2"/>
+            <xs:element name="child" maxOccurs="unbounded">
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+      <child>
+        <name>Bob</name>
+        <age>7</age>
+      </child>
+    </family>
+    END
+
+    my $client = LLM::Client::OpenAI.new();
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
+
+    dies-ok {
+        $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim)
+    }, 'Exception thrown for invalid xml';
 }
 
 
