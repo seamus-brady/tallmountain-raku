@@ -1,0 +1,164 @@
+use v6.d;
+use Test;
+use lib 'lib';
+use LLM::Instructor;
+
+plan 6;
+
+subtest 'LLM::Instructor loaded' => {
+    my $instructor = LLM::Instructor.new;
+    isa-ok $instructor, LLM::Instructor;
+}
+
+subtest 'LLM::Instructor strips xml code markers' => {
+    my $xml-doc-marked = q:to/END/;
+    ```xml
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+    </family>
+    ```
+    END
+
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+    </family>
+    END
+
+    my $instructor = LLM::Instructor.new;
+    is $instructor.remove-code-block-markers($xml-doc-marked.trim), $xml-doc.trim, 'Test remove xml code markers.';
+}
+
+subtest 'LLM::Instructor strips xml declaration' => {
+    my $xml-doc-declared = q:to/END/;
+    <?xml version="1.0" encoding="UTF-8"?>
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+    </family>
+    END
+
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+    </family>
+    END
+
+    my $instructor = LLM::Instructor.new;
+    is $instructor.strip-xml-declaration($xml-doc-declared.trim), $xml-doc.trim, 'Test remove xml declaration.';
+}
+
+
+subtest 'LLM::Instructor xml is valid' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="family">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" maxOccurs="2"/>
+            <xs:element name="child" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="age" type="xs:integer"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-string = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <parent>Jane Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+      <child>
+        <name>Bob</name>
+        <age>7</age>
+      </child>
+    </family>
+    END
+
+    my $instructor = LLM::Instructor.new;
+    is $instructor.is-valid-xml($xml-string.trim, $xml-schema.trim), Bool::True, 'Test xml is valid.';
+}
+
+subtest 'LLM::Instructor xml is invalid' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="family">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" maxOccurs="2"/>
+            <xs:element name="child" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="age" type="xs:integer"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-string = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <parent>Jane Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+        <whatever>foo</whatever>
+      </child>
+      <pet>
+        <dog>Fido</dog>
+      </pet>
+    </family>
+    END
+
+    my $instructor = LLM::Instructor.new;
+    is $instructor.is-valid-xml($xml-string.trim, $xml-schema.trim), Bool::False, 'Test xml is invalid.';
+}
+
+subtest 'LLM::Instructor hash from xml' => {
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+    </family>
+    END
+
+    my $instructor = LLM::Instructor.new;
+    my %family=  $instructor.hash-from-xml($xml-doc.trim);
+    is %family<parent>, 'John Doe', 'Test parent.';
+    is %family<child><name>, 'Alice', 'Test child name.';
+}
+
+done-testing;

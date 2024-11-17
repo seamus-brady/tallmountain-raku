@@ -78,7 +78,9 @@ sub remove-first-and-last-lines($text) {
     $text.lines[1..^*-1].join("\n");
 }
 
-my $llm-xml = remove-first-and-last-lines($response);
+
+
+my $llm-xml = remove-code-block-markers($response);
 say "---";
 say $llm-xml;
 
@@ -92,57 +94,19 @@ say $xmlschema.is-valid($doc);
 say "---";
 say $doc;
 
-sub strip-xml-declaration(Str $xml) {
-    $xml.subst(/ ^^ \s* '<?xml' .*? '?>' \s* /, '', :g);
-}
+
 
 my $doc2 = strip-xml-declaration($llm-xml);
 
 say "---";
 say $doc2;
 
-use LibXML;
-use LibXML::Document;
-use LibXML::Enums;
 
-multi sub from-xml(Str $xml_string) is export {
-    my $doc = LibXML::Document.parse($xml_string);
-    my $root = $doc.root;
-    from-xml($root);
-}
-multi sub from-xml(LibXML::Element $node where -> $n { ($n.firstChild !~~ LibXML::Text && $n.firstChild !~~ LibXML::CDATA) || $n.firstChild.isBlank || $n.attributes.elems }) is export {
-    my %new_hash;
-    my $attrs = $node.attributes;
-    for $attrs.kv -> $attr-name, $attr-value {
-        %new_hash{$attr-name} = $attr-value.value;
-    }
-    my @nodes = $node.children(:!blank);
-    for @nodes -> $child {
-        my $hash = from-xml($child);
-        %new_hash.push: { $child.localname => $hash };
-    }
-    return %new_hash;
-}
-
-multi sub from-xml(LibXML::Element $node where -> $n {$n.firstChild.nodeType == XML_TEXT_NODE && !$n.firstChild.isBlank && !$n.attributes.elems}) is export {
-    from-xml($node.firstChild);
-}
-
-multi sub from-xml(LibXML::Element $node where -> $n {$n.firstChild ~~ LibXML::CDATA }) is export {
-    from-xml($node.firstChild);
-}
-
-multi sub from-xml(LibXML::Text $node ) is export {
-    my $value = $node.nodeValue;
-    Numeric($value) || $value;
-}
-
-multi sub from-xml(LibXML::CDATA $node) is export {
-    $node.nodeValue;
-}
 
 my %family = from-xml($doc2);
 
 say %family<parent>;
 
-say %family<child>;
+say %family<child>[0];
+
+#=======================
