@@ -121,7 +121,7 @@ subtest 'LLM::Client::OpenAI structured output extracts string' => {
     </engine-part>
     END
 
-            my $client = LLM::Client::OpenAI.new();
+    my $client = LLM::Client::OpenAI.new();
     my $messages = LLM::Messages.new;
     $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
     my $prompt = q:to/END/;
