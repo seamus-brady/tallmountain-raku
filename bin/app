@@ -37,7 +37,6 @@ END
 my $xml-doc = q:to/END/;
 <family>
   <parent>John Doe</parent>
-  <parent>Jane Doe</parent>
   <child>
     <name>Alice</name>
     <age>10</age>

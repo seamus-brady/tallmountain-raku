@@ -159,6 +159,7 @@ subtest 'LLM::Util::Instructor hash from xml' => {
     my %family=  $instructor.hash-from-xml($xml-doc.trim);
     is %family<parent>, 'John Doe', 'Test parent.';
     is %family<child><name>, 'Alice', 'Test child name.';
+    is %family<child>[0]<name>, 'Alice', 'Test child name.';
 }
 
 done-testing;

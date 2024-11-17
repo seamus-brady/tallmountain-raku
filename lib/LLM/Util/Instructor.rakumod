@@ -13,10 +13,19 @@ class LLM::Util::Instructor {
 
 
     method is-valid-xml(Str $xml_string is copy, Str $xml-schema is copy --> Bool) {
-        # checks if the xml string is valid against a supplied schema
-        my $xmlschema = LibXML::Schema.new(string => $xml-schema);
-        my $xml-doc = LibXML.new.parse: :string($xml_string);
-        return $xmlschema.is-valid($xml-doc);
+        try {
+            my $xmlschema = LibXML::Schema.new(string => $xml-schema);
+            my $xml-doc = LibXML.new.parse: :string($xml_string);
+            return $xmlschema.is-valid($xml-doc);
+        }
+        CATCH {
+            # also catch any invalid xml
+            default {
+                my $error = $_;
+                self.LOGGER.error("Exception caught: $error");
+                return Bool::False;
+            }
+        }
     }
 
 

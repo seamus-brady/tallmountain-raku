@@ -83,32 +83,47 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 			Str $xml-example is copy,
 			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
 			--> Hash) {
+		# calls the inner logic to get the structured output in xml format
+		# repeats n times if the output is not valid xml and then dies
+		# returns a Raku hash
 
 		self.LOGGER.debug("completion-structured-output starting...");
+		my $instructor-util = LLM::Util::Instructor.new;
+		my $xml-output;
+		my $attempts = 0;
+		my $allowed_attempts = Util::Config.get_config('openai', 'openai_structured_output_attempts');
 
-		my Str $conversation-context = @messages.gist;
+		# Validate XML example against XML schema
+		unless $instructor-util.is-valid-xml($xml-example, $xml-schema) {
+			my Str $message = "Error: Provided XML example is not valid according to the XML schema!";
+			self.LOGGER.error($message);
+			LLM::Client::OpenAIException.new(message => $message).throw;
+		}
 
-		my Str $prompt-string = qq:to/END/;
-		=== TASK ===
+		while $attempts <  $allowed_attempts {
+			self.LOGGER.debug("completion-structured-output starting attempt number $attempts...");
+			$xml-output = self.completion-structured-output-as-xml(@messages, $xml-schema, $xml-example, $mode);
+			if $instructor-util.is-valid-xml($xml-output, $xml-schema) {
+				return $instructor-util.hash-from-xml($xml-output);
+			}
+			$attempts++;
+		}
 
-		- Your task is to extract the correct information from the conversation context below.
-		- You must provided the structured output in XML format using the xml-schema provided.
-		- You are also provided with an example of the expected output in xml.
+		my Str $message = "Error: unable to get structured output in alloted number of attempts!";
+		self.LOGGER.error($message);
+		LLM::Client::OpenAIException.new(message => $message).throw;
+	}
 
+	method completion-structured-output-as-xml(
+			@messages is copy,
+			Str $xml-schema is copy,
+			Str $xml-example is copy,
+			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+			--> Str) {
 
-		=== START CONVERSATION CONTEXT ===
-		$conversation-context
-		=== END CONVERSATION CONTEXT ===
+		self.LOGGER.debug("completion-structured-output-xml starting...");
 
-		=== START XML SCHEMA ===
-		$xml-schema
-		=== END XML SCHEMA ===
-
-		=== START XML EXAMPLE ===
-		$xml-example
-		=== END XML EXAMPLE ===
-
-		END
+		my Str $prompt-string = self.get-completion-prompt(@messages, $xml-schema, $xml-example);
 
 		my $xml-messages = LLM::Messages.new;
 		$xml-messages.build-messages('You are an expert in xml data extraction.', LLM::Messages.SYSTEM);
@@ -144,13 +159,46 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 			my $instructor-util = LLM::Util::Instructor.new;
 			my $xml-output = $instructor-util.remove-code-block-markers($message-content)
 					andthen $instructor-util.strip-xml-declaration($xml-output);
-			return $instructor-util.hash-from-xml($xml-output);
+			return $xml-output;
 		}
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";
 			self.LOGGER.error($message);
 			LLM::Client::OpenAIException.new(message => $message).throw;
 		}
+	}
+
+	method get-completion-prompt(
+			@messages is copy,
+			Str $xml-schema is copy,
+			Str $xml-example is copy --> Str){
+
+		# formats the completion prompt for structured output
+
+		my Str $conversation-context = @messages.gist;
+		my Str $prompt-string = qq:to/END/;
+		=== TASK ===
+
+		- Your task is to extract the correct information from the conversation context below.
+		- You must provided the structured output in XML format using the xml-schema provided.
+		- You are also provided with an example of the expected output in xml.
+
+
+		=== START CONVERSATION CONTEXT ===
+		$conversation-context
+		=== END CONVERSATION CONTEXT ===
+
+		=== START XML SCHEMA ===
+		$xml-schema
+		=== END XML SCHEMA ===
+
+		=== START XML EXAMPLE ===
+		$xml-example
+		=== END XML EXAMPLE ===
+
+		END
+
+		return $prompt-string.trim;
 	}
 }
 

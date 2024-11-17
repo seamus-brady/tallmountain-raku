@@ -14,7 +14,7 @@ use lib 'lib';
 use LLM::Client::OpenAI;
 use LLM::Messages;
 
-plan 2;
+plan 4;
 
 # Create an instance of the OpenAIClient
 my $client = LLM::Client::OpenAI.new();
@@ -40,6 +40,92 @@ subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     my $response = $client.completion-string($messages.get-messages());
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
+}
+
+
+subtest 'LLM::Client::OpenAI structured output' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="family">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" maxOccurs="2"/>
+            <xs:element name="child" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string"/>
+                  <xs:element name="age" type="xs:integer"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+      <child>
+        <name>Bob</name>
+        <age>7</age>
+      </child>
+    </family>
+    END
+
+    my $client = LLM::Client::OpenAI.new();
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
+
+    my %family = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    is %family<parent>, 'Mary', 'Test parent.';
+    is %family<child>[0]<name>, 'Tom', 'Test child name.';
+    is %family<child>[1]<name>, 'Laura', 'Test child name.';
+    is %family<child>[0]<age>, 10, 'Test child age.';
+    is %family<child>[1]<age>, 2, 'Test child age.';
+}
+
+subtest 'LLM::Client::OpenAI structured output invalid schema' => {
+    my $xml-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="family">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent" type="xs:string" maxOccurs="2"/>
+            <xs:element name="child" maxOccurs="unbounded">
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    END
+
+    my $xml-doc = q:to/END/;
+    <family>
+      <parent>John Doe</parent>
+      <child>
+        <name>Alice</name>
+        <age>10</age>
+      </child>
+      <child>
+        <name>Bob</name>
+        <age>7</age>
+      </child>
+    </family>
+    END
+
+    my $client = LLM::Client::OpenAI.new();
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
+
+    dies-ok {
+        $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim)
+    }, 'Exception thrown for invalid xml';
 }
 
 
