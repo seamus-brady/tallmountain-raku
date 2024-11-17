@@ -6,9 +6,9 @@ use LibXML::Enums;
 use LibXML::Schema;
 
 
-class LLM::Instructor {
+class LLM::Util::Instructor {
 
-    # based on the same idea as the Python Instructor library, this class provides a say to get
+    # based on the same idea as the Python Instructor library, this class provides utility functions to get
     # structured data from an LLM using an XML schema
 
 
@@ -84,5 +84,6 @@ class LLM::Instructor {
     multi sub from-xml(LibXML::CDATA $node) is export {
         $node.nodeValue;
     }
+
     ################################################################################
 }

@@ -15,6 +15,8 @@ use Util::Logger;
 use Util::Config;
 use LLM::Role::Client;
 use LLM::AdaptiveRequestMode;
+use LLM::Messages;
+use LLM::Util::Instructor;
 
 # load openai key from .env, if available
 
@@ -34,12 +36,13 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 
 
 	method completion-string(
-				@messages,
+				@messages is copy,
 				LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
 				--> Str) {
-		my $client = HTTP::Tinyish.new;
 
 		self.LOGGER.debug("completion-string starting...");
+
+		my $client = HTTP::Tinyish.new;
 
 		# Prepare the payload for the OpenAI API
 		my %payload = (
@@ -75,19 +78,50 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 	}
 
 	method completion-structured-output(
-			@messages,
+			@messages is copy,
+			Str $xml-schema is copy,
+			Str $xml-example is copy,
 			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
-			--> Str) {
-		my $client = HTTP::Tinyish.new;
+			--> Hash) {
 
-		self.LOGGER.debug("completion-string starting...");
+		self.LOGGER.debug("completion-structured-output starting...");
+
+		my Str $conversation-context = @messages.gist;
+
+		my Str $prompt-string = qq:to/END/;
+		=== TASK ===
+
+		- Your task is to extract the correct information from the conversation context below.
+		- You must provided the structured output in XML format using the xml-schema provided.
+		- You are also provided with an example of the expected output in xml.
+
+
+		=== START CONVERSATION CONTEXT ===
+		$conversation-context
+		=== END CONVERSATION CONTEXT ===
+
+		=== START XML SCHEMA ===
+		$xml-schema
+		=== END XML SCHEMA ===
+
+		=== START XML EXAMPLE ===
+		$xml-example
+		=== END XML EXAMPLE ===
+
+		END
+
+		my $xml-messages = LLM::Messages.new;
+		$xml-messages.build-messages('You are an expert in xml data extraction.', LLM::Messages.SYSTEM);
+		$xml-messages.build-messages($prompt-string, LLM::Messages.USER);
+
+		my $client = HTTP::Tinyish.new;
 
 		# Prepare the payload for the OpenAI API
 		my %payload = (
-		model => $.model,
-		messages => @messages,
-		temperature => $mode.temperature,
-		max_tokens => $mode.max-tokens,
+			model => $.model,
+			messages => $xml-messages.get-messages,
+			temperature => $mode.temperature,
+			max_tokens => $mode.max-tokens,
 		);
 
 		# Prepare headers with API key for authorization
@@ -106,7 +140,11 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		# Handle the response
 		if $response<success> {
 			my %result = from-json($response<content>);
-			return %result<choices>[0]<message><content>;
+			my $message-content = %result<choices>[0]<message><content>;
+			my $instructor-util = LLM::Util::Instructor.new;
+			my $xml-output = $instructor-util.remove-code-block-markers($message-content)
+					andthen $instructor-util.strip-xml-declaration($xml-output);
+			return $instructor-util.hash-from-xml($xml-output);
 		}
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";

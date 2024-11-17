@@ -1,16 +1,16 @@
 use v6.d;
 use Test;
 use lib 'lib';
-use LLM::Instructor;
+use LLM::Util::Instructor;
 
 plan 6;
 
-subtest 'LLM::Instructor loaded' => {
-    my $instructor = LLM::Instructor.new;
-    isa-ok $instructor, LLM::Instructor;
+subtest 'LLM::Util::Instructor loaded' => {
+    my $instructor = LLM::Util::Instructor.new;
+    isa-ok $instructor, LLM::Util::Instructor;
 }
 
-subtest 'LLM::Instructor strips xml code markers' => {
+subtest 'LLM::Util::Instructor strips xml code markers' => {
     my $xml-doc-marked = q:to/END/;
     ```xml
     <family>
@@ -33,11 +33,11 @@ subtest 'LLM::Instructor strips xml code markers' => {
     </family>
     END
 
-    my $instructor = LLM::Instructor.new;
+    my $instructor = LLM::Util::Instructor.new;
     is $instructor.remove-code-block-markers($xml-doc-marked.trim), $xml-doc.trim, 'Test remove xml code markers.';
 }
 
-subtest 'LLM::Instructor strips xml declaration' => {
+subtest 'LLM::Util::Instructor strips xml declaration' => {
     my $xml-doc-declared = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <family>
@@ -59,12 +59,12 @@ subtest 'LLM::Instructor strips xml declaration' => {
     </family>
     END
 
-    my $instructor = LLM::Instructor.new;
+    my $instructor = LLM::Util::Instructor.new;
     is $instructor.strip-xml-declaration($xml-doc-declared.trim), $xml-doc.trim, 'Test remove xml declaration.';
 }
 
 
-subtest 'LLM::Instructor xml is valid' => {
+subtest 'LLM::Util::Instructor xml is valid' => {
     my $xml-schema = q:to/END/;
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="family">
@@ -100,11 +100,11 @@ subtest 'LLM::Instructor xml is valid' => {
     </family>
     END
 
-    my $instructor = LLM::Instructor.new;
+    my $instructor = LLM::Util::Instructor.new;
     is $instructor.is-valid-xml($xml-string.trim, $xml-schema.trim), Bool::True, 'Test xml is valid.';
 }
 
-subtest 'LLM::Instructor xml is invalid' => {
+subtest 'LLM::Util::Instructor xml is invalid' => {
     my $xml-schema = q:to/END/;
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="family">
@@ -140,11 +140,11 @@ subtest 'LLM::Instructor xml is invalid' => {
     </family>
     END
 
-    my $instructor = LLM::Instructor.new;
+    my $instructor = LLM::Util::Instructor.new;
     is $instructor.is-valid-xml($xml-string.trim, $xml-schema.trim), Bool::False, 'Test xml is invalid.';
 }
 
-subtest 'LLM::Instructor hash from xml' => {
+subtest 'LLM::Util::Instructor hash from xml' => {
     my $xml-doc = q:to/END/;
     <family>
       <parent>John Doe</parent>
@@ -155,7 +155,7 @@ subtest 'LLM::Instructor hash from xml' => {
     </family>
     END
 
-    my $instructor = LLM::Instructor.new;
+    my $instructor = LLM::Util::Instructor.new;
     my %family=  $instructor.hash-from-xml($xml-doc.trim);
     is %family<parent>, 'John Doe', 'Test parent.';
     is %family<child><name>, 'Alice', 'Test child name.';

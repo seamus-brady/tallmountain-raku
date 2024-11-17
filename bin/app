@@ -50,63 +50,10 @@ my $xml-doc = q:to/END/;
 END
 
 my $client = LLM::Client::OpenAI.new();
-
-my $prompt-string = qq:to/END/;
-=== TASK ===
-Please extract the information from the data below using the xml schema provided:
-
-=== DATA ===
-John Doe has two children, Alice and Bob. Alice is 10 years old and Bob is 7 years old.
-
-=== START XML SCHEMA ===
-$xml-schema
-=== END XML SCHEMA ===
-END
-
-
-
-say $prompt-string ;
-
 my $messages = LLM::Messages.new;
 $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-$messages.build-messages($prompt-string, LLM::Messages.USER);
+$messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
-my $response = $client.completion-string($messages.get-messages);
+my $response = $client.completion-structured-output($messages.get-messages, $xml-schema, $xml-doc);
 say $response;
 
-sub remove-first-and-last-lines($text) {
-    $text.lines[1..^*-1].join("\n");
-}
-
-
-
-my $llm-xml = remove-code-block-markers($response);
-say "---";
-say $llm-xml;
-
-use LibXML::Schema;
-use LibXML;
-
-
-my $xmlschema = LibXML::Schema.new(string => $xml-schema);
-my $doc = LibXML.new.parse: :string($llm-xml);
-say $xmlschema.is-valid($doc);
-say "---";
-say $doc;
-
-
-
-my $doc2 = strip-xml-declaration($llm-xml);
-
-say "---";
-say $doc2;
-
-
-
-my %family = from-xml($doc2);
-
-say %family<parent>;
-
-say %family<child>[0];
-
-#=======================
