@@ -14,15 +14,35 @@ use lib 'lib';
 use Cro::HTTP::Router;
 use Cro::HTTP::Server;
 
-my $application = route {
+# Define a supply for chat events
+my $supplier = Supplier.new;
+my $chat-supply = $supplier.Supply;
+
+
+my $chat_ui_app = route {
+
+    # process the user message and return the response
     post -> 'chat' {
         my $prompt;
 
+        # get the user message from the request body
         request-body -> %fields {
             $prompt = %fields<message>;
         }
-        # my $response = get_response($prompt, "Hello, I am a bot. I am still learning. Please be patient with me.");
-        content 'text/html', qq:to/END/;
+        $supplier.emit($prompt);
+        my $response = get_response($prompt);
+        content 'text/html', $response;
+    }
+
+    # serve the chat UI
+    get -> {
+        static 'www/chat_ui.html';
+    }
+}
+
+
+sub get_response($prompt){
+    my $response =  qq:to/END/;
             <div class="message-container user-message-container">
             <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
             <span>$prompt
@@ -32,31 +52,12 @@ my $application = route {
             <span>Hello!</span>
             </div>
             END
-    }
-
-    get -> {
-        static 'www/chat_ui.html';
-    }
+    return $response;
 }
 
-
-sub get_response(Str $user_message, Str $bot_reply --> Str){
-    my $response = qq:to/END/;
-    <div class="message-container user-message-container">
-    <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
-    <span>$user_message</span>
-    </div>
-    <div class="message-container bot-message-container">
-    <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
-    <span>$bot_reply</span>
-    </div>
-    END
-    return $response.trim;
-}
-
-# Start the server in the background
-my $server-thread = start {
-    my $server = Cro::HTTP::Server.new: :host<localhost>, :port<10000>, :$application;
+# Start the chat ui server in the background
+start {
+    my $server = Cro::HTTP::Server.new: :host<localhost>, :port<10000>, application => $chat_ui_app;
     $server.start;
     say "Listening at...";
     react {
@@ -69,19 +70,16 @@ my $server-thread = start {
 }
 
 # Main application logic
-say "Web server running at http://localhost:10000";
+say "Chat UI server running at http://localhost:10000";
 
-my $server1 = Cro::HTTP::Server.new: :host<localhost>, :port<10001>, :$application;
-$server1.start;
-
-# Main application logic
-say "Web server running at http://localhost:10001";
-
-say "Listening at...";
 react {
+
+    whenever $chat-supply -> $x {
+        say "Supply received event: $x";
+    };
+
     whenever signal(SIGINT) {
         say "Shutting down...";
-        $server1.stop;
-        done;
+        $chat-supply.done;
     }
 }
