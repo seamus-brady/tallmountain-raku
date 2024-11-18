@@ -201,6 +201,14 @@
                 var lastMessage = messages[messages.length - 1];
                 lastMessage.classList.add('fade-in');
             }
+
+             // Limit the number of message pairs to 50
+            var messagePairs = chatbox.querySelectorAll('.message-container');
+            if (messagePairs.length > 100) { // 50 pairs means 100 messages (bot + user)
+                for (var i = 0; i < messagePairs.length - 100; i++) {
+                    chatbox.removeChild(messagePairs[i]);
+            }
+        }
         });
     </script>
 
