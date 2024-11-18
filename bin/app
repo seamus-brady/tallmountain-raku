@@ -11,51 +11,77 @@
 
 use v6.d;
 use lib 'lib';
-use LLM::Messages;
-use LLM::Client::OpenAI;
+use Cro::HTTP::Router;
+use Cro::HTTP::Server;
 
-my $xml-schema = q:to/END/;
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="engine-part">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="part-number" type="xs:string" />
-        <xs:element name="name" type="xs:string" />
-        <xs:element name="manufacturer" type="xs:string" />
-        <xs:element name="price" type="xs:decimal" />
-        <xs:element name="weight" type="xs:decimal" />
-        <xs:element name="material" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-</xs:schema>
-END
+my $application = route {
+    post -> 'chat' {
+        my $prompt;
 
-my $xml-doc = q:to/END/;
-<engine-part>
-  <part-number>ENG12345</part-number>
-  <name>Piston</name>
-  <manufacturer>EngineCo</manufacturer>
-  <price>150.75</price>
-  <weight>1.2</weight>
-  <material>Aluminum</material>
-</engine-part>
-END
+        request-body -> %fields {
+            $prompt = %fields<message>;
+        }
+        # my $response = get_response($prompt, "Hello, I am a bot. I am still learning. Please be patient with me.");
+        content 'text/html', qq:to/END/;
+            <div class="message-container user-message-container">
+            <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
+            <span>$prompt
+            </div>
+            <div class="message-container bot-message-container">
+            <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
+            <span>Hello!</span>
+            </div>
+            END
+    }
 
-my $client = LLM::Client::OpenAI.new();
-my $messages = LLM::Messages.new;
-$messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-my $prompt = q:to/END/;
-The engine part has been ordered as follows:
-part-number: ENG65765876
-name: Steering Wheel
-Made by BigWheel Ltd
-€2000
-It weights 4kg.
-It is made from bright mild steel and vegan leather
-END
-$messages.build-messages($prompt, LLM::Messages.USER);
+    get -> {
+        static 'www/chat_ui.html';
+    }
+}
 
-my %response = $client.completion-structured-output($messages.get-messages, $xml-schema, $xml-doc);
-say %response<name>;
 
+sub get_response(Str $user_message, Str $bot_reply --> Str){
+    my $response = qq:to/END/;
+    <div class="message-container user-message-container">
+    <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
+    <span>$user_message</span>
+    </div>
+    <div class="message-container bot-message-container">
+    <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
+    <span>$bot_reply</span>
+    </div>
+    END
+    return $response.trim;
+}
+
+# Start the server in the background
+my $server-thread = start {
+    my $server = Cro::HTTP::Server.new: :host<localhost>, :port<10000>, :$application;
+    $server.start;
+    say "Listening at...";
+    react {
+        whenever signal(SIGINT) {
+            say "Shutting down...";
+            $server.stop;
+            done;
+        }
+    }
+}
+
+# Main application logic
+say "Web server running at http://localhost:10000";
+
+my $server1 = Cro::HTTP::Server.new: :host<localhost>, :port<10001>, :$application;
+$server1.start;
+
+# Main application logic
+say "Web server running at http://localhost:10001";
+
+say "Listening at...";
+react {
+    whenever signal(SIGINT) {
+        say "Shutting down...";
+        $server1.stop;
+        done;
+    }
+}
