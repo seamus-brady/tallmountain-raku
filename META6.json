@@ -8,14 +8,16 @@
     "HTTP::Tinyish",
     "JSON::Fast",
     "Logger",
-    "Config::Clever"
+    "Config::Clever",
+    "Cro::HTTP::Router",
+    "Cro::HTTP::Server"
   ],
   "provides": {
-    "DotEnv": "lib/Util/DotEnv.rakumod",
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
     "LLM::Client::OpenAI": "lib/LLM/Client/OpenAI.rakumod",
     "LLM::Messages": "lib/LLM/Messages.rakumod",
-    "LLM::Util::Instructor": "lib/LLM/Util/Instructor.rakumod"
+    "LLM::Util::Instructor": "lib/LLM/Util/Instructor.rakumod",
+    "Util::DotEnv": "lib/Util/DotEnv.rakumod"
   },
   "license": "Proprietary",
   "source-url": "http://www.tallmountain.io",

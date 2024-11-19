@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>TallMountain</title>
+
+    <!-- External Libraries: HTMX for interactivity and TailwindCSS for styling -->
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        /* Chat Message Container Styling */
+        .message-container {
+            display: flex;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+        /* Bot Message Styling */
+        .bot-message-container {
+            background-color: #e3e8ec;
+            align-self: flex-start;
+            flex-direction: row;
+        }
+        /* User Message Styling */
+        .user-message-container {
+            background-color: #d4edda;
+            color: #333;
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        /* Message Icon Styling */
+        .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: 0 8px;
+        }
+        /* Chat Box Styling */
+        .chat-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 16px;
+            flex-grow: 1;
+        }
+        /* Input Container Styling */
+        .input-container {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+        }
+        /* Input Box Styling */
+        .input-box {
+            flex-grow: 1;
+            border: none;
+            padding: 10px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        /* Send Button Styling */
+        .send-button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .send-button:hover {
+            background-color: #357ab8;
+        }
+        /* Toolbar and Footer Wrapper Styling */
+        .toolbar-wrapper, .footer-wrapper {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            z-index: 10;
+        }
+        .toolbar-wrapper { top: 0; }
+        .footer-wrapper { bottom: 0; }
+
+        /* Toolbar Styling */
+        .toolbar {
+            background-color: #fffae0;
+            color: #333333;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .toolbar-logo {
+            display: flex;
+            align-items: center;
+        }
+        .toolbar-logo img {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+        .toolbar-links a {
+            color: #333333;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        /* Footer Styling */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f3f3f3;
+            font-size: 0.8rem;
+            color: #555;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        /* Main Chat Box Container Styling */
+        .main-container {
+            width: 50%;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        /* Fade-in Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+
+
+
+
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<!-- Toolbar Section -->
+<div class="toolbar-wrapper">
+    <div class="toolbar rounded-t-lg">
+        <div class="toolbar-logo">
+            <img alt="Mountain Icon" src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png">
+            <span class="text-lg font-bold">TallMountain</span>
+        </div>
+        <div class="toolbar-links">
+            <a href="#about">About</a>
+            <a href="#docs">Docs</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Chat Container -->
+<div class="main-container bg-white rounded-lg shadow-lg flex flex-col h-4/5">
+    <div class="text-center text-2xl font-bold p-4">Chat</div>
+    <div class="chat-container" id="chatbox">
+        <!-- Initial Bot Message -->
+        <div class="message-container bot-message-container">
+            <img alt="Bot Icon" class="icon" src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png">
+            <span>Welcome! Type your question below.</span>
+        </div>
+    </div>
+
+    <!-- Chat Form for User Messages -->
+    <form class="w-full p-4" hx-include="[name='message']" hx-on="htmx:afterRequest:resetMessage"
+          hx-post="/chat" hx-swap="beforeend" hx-target="#chatbox">
+        <div class="input-container">
+            <input autocomplete="off" class="input-box" name="message" placeholder="Type your message here" required
+                   type="text">
+            <button class="send-button ml-2" type="submit">
+                Send
+                <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 5l7 7-7 7M5 12h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Footer Section -->
+<div class="footer-wrapper">
+    <div class="footer rounded-b-lg">
+        &copy; 2024 TallMountain. All rights reserved.
+    </div>
+</div>
+
+<!-- Script to Reset Input and Scroll on Message Send -->
+<script>
+        htmx.on('htmx:afterRequest', function(event) {
+            document.querySelector('input[name=message]').value = '';
+            var chatbox = document.getElementById('chatbox');
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            var messages = chatbox.querySelectorAll('.message-container');
+            if (messages.length > 0) {
+                var lastMessage = messages[messages.length - 1];
+                lastMessage.classList.add('fade-in');
+            }
+
+             // Limit the number of message pairs to 50
+            var messagePairs = chatbox.querySelectorAll('.message-container');
+            if (messagePairs.length > 100) { // 50 pairs means 100 messages (bot + user)
+                for (var i = 0; i < messagePairs.length - 100; i++) {
+                    chatbox.removeChild(messagePairs[i]);
+            }
+        }
+        });
+
+
+</script>
+
+</body>
+</html>

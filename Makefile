@@ -1,5 +1,8 @@
 # convenience make class to run the Raku application and tests
 
+# get the current directory
+ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
 .PHONY: all run test clean
 
 all: run
