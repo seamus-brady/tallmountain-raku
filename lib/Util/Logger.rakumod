@@ -21,23 +21,23 @@ class Util::Logger {
     }
 
     method trace(Str:D $message) {
-        $!logger.trace("[$!namespace]  - $message");
+        $!logger.trace("[$!namespace] - $message");
     }
 
     method debug(Str:D $message) {
-        $!logger.debug("[$!namespace]  - $message");
+        $!logger.debug("[$!namespace] - $message");
     }
 
     method info(Str:D $message) {
-        $!logger.info("[$!namespace]  - $message");
+        $!logger.info("[$!namespace] - $message");
     }
 
     method warn(Str:D $message) {
-        $!logger.warn("[$!namespace]  - $message");
+        $!logger.warn("[$!namespace] - $message");
     }
 
     method error(Str:D $message) {
-        $!logger.error("[$!namespace]  - $message");
+        $!logger.error("[$!namespace] - $message");
     }
 
     method !init_logger() {

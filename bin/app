@@ -11,75 +11,50 @@
 
 use v6.d;
 use lib 'lib';
-use Cro::HTTP::Router;
+use Util::Logger;
 use Cro::HTTP::Server;
+use LLM::Messages;
+use LLM::Client::OpenAI;
+use WWW::ChatUI;
 
-# Define a supply for chat events
-my $supplier = Supplier.new;
-my $chat-supply = $supplier.Supply;
+my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
 
+my $chat-ui = WWW::ChatUI.new;
 
-my $chat_ui_app = route {
+# define a supply for the chat requests
+my $chat-request-supply = $chat-ui.chat-request-supply;
 
-    # process the user message and return the response
-    post -> 'chat' {
-        my $prompt;
-
-        # get the user message from the request body
-        request-body -> %fields {
-            $prompt = %fields<message>;
-        }
-        $supplier.emit($prompt);
-        my $response = get_response($prompt);
-        content 'text/html', $response;
-    }
-
-    # serve the chat UI
-    get -> {
-        static 'www/chat_ui.html';
-    }
-}
-
-
-sub get_response($prompt){
-    my $response =  qq:to/END/;
-            <div class="message-container user-message-container">
-            <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
-            <span>$prompt
-            </div>
-            <div class="message-container bot-message-container">
-            <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
-            <span>Hello!</span>
-            </div>
-            END
-    return $response;
-}
+# define a channel for responses
+my $chat-response-channel = $chat-ui.chat-response-channel;
 
 # Start the chat ui server in the background
-start {
-    my $server = Cro::HTTP::Server.new: :host<localhost>, :port<10000>, application => $chat_ui_app;
-    $server.start;
-    say "Listening at...";
-    react {
-        whenever signal(SIGINT) {
-            say "Shutting down...";
-            $server.stop;
-            done;
-        }
-    }
-}
+$chat-ui.start-chat-ui();
 
 # Main application logic
-say "Chat UI server running at http://localhost:10000";
+$APP_LOGGER.debug("TallMountain is now running...");
+say("TallMountain is now running...");
+
+my $client = LLM::Client::OpenAI.new();
 
 react {
 
-    whenever $chat-supply -> $x {
-        say "Supply received event: $x";
+    # Whenever a chat request is received, process it
+    whenever $chat-request-supply -> $request {
+        $APP_LOGGER.debug("App received user request: '$request'");
+
+        # build a response
+        my $messages = LLM::Messages.new;
+        $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+        $messages.build-messages($request, LLM::Messages.USER);
+        my $response = $client.completion-string($messages.get-messages);
+        $APP_LOGGER.debug("App received bot response: '$response'");
+
+        # return the response
+        $chat-response-channel.send($response);
     };
 
     whenever signal(SIGINT) {
-        say "Shutting down...";
-        $chat-supply.done;
+        $APP_LOGGER.debug("Shutting down...");
+        $chat-response-channel.close;
     }
 }

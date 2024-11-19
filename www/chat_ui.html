@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>TallMountain</title>
 
     <!-- External Libraries: HTMX for interactivity and TailwindCSS for styling -->
@@ -136,61 +136,64 @@
         .fade-in { animation: fadeIn 0.5s ease-out; }
 
 
+
+
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <!-- Toolbar Section -->
-    <div class="toolbar-wrapper">
-        <div class="toolbar rounded-t-lg">
-            <div class="toolbar-logo">
-                <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" alt="Mountain Icon">
-                <span class="text-lg font-bold">TallMountain</span>
-            </div>
-            <div class="toolbar-links">
-                <a href="#about">About</a>
-                <a href="#docs">Docs</a>
-                <a href="#contact">Contact</a>
-            </div>
+<!-- Toolbar Section -->
+<div class="toolbar-wrapper">
+    <div class="toolbar rounded-t-lg">
+        <div class="toolbar-logo">
+            <img alt="Mountain Icon" src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png">
+            <span class="text-lg font-bold">TallMountain</span>
+        </div>
+        <div class="toolbar-links">
+            <a href="#about">About</a>
+            <a href="#docs">Docs</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Chat Container -->
+<div class="main-container bg-white rounded-lg shadow-lg flex flex-col h-4/5">
+    <div class="text-center text-2xl font-bold p-4">Chat</div>
+    <div class="chat-container" id="chatbox">
+        <!-- Initial Bot Message -->
+        <div class="message-container bot-message-container">
+            <img alt="Bot Icon" class="icon" src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png">
+            <span>Welcome! Type your question below.</span>
         </div>
     </div>
 
-    <!-- Main Chat Container -->
-    <div class="main-container bg-white rounded-lg shadow-lg flex flex-col h-4/5">
-        <div class="text-center text-2xl font-bold p-4">Chat</div>
-        <div id="chatbox" class="chat-container">
-            <!-- Initial Bot Message -->
-            <div class="message-container bot-message-container">
-                <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
-                <span>Welcome! Type your question below.</span>
-            </div>
+    <!-- Chat Form for User Messages -->
+    <form class="w-full p-4" hx-include="[name='message']" hx-on="htmx:afterRequest:resetMessage"
+          hx-post="/chat" hx-swap="beforeend" hx-target="#chatbox">
+        <div class="input-container">
+            <input autocomplete="off" class="input-box" name="message" placeholder="Type your message here" required
+                   type="text">
+            <button class="send-button ml-2" type="submit">
+                Send
+                <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 5l7 7-7 7M5 12h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
         </div>
+    </form>
+</div>
 
-        <!-- Chat Form for User Messages -->
-        <form hx-post="/chat" hx-target="#chatbox" hx-swap="beforeend"
-              hx-include="[name='message']" hx-on="htmx:afterRequest:resetMessage" class="w-full p-4">
-            <div class="input-container">
-                <input type="text" name="message" placeholder="Type your message here" required autocomplete="off"
-                       class="input-box">
-                <button type="submit" class="send-button ml-2">
-                    Send
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7M5 12h16" />
-                    </svg>
-                </button>
-            </div>
-        </form>
+<!-- Footer Section -->
+<div class="footer-wrapper">
+    <div class="footer rounded-b-lg">
+        &copy; 2024 TallMountain. All rights reserved.
     </div>
+</div>
 
-    <!-- Footer Section -->
-    <div class="footer-wrapper">
-        <div class="footer rounded-b-lg">
-            &copy; 2024 TallMountain. All rights reserved.
-        </div>
-    </div>
-
-    <!-- Script to Reset Input and Scroll on Message Send -->
-    <script>
+<!-- Script to Reset Input and Scroll on Message Send -->
+<script>
         htmx.on('htmx:afterRequest', function(event) {
             document.querySelector('input[name=message]').value = '';
             var chatbox = document.getElementById('chatbox');
@@ -210,7 +213,9 @@
             }
         }
         });
-    </script>
+
+
+</script>
 
 </body>
 </html>
