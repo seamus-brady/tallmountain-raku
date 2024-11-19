@@ -56,5 +56,6 @@ react {
     whenever signal(SIGINT) {
         $APP_LOGGER.debug("Shutting down...");
         $chat-response-channel.close;
+        exit;
     }
 }

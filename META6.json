@@ -8,7 +8,9 @@
     "HTTP::Tinyish",
     "JSON::Fast",
     "Logger",
-    "Config::Clever"
+    "Config::Clever",
+    "Cro::HTTP::Router",
+    "Cro::HTTP::Server"
   ],
   "provides": {
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
