@@ -13,8 +13,8 @@ use v6.d;
 use lib 'lib';
 use Util::Logger;
 use Cro::HTTP::Server;
-use LLM::Messages;
-use LLM::Facade;
+use Cycle::Cognitive;
+use Cycle::TaintedString;
 use WWW::ChatUI;
 
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
@@ -34,7 +34,7 @@ $chat-ui.start-chat-ui();
 $APP_LOGGER.debug("TallMountain is now running...");
 say("TallMountain is now running...");
 
-my $llm_client = LLM::Facade.new();
+my $cycle = Cycle::Cognitive.new;
 
 react {
 
@@ -42,11 +42,9 @@ react {
     whenever $chat-request-supply -> $request {
         $APP_LOGGER.debug("App received user request: '$request'");
 
-        # build a response
-        my $messages = LLM::Messages.new;
-        $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-        $messages.build-messages($request, LLM::Messages.USER);
-        my $response = $llm_client.completion-string($messages.get-messages);
+        # get a response but wrap in a tainted string
+        my $tainted-string = Cycle::TaintedString.new(payload => $request);
+        my $response = $cycle.run-one-cycle($tainted-string);
         $APP_LOGGER.debug("App received bot response: '$response'");
 
         # return the response

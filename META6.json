@@ -10,7 +10,8 @@
     "Logger",
     "Config::Clever",
     "Cro::HTTP::Router",
-    "Cro::HTTP::Server"
+    "Cro::HTTP::Server",
+    "UUID::V4"
   ],
   "provides": {
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",

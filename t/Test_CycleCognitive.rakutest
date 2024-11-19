@@ -1,0 +1,27 @@
+use v6.d;
+use Test;
+use lib 'lib';
+use Cycle::Cognitive;
+use Cycle::TaintedString;
+
+plan 3;
+
+subtest 'Cycle::Cognitive test creation' => {
+    my $cycle = Cycle::Cognitive.new;
+    is $cycle.index, 0, 'Initial index is 0';
+}
+
+subtest 'Cycle::Cognitive test increment-index method' => {
+    my $cycle = Cycle::Cognitive.new;
+    $cycle.increment-index;
+    is $cycle.index, 1, 'Index incremented to 1';
+}
+
+subtest 'Cycle::Cognitive test reset-index method' => {
+    my $cycle = Cycle::Cognitive.new;
+    $cycle.increment-index;
+    $cycle.reset-index;
+    is $cycle.index, 0, 'Index reset to 0';
+}
+
+done-testing;
