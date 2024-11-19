@@ -168,6 +168,11 @@
         </div>
     </div>
 
+    <!-- Add a "thinking" indicator -->
+    <div id="thinking-indicator" class="hidden text-center p-4">
+        <span>TallMountain is thinking...</span>
+    </div>
+
     <!-- Chat Form for User Messages -->
     <form class="w-full p-4" hx-include="[name='message']" hx-on="htmx:afterRequest:resetMessage"
           hx-post="/chat" hx-swap="beforeend" hx-target="#chatbox">
@@ -194,25 +199,36 @@
 
 <!-- Script to Reset Input and Scroll on Message Send -->
 <script>
-        htmx.on('htmx:afterRequest', function(event) {
-            document.querySelector('input[name=message]').value = '';
-            var chatbox = document.getElementById('chatbox');
-            chatbox.scrollTop = chatbox.scrollHeight;
 
-            var messages = chatbox.querySelectorAll('.message-container');
-            if (messages.length > 0) {
-                var lastMessage = messages[messages.length - 1];
-                lastMessage.classList.add('fade-in');
-            }
+    htmx.on('htmx:beforeRequest', function(event) {
+        // Clear the input box
+        document.querySelector('input[name=message]').value = '';
 
-             // Limit the number of message pairs to 50
-            var messagePairs = chatbox.querySelectorAll('.message-container');
-            if (messagePairs.length > 100) { // 50 pairs means 100 messages (bot + user)
-                for (var i = 0; i < messagePairs.length - 100; i++) {
-                    chatbox.removeChild(messagePairs[i]);
-            }
+        // Show the thinking indicator
+        document.getElementById('thinking-indicator').classList.remove('hidden');
+    });
+
+    htmx.on('htmx:afterRequest', function(event) {
+        // Hide the thinking indicator
+        document.getElementById('thinking-indicator').classList.add('hidden');
+
+        var chatbox = document.getElementById('chatbox');
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+        var messages = chatbox.querySelectorAll('.message-container');
+        if (messages.length > 0) {
+            var lastMessage = messages[messages.length - 1];
+            lastMessage.classList.add('fade-in');
         }
-        });
+
+         // Limit the number of message pairs to 50
+        var messagePairs = chatbox.querySelectorAll('.message-container');
+        if (messagePairs.length > 100) { // 50 pairs means 100 messages (bot + user)
+            for (var i = 0; i < messagePairs.length - 100; i++) {
+                chatbox.removeChild(messagePairs[i]);
+        }
+    }
+    });
 
 
 </script>
