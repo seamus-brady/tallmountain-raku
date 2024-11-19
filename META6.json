@@ -11,7 +11,8 @@
     "Config::Clever",
     "Cro::HTTP::Router",
     "Cro::HTTP::Server",
-    "UUID::V4"
+    "UUID::V4",
+    "Array::Circular"
   ],
   "provides": {
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
@@ -19,6 +20,7 @@
     "LLM::Facade": "lib/LLM/Facade.rakumod",
     "LLM::Messages": "lib/LLM/Messages.rakumod",
     "LLM::Util::Instructor": "lib/LLM/Util/Instructor.rakumod",
+    "Memory::ConversationBuffer": "lib/Memory/ConversationBuffer.rakumod",
     "Util::DotEnv": "lib/Util/DotEnv.rakumod"
   },
   "license": "Proprietary",
