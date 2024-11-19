@@ -15,6 +15,7 @@
   "provides": {
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
     "LLM::Client::OpenAI": "lib/LLM/Client/OpenAI.rakumod",
+    "LLM::Facade": "lib/LLM/Facade.rakumod",
     "LLM::Messages": "lib/LLM/Messages.rakumod",
     "LLM::Util::Instructor": "lib/LLM/Util/Instructor.rakumod",
     "Util::DotEnv": "lib/Util/DotEnv.rakumod"

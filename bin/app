@@ -14,7 +14,7 @@ use lib 'lib';
 use Util::Logger;
 use Cro::HTTP::Server;
 use LLM::Messages;
-use LLM::Client::OpenAI;
+use LLM::Facade;
 use WWW::ChatUI;
 
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
@@ -34,7 +34,7 @@ $chat-ui.start-chat-ui();
 $APP_LOGGER.debug("TallMountain is now running...");
 say("TallMountain is now running...");
 
-my $client = LLM::Client::OpenAI.new();
+my $llm_client = LLM::Facade.new();
 
 react {
 
@@ -46,7 +46,7 @@ react {
         my $messages = LLM::Messages.new;
         $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
         $messages.build-messages($request, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages);
+        my $response = $llm_client.completion-string($messages.get-messages);
         $APP_LOGGER.debug("App received bot response: '$response'");
 
         # return the response

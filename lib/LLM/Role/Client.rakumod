@@ -17,4 +17,13 @@ role LLM::Role::Client {
             --> Str) {
         die X::AdHoc.new(:payload("This method is not implemented."));
     }
+
+    method completion-structured-output(
+            @messages is copy,
+            Str $xml-schema is copy,
+            Str $xml-example is copy,
+            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+            --> Hash) {
+        die X::AdHoc.new(:payload("This method is not implemented."));
+    }
 }

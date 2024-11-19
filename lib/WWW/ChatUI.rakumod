@@ -70,7 +70,7 @@ class WWW::ChatUI {
             </div>
             <div class="message-container bot-message-container">
             <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
-            <span>{$bot-response}</span>
+            <span class="bot-message">{$bot-response}</span>
             </div>
             END
         return $response.trim;
