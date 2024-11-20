@@ -1,0 +1,19 @@
+#!/usr/bin/env raku
+use v6.d;
+use lib 'lib';
+use Cycle::ChatBuffer;
+use Memory::ConversationBuffer;
+
+
+my $buffer = Memory::ConversationBuffer.new();
+for 1..20 -> $i {
+    $buffer.add-entry("entry$i");
+}
+my @recent-entries = $buffer.get-recent();
+say @recent-entries;
+
+my $chat-buffer = Cycle::ChatBuffer.new();
+$chat-buffer.add-message('hello there!');
+$chat-buffer.add-message('hello there again!');
+my @messages = $chat-buffer.messages();
+say @messages;

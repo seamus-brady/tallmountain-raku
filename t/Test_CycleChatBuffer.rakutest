@@ -1,0 +1,53 @@
+use v6.d;
+use Test;
+use Cycle::ChatBuffer;
+
+plan 5;
+
+subtest 'Cycle::ChatBuffer messages' => {
+    my $chat-buffer = Cycle::ChatBuffer.new();
+    for 1..20 -> $i {
+        $chat-buffer.add-message("entry$i");
+    }
+    my @messages = $chat-buffer.messages();
+    is @messages.elems, 15, 'Messages count is correct';
+    is-deeply @messages, ['entry6', 'entry7', 'entry8', 'entry9', 'entry10',
+                          'entry11', 'entry12', 'entry13', 'entry14', 'entry15',
+                          'entry16', 'entry17', 'entry18', 'entry19', 'entry20'],
+            'Messages are correct';
+}
+
+subtest 'Cycle::ChatBuffer add-message' => {
+    my $chat-buffer = Cycle::ChatBuffer.new();
+    $chat-buffer.add-message('test-message');
+    my @messages = $chat-buffer.messages();
+    is @messages.elems, 1, 'Message added correctly';
+    is @messages[0], 'test-message', 'Message content is correct';
+}
+
+subtest 'Cycle::ChatBuffer add-message order' => {
+    my $chat-buffer = Cycle::ChatBuffer.new();
+    $chat-buffer.add-message('test-message 1');
+    $chat-buffer.add-message('test-message 2');
+    $chat-buffer.add-message('test-message 3');
+    my @messages = $chat-buffer.messages();
+    is @messages[0], 'test-message 3', 'Message content is correct';
+}
+
+subtest 'Cycle::ChatBuffer add-user-message' => {
+    my $chat-buffer = Cycle::ChatBuffer.new();
+    $chat-buffer.add-user-message('user_request');
+    my @messages = $chat-buffer.messages();
+    is @messages.elems, 1, 'User message added correctly';
+    like @messages[0], /user_request/, 'User message content is correct';
+}
+
+subtest 'Cycle::ChatBuffer add-assistant-message' => {
+    my $chat-buffer = Cycle::ChatBuffer.new();
+    $chat-buffer.add-assistant-message('assistant_response');
+    my @messages = $chat-buffer.messages();
+    is @messages.elems, 1, 'Assistant message added correctly';
+    like @messages[0], /assistant_response/, 'Assistant message content is correct';
+}
+
+done-testing;
