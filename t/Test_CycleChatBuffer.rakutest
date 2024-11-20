@@ -1,11 +1,11 @@
 use v6.d;
 use Test;
-use Cycle::ChatBuffer;
+use Cycle::Buffer::Chat;
 
 plan 5;
 
-subtest 'Cycle::ChatBuffer messages' => {
-    my $chat-buffer = Cycle::ChatBuffer.new();
+subtest 'Cycle::Buffer::Chat messages' => {
+    my $chat-buffer = Cycle::Buffer::Chat.new();
     for 1..20 -> $i {
         $chat-buffer.add-message("entry$i");
     }
@@ -17,33 +17,33 @@ subtest 'Cycle::ChatBuffer messages' => {
             'Messages are correct';
 }
 
-subtest 'Cycle::ChatBuffer add-message' => {
-    my $chat-buffer = Cycle::ChatBuffer.new();
+subtest 'Cycle::Buffer::Chat add-message' => {
+    my $chat-buffer = Cycle::Buffer::Chat.new();
     $chat-buffer.add-message('test-message');
     my @messages = $chat-buffer.messages();
     is @messages.elems, 1, 'Message added correctly';
     is @messages[0], 'test-message', 'Message content is correct';
 }
 
-subtest 'Cycle::ChatBuffer add-message order' => {
-    my $chat-buffer = Cycle::ChatBuffer.new();
+subtest 'Cycle::Buffer::Chat add-message order' => {
+    my $chat-buffer = Cycle::Buffer::Chat.new();
     $chat-buffer.add-message('test-message 1');
     $chat-buffer.add-message('test-message 2');
     $chat-buffer.add-message('test-message 3');
     my @messages = $chat-buffer.messages();
-    is @messages[0], 'test-message 3', 'Message content is correct';
+    is @messages[0], 'test-message 1', 'Message content is correct';
 }
 
-subtest 'Cycle::ChatBuffer add-user-message' => {
-    my $chat-buffer = Cycle::ChatBuffer.new();
+subtest 'Cycle::Buffer::Chat add-user-message' => {
+    my $chat-buffer = Cycle::Buffer::Chat.new();
     $chat-buffer.add-user-message('user_request');
     my @messages = $chat-buffer.messages();
     is @messages.elems, 1, 'User message added correctly';
     like @messages[0], /user_request/, 'User message content is correct';
 }
 
-subtest 'Cycle::ChatBuffer add-assistant-message' => {
-    my $chat-buffer = Cycle::ChatBuffer.new();
+subtest 'Cycle::Buffer::Chat add-assistant-message' => {
+    my $chat-buffer = Cycle::Buffer::Chat.new();
     $chat-buffer.add-assistant-message('assistant_response');
     my @messages = $chat-buffer.messages();
     is @messages.elems, 1, 'Assistant message added correctly';

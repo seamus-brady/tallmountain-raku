@@ -2,7 +2,7 @@ use v6.d;
 use LLM::Messages;
 use Memory::ConversationBuffer;
 
-class Cycle::ChatBuffer {
+class Cycle::Buffer::Chat {
 
     has Memory::ConversationBuffer $.message-buffer = Memory::ConversationBuffer.new();
 

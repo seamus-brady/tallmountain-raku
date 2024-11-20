@@ -14,7 +14,7 @@ use lib 'lib';
 use Util::Logger;
 use Cro::HTTP::Server;
 use Cycle::Cognitive;
-use Cycle::TaintedString;
+use Cycle::Payload::TaintedString;
 use WWW::ChatUI;
 
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");

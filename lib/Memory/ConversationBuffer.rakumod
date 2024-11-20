@@ -34,11 +34,7 @@ class Memory::ConversationBuffer {
 
     method get-recent() {
         my $n = RECENT_ENTRY_WINDOW;
-        if self.buffer.elems >= $n {
-            my @return = self.buffer[* - $n .. *];
-            return @return.reverse;
-        }
-        # If fewer than $n messages, return all
-        return self.buffer.reverse;
+        return self.buffer[* - $n .. *] if self.buffer.elems >= $n;
+        return self.buffer; # If fewer than $n messages, return all
     }
 }

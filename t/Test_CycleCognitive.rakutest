@@ -2,7 +2,7 @@ use v6.d;
 use Test;
 use lib 'lib';
 use Cycle::Cognitive;
-use Cycle::TaintedString;
+use Cycle::Payload::TaintedString;
 
 plan 3;
 

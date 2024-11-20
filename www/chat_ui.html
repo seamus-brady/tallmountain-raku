@@ -135,6 +135,17 @@
         }
         .fade-in { animation: fadeIn 0.5s ease-out; }
 
+        /* Keyframe animation for movement */
+        @keyframes thinkingMovement {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Apply the animation to the thinking indicator */
+        #thinking-indicator {
+            animation: thinkingMovement 1s infinite;
+        }
 
 
 

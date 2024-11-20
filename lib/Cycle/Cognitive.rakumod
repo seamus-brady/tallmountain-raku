@@ -1,7 +1,8 @@
 use v6.d;
 use UUID::V4;
 use Util::Logger;
-use Cycle::TaintedString;
+use Cycle::Payload::TaintedString;
+use Cycle::Buffer::Chat;
 use LLM::Messages;
 use LLM::Facade;
 
@@ -14,6 +15,7 @@ class Cycle::Cognitive {
     has Str $.uuid = uuid-v4();
     has DateTime $.start-time = DateTime.now;
     has LLM::Facade $.llm_client = LLM::Facade.new();
+    has Cycle::Buffer::Chat $.chat-buffer = Cycle::Buffer::Chat.new();
 
     method increment-index() {
         self.LOGGER.debug("increment-index called");
@@ -29,10 +31,9 @@ class Cycle::Cognitive {
         self.increment-index();
         self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
         # build a response
-        my $messages = LLM::Messages.new;
-        $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-        $messages.build-messages( $tainted-string.payload, LLM::Messages.USER);
-        my $response = $.llm_client.completion-string($messages.get-messages);
+        self.chat-buffer.add-user-message($tainted-string.payload);
+        my $response = $.llm_client.completion-string(self.chat-buffer.messages);
+        self.chat-buffer.add-assistant-message($response);
         return $response;
     }
 
