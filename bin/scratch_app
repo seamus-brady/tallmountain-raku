@@ -1,19 +1,18 @@
 #!/usr/bin/env raku
 use v6.d;
 use lib 'lib';
-use Cycle::Buffer::ChatBuffer;
-use Memory::ConversationBuffer;
+use LLM::Client::OpenAI;
+use LLM::Messages;
+use JSON::Fast;
 
+my $messages = LLM::Messages.new;
+$messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+$messages.build-messages('Knock knock.', LLM::Messages.USER);
+$messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
+$messages.build-messages('Orange.', LLM::Messages.USER);
 
-#my $buffer = Memory::ConversationBuffer.new();
-#for 1..51 -> $i {
-#    $buffer.add-entry("Hello there number $i");
-#}
-#my @recent-entries = $buffer.get-recent();
-#say @recent-entries;
+say $messages.to-json;
 
-my $chat-buffer = Cycle::ChatBuffer.new();
-$chat-buffer.add-message('hello there!');
-$chat-buffer.add-message('hello there again!');
-my @messages = $chat-buffer.messages();
-say @messages;
+my $client = LLM::Client::OpenAI.new();
+my $response = $client.completion-string($messages);
+say $response;
