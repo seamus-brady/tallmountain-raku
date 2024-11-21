@@ -36,52 +36,55 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 
 
 	method completion-string(
-				@messages is copy,
+				$messages is copy,
 				LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
-				--> Str) {
+				--> Any) {
 
 		self.LOGGER.debug("completion-string starting...");
 
 		my $client = HTTP::Tinyish.new;
 
+		my Str $json-messages = to-json($messages.get-messages);
+		# say $json-messages;
 		# Prepare the payload for the OpenAI API
 		my $payload = q:to/END/;
 		{
-		  "model": "gpt-4o",
-		  "messages": [
-			{
-			  "role": "user",
-			  "content": "Whats the weather like in Boston today?"
-			}
-		  ],
+		  "messages":
+		END
+		$payload = $payload ~ $json-messages ~ ",\n";
+		$payload = $payload ~ q:to/END/;
 		  "tools": [
 			{
 			  "type": "function",
 			  "function": {
-				"name": "get_current_weather",
-				"description": "Get the current weather in a given location",
 				"parameters": {
+				  "required": [
+					"location"
+				  ],
 				  "type": "object",
 				  "properties": {
-					"location": {
-					  "type": "string",
-					  "description": "The city and state, e.g. San Francisco, CA"
-					},
 					"unit": {
 					  "type": "string",
-					  "enum": ["celsius", "fahrenheit"]
+					  "enum": [
+						"celsius",
+						"fahrenheit"
+					  ]
+					},
+					"location": {
+					  "description": "The city and state, e.g. San Francisco, CA",
+					  "type": "string"
 					}
-				  },
-				  "required": ["location"]
-				}
+				  }
+				},
+				"name": "get_current_weather",
+				"description": "Get the current weather in a given location"
 			  }
 			}
 		  ],
-		  "tool_choice": "auto"
+		  "tool_choice": "auto",
+		  "model": "gpt-4o"
 		}
 		END
-
-
 
 		# Prepare headers with API key for authorization
 		my %headers = (
@@ -93,15 +96,13 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		my $response = $client.post(
             $.api-url,
             headers => %headers,
-            content => $payload.trim
+            content => $payload
         );
-
-		say $response;
 
 		# Handle the response
 		if $response<success> {
 			my %result = from-json($response<content>);
-			return %result<choices>[0]<message><content>;
+			return %result;
 		}
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";

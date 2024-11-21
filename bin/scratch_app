@@ -3,6 +3,7 @@ use v6.d;
 use lib 'lib';
 use LLM::Client::OpenAI;
 use LLM::Messages;
+use JSON::Fast;
 
 my $messages = LLM::Messages.new;
 $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
@@ -11,6 +12,16 @@ $messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
 $messages.build-messages('Orange.', LLM::Messages.USER);
 
 my $client = LLM::Client::OpenAI.new();
-my $response = $client.completion-string($messages.get-messages());
+my $response = $client.completion-string($messages);
 
 say $response;
+
+sub format-messages(@messages) {
+    my $json-messages = to-json(@messages);
+    return qq:to/END/;
+    "messages": $json-messages
+    END
+}
+
+my $formatted = format-messages($messages.get-messages());
+say $formatted;
