@@ -10,14 +10,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
-        /* Gradient Background */
-       .css-selector {
-            background: linear-gradient(270deg, #118366, #ecf7f4);
-            background-size: 400% 400%;
+        /* Define keyframe animation for background */
+        @keyframes animateBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-            -webkit-animation: AnimationName 30s ease infinite;
-            -moz-animation: AnimationName 30s ease infinite;
-            animation: AnimationName 30s ease infinite;
+        /* Apply the animation to the body element */
+        body {
+            background: url('https://tallmountain.io/swell_waves.svg') no-repeat center center fixed;
+            background-size: cover;
+            animation: animateBackground 30s linear infinite;
         }
 
         @-webkit-keyframes AnimationName {
@@ -167,17 +171,19 @@
         }
         .fade-in { animation: fadeIn 0.5s ease-out; }
 
+        /* Apply fixed positioning and center the thinking indicator */
         #thinking-indicator {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1000; /* Ensure it appears over everything else */
-            background: white; /* Make the background white */
-            padding: 20px; /* Add some padding */
-            border-radius: 10px; /* Add rounded corners */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+            background: transparent; /* Make the background fully transparent */
+            padding: 20px; /* Optional: Add some padding */
+            border-radius: 10px; /* Optional: Add rounded corners */
+            box-shadow: none; /* Remove the shadow */
         }
+
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen css-selector">
@@ -208,11 +214,11 @@
         </div>
     </div>
 
+    <!-- Add a "thinking" indicator -->
     <div id="thinking-indicator" class="hidden text-center p-4">
-        <img src="https://tallmountain.io/mountain_loading.gif" alt="Thinking...">
-        <span>Thinking</span>
+        <img src="https://tallmountain.io/mountain_loading_transparent.gif">
     </div>
-    
+
     <!-- Chat Form for User Messages -->
     <form class="w-full p-4" hx-include="[name='message']" hx-on="htmx:afterRequest:resetMessage"
           hx-post="/chat" hx-swap="beforeend" hx-target="#chatbox">
