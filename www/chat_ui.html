@@ -10,6 +10,37 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
+         .background-svg {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              z-index: -1; /* Push behind other content */
+            }
+
+        @-webkit-keyframes AnimationName {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+        @-moz-keyframes AnimationName {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+        @keyframes AnimationName {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+
+        @keyframes AnimationName {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+
         /* Chat Message Container Styling */
         .message-container {
             display: flex;
@@ -135,12 +166,57 @@
         }
         .fade-in { animation: fadeIn 0.5s ease-out; }
 
-
-
+        /* Apply fixed positioning and center the thinking indicator */
+        #thinking-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* Ensure it appears over everything else */
+            background: transparent; /* Make the background fully transparent */
+            padding: 20px; /* Optional: Add some padding */
+            border-radius: 10px; /* Optional: Add rounded corners */
+            box-shadow: none; /* Remove the shadow */
+        }
 
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<svg class="background-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 868" preserveAspectRatio="xMidYMid" style="shape-rendering: auto; display: block; background: rgb(8, 28, 84);" width="1920" height="868" xmlns:xlink="http://www.w3.org/1999/xlink"><g><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-0">
+        <stop offset="0" stop-color="#081c54"></stop>
+        <stop offset="1" stop-color="#225ea8"></stop>
+    </linearGradient><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-1">
+        <stop offset="0" stop-color="#225ea8"></stop>
+        <stop offset="1" stop-color="#1d91c0"></stop>
+    </linearGradient><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-2">
+        <stop offset="0" stop-color="#1d91c0"></stop>
+        <stop offset="1" stop-color="#41b6c4"></stop>
+    </linearGradient><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-3">
+        <stop offset="0" stop-color="#41b6c4"></stop>
+        <stop offset="1" stop-color="#7fcdbb"></stop>
+    </linearGradient><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-4">
+        <stop offset="0" stop-color="#7fcdbb"></stop>
+        <stop offset="1" stop-color="#c7e9b4"></stop>
+    </linearGradient><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-5">
+        <stop offset="0" stop-color="#c7e9b4"></stop>
+        <stop offset="1" stop-color="#f3f8cf"></stop>
+    </linearGradient><linearGradient y2="1" y1="0" x2="0" x1="0" id="lg-rzfb6sjvxv-6">
+        <stop offset="0" stop-color="#f3f8cf"></stop>
+        <stop offset="1" stop-color="#081c54"></stop>
+    </linearGradient><path fill-opacity="0.88" fill="url(#lg-rzfb6sjvxv-0)" d="M0 0L0 959.14Q192 878.10 384 843.82T768 815.05T1152 712T1536 706.13T1920 617.44L1920 0Z">
+        <animate values="M0 0L0 959.14Q192 878.10 384 843.82T768 815.05T1152 712T1536 706.13T1920 617.44L1920 0Z;M0 0L0 919.93Q192 871.36 384 855.30T768 837.59T1152 687.23T1536 750.65T1920 708.55L1920 0Z;M0 0L0 878.66Q192 945.36 384 908.68T768 875.16T1152 686.31T1536 758.22T1920 619.79L1920 0Z;M0 0L0 959.14Q192 878.10 384 843.82T768 815.05T1152 712T1536 706.13T1920 617.44L1920 0Z" begin="0s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline" keyTimes="0;0.333;0.667;1" repeatCount="indefinite" dur="33.33s" attributeName="d"></animate>
+    </path><path fill-opacity="0.88" fill="url(#lg-rzfb6sjvxv-1)" d="M0 0L0 687.47Q192 736.29 384 721.30T768 660.15T1152 541.24T1536 568.91T1920 455.51L1920 0Z">
+        <animate values="M0 0L0 687.47Q192 736.29 384 721.30T768 660.15T1152 541.24T1536 568.91T1920 455.51L1920 0Z;M0 0L0 843.57Q192 708.64 384 672.25T768 614.32T1152 639.91T1536 630.23T1920 606.28L1920 0Z;M0 0L0 769.38Q192 819.15 384 777.21T768 741.83T1152 600.96T1536 528.32T1920 510.62L1920 0Z;M0 0L0 687.47Q192 736.29 384 721.30T768 660.15T1152 541.24T1536 568.91T1920 455.51L1920 0Z" begin="-5.56s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline" keyTimes="0;0.333;0.667;1" repeatCount="indefinite" dur="33.33s" attributeName="d"></animate>
+    </path><path fill-opacity="0.88" fill="url(#lg-rzfb6sjvxv-2)" d="M0 0L0 593.40Q192 588.73 384 561.40T768 580.83T1152 530.45T1536 536.41T1920 444.47L1920 0Z">
+        <animate values="M0 0L0 593.40Q192 588.73 384 561.40T768 580.83T1152 530.45T1536 536.41T1920 444.47L1920 0Z;M0 0L0 602.83Q192 578.04 384 536.78T768 493.98T1152 566.76T1536 495.70T1920 466.57L1920 0Z;M0 0L0 571.34Q192 610.18 384 565.77T768 558.34T1152 503.15T1536 511.85T1920 374.10L1920 0Z;M0 0L0 593.40Q192 588.73 384 561.40T768 580.83T1152 530.45T1536 536.41T1920 444.47L1920 0Z" begin="-11.11s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline" keyTimes="0;0.333;0.667;1" repeatCount="indefinite" dur="33.33s" attributeName="d"></animate>
+    </path><path fill-opacity="0.88" fill="url(#lg-rzfb6sjvxv-3)" d="M0 0L0 446.58Q192 568.24 384 523.94T768 380.31T1152 347.61T1536 448.88T1920 417.86L1920 0Z">
+        <animate values="M0 0L0 446.58Q192 568.24 384 523.94T768 380.31T1152 347.61T1536 448.88T1920 417.86L1920 0Z;M0 0L0 478.67Q192 556.05 384 523.93T768 369.55T1152 376.60T1536 389.76T1920 388.68L1920 0Z;M0 0L0 408.04Q192 491.92 384 468.24T768 460.77T1152 345T1536 367.12T1920 344.01L1920 0Z;M0 0L0 446.58Q192 568.24 384 523.94T768 380.31T1152 347.61T1536 448.88T1920 417.86L1920 0Z" begin="-16.67s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline" keyTimes="0;0.333;0.667;1" repeatCount="indefinite" dur="33.33s" attributeName="d"></animate>
+    </path><path fill-opacity="0.88" fill="url(#lg-rzfb6sjvxv-4)" d="M0 0L0 316.58Q192 447.23 384 398.98T768 272.95T1152 285.81T1536 222.61T1920 290.26L1920 0Z">
+        <animate values="M0 0L0 316.58Q192 447.23 384 398.98T768 272.95T1152 285.81T1536 222.61T1920 290.26L1920 0Z;M0 0L0 393.70Q192 390.97 384 362.40T768 230.57T1152 254.86T1536 325.05T1920 184.70L1920 0Z;M0 0L0 322.41Q192 294.88 384 263.29T768 367.94T1152 258.14T1536 191.08T1920 171.20L1920 0Z;M0 0L0 316.58Q192 447.23 384 398.98T768 272.95T1152 285.81T1536 222.61T1920 290.26L1920 0Z" begin="-22.22s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline" keyTimes="0;0.333;0.667;1" repeatCount="indefinite" dur="33.33s" attributeName="d"></animate>
+    </path><path fill-opacity="0.88" fill="url(#lg-rzfb6sjvxv-5)" d="M0 0L0 270.44Q192 165.58 384 126.43T768 253.27T1152 194.58T1536 132.43T1920 133.10L1920 0Z">
+        <animate values="M0 0L0 270.44Q192 165.58 384 126.43T768 253.27T1152 194.58T1536 132.43T1920 133.10L1920 0Z;M0 0L0 113.28Q192 294.86 384 258.14T768 144.20T1152 179.66T1536 236.46T1920 78.92L1920 0Z;M0 0L0 268.37Q192 200.80 384 181.52T768 252.66T1152 115.23T1536 113.78T1920 177.51L1920 0Z;M0 0L0 270.44Q192 165.58 384 126.43T768 253.27T1152 194.58T1536 132.43T1920 133.10L1920 0Z" begin="-27.78s" keySplines="0.5 0 0.5 1;0.5 0 0.5 1;0.5 0 0.5 1" calcMode="spline" keyTimes="0;0.333;0.667;1" repeatCount="indefinite" dur="33.33s" attributeName="d"></animate>
+    </path><g></g></g>
+    </svg>
 
 <!-- Toolbar Section -->
 <div class="toolbar-wrapper">
@@ -170,7 +246,7 @@
 
     <!-- Add a "thinking" indicator -->
     <div id="thinking-indicator" class="hidden text-center p-4">
-        <span>TallMountain is thinking...</span>
+        <img src="https://tallmountain.io/mountain_loading_transparent.gif">
     </div>
 
     <!-- Chat Form for User Messages -->

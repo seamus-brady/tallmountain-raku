@@ -1,0 +1,77 @@
+use v6.d;
+use Test;
+use Memory::ConversationBuffer;
+
+plan 8;
+
+subtest 'Memory::ConversationBuffer init' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    isa-ok $buffer, Memory::ConversationBuffer;
+}
+
+subtest 'Memory::ConversationBuffer add' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    $buffer.add-entry('test');
+    isa-ok $buffer, Memory::ConversationBuffer
+}
+
+subtest 'Memory::ConversationBuffer get-last-n-entries' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    $buffer.add-entry('entry1');
+    $buffer.add-entry('entry2');
+    $buffer.add-entry('entry3');
+    my @last-entries = $buffer.get-last-n-entries(2);
+    is-deeply @last-entries, ['entry2', 'entry3'], 'Last 2 entries are correct';
+}
+
+subtest 'Memory::ConversationBuffer get-recent' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    for 1..20 -> $i {
+        $buffer.add-entry("entry$i");
+    }
+    my @recent-entries = $buffer.get-recent();
+    is @recent-entries.elems, 15, 'Recent entries count is correct';
+    is-deeply @recent-entries, ['entry6', 'entry7', 'entry8', 'entry9', 'entry10', 'entry11',
+                                'entry12', 'entry13', 'entry14', 'entry15', 'entry16', 'entry17',
+                                'entry18', 'entry19', 'entry20'],
+            'Recent entries are correct';
+}
+
+subtest 'Memory::ConversationBuffer get-recent with fewer than RECENT_ENTRY_WINDOW entries' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    $buffer.add-entry("Message 1");
+    $buffer.add-entry("Message 2");
+    $buffer.add-entry("Message 3");
+    is-deeply $buffer.get-recent(), ["Message 1", "Message 2", "Message 3"], 'get-recent with fewer than RECENT_ENTRY_WINDOW entries';
+}
+
+subtest 'Memory::ConversationBuffer get-recent with exactly RECENT_ENTRY_WINDOW entries' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    for 1..15 -> $i {
+        $buffer.add-entry("Message $i");
+    }
+    my @recent-entries = $buffer.get-recent();
+    is @recent-entries.elems, 15, 'Recent entries count is 15';
+}
+
+subtest 'Memory::ConversationBuffer get-recent with more than RECENT_ENTRY_WINDOW entries' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    for 1..20 -> $i {
+        $buffer.add-entry("Message $i");
+    }
+    my @recent-entries = $buffer.get-recent();
+    is @recent-entries.elems, 15, 'Recent entries count is 15';
+}
+
+subtest 'Memory::ConversationBuffer get-recent has most recent entry' => {
+    my $buffer = Memory::ConversationBuffer.new();
+    for 1..20 -> $i {
+        $buffer.add-entry("Message $i");
+    }
+    my @recent-entries = $buffer.get-recent();
+    is @recent-entries[*-1], 'Message 20', 'Last element is Message 20';
+}
+
+
+
+done-testing;
