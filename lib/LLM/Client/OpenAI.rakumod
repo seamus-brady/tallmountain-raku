@@ -45,12 +45,43 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		my $client = HTTP::Tinyish.new;
 
 		# Prepare the payload for the OpenAI API
-		my %payload = (
-			model => $.model,
-			messages => @messages,
-			temperature => $mode.temperature,
-			max_tokens => $mode.max-tokens,
-		);
+		my $payload = q:to/END/;
+		{
+		  "model": "gpt-4o",
+		  "messages": [
+			{
+			  "role": "user",
+			  "content": "Whats the weather like in Boston today?"
+			}
+		  ],
+		  "tools": [
+			{
+			  "type": "function",
+			  "function": {
+				"name": "get_current_weather",
+				"description": "Get the current weather in a given location",
+				"parameters": {
+				  "type": "object",
+				  "properties": {
+					"location": {
+					  "type": "string",
+					  "description": "The city and state, e.g. San Francisco, CA"
+					},
+					"unit": {
+					  "type": "string",
+					  "enum": ["celsius", "fahrenheit"]
+					}
+				  },
+				  "required": ["location"]
+				}
+			  }
+			}
+		  ],
+		  "tool_choice": "auto"
+		}
+		END
+
+
 
 		# Prepare headers with API key for authorization
 		my %headers = (
@@ -62,8 +93,10 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		my $response = $client.post(
             $.api-url,
             headers => %headers,
-            content => to-json(%payload)
+            content => $payload.trim
         );
+
+		say $response;
 
 		# Handle the response
 		if $response<success> {
@@ -73,6 +106,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";
 			self.LOGGER.error($message);
+			self.LOGGER.error("OpenAI API response:\n$response ");
 			LLM::Client::OpenAIException.new(message => $message).throw;
 		}
 	}
