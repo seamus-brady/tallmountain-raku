@@ -47,12 +47,8 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		my Str $json-messages = to-json($messages.get-messages);
 		# say $json-messages;
 		# Prepare the payload for the OpenAI API
-		my $payload = q:to/END/;
-		{
-		  "messages":
-		END
-		$payload = $payload ~ $json-messages ~ ",\n";
-		$payload = $payload ~ q:to/END/;
+
+		my Str $tools = q:to/END/;
 		  "tools": [
 			{
 			  "type": "function",
@@ -81,6 +77,14 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 			  }
 			}
 		  ],
+		END
+		my $payload = q:to/END/;
+		{
+		  "messages":
+		END
+		$payload = $payload ~ $json-messages ~ ",\n";
+		$payload = $payload ~ $tools;
+		$payload = $payload ~ q:to/END/;
 		  "tool_choice": "auto",
 		END
 		$payload = $payload  ~ "\"model\": \"$.model\"\n}";
