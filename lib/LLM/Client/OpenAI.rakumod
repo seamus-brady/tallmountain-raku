@@ -82,9 +82,10 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 			}
 		  ],
 		  "tool_choice": "auto",
-		  "model": "gpt-4o"
-		}
 		END
+		$payload = $payload  ~ "\"model\": \"$.model\"\n}";
+
+		say $payload;
 
 		# Prepare headers with API key for authorization
 		my %headers = (
