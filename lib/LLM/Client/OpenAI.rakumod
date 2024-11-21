@@ -36,7 +36,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 
 
 	method completion-string(
-				@messages is copy,
+			    LLM::Messages $messages is copy,
 				LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
 				--> Str) {
 
@@ -47,7 +47,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		# Prepare the payload for the OpenAI API
 		my %payload = (
 			model => $.model,
-			messages => @messages,
+			messages => $messages.get-messages,
 			temperature => $mode.temperature,
 			max_tokens => $mode.max-tokens,
 		);
@@ -73,12 +73,13 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";
 			self.LOGGER.error($message);
+			self.LOGGER.error($response);
 			LLM::Client::OpenAIException.new(message => $message).throw;
 		}
 	}
 
 	method completion-structured-output(
-			@messages is copy,
+			LLM::Messages $messages is copy,
 			Str $xml-schema is copy,
 			Str $xml-example is copy,
 			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
@@ -102,7 +103,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 
 		while $attempts <  $allowed_attempts {
 			self.LOGGER.debug("completion-structured-output starting attempt number $attempts...");
-			$xml-output = self.completion-structured-output-as-xml(@messages, $xml-schema, $xml-example, $mode);
+			$xml-output = self.completion-structured-output-as-xml($messages, $xml-schema, $xml-example, $mode);
 			if $instructor-util.is-valid-xml($xml-output, $xml-schema) {
 				return $instructor-util.hash-from-xml($xml-output);
 			}
@@ -115,7 +116,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 	}
 
 	method completion-structured-output-as-xml(
-			@messages is copy,
+			LLM::Messages $messages is copy,
 			Str $xml-schema is copy,
 			Str $xml-example is copy,
 			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
@@ -123,7 +124,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 
 		self.LOGGER.debug("completion-structured-output-xml starting...");
 
-		my Str $prompt-string = self.get-completion-prompt(@messages, $xml-schema, $xml-example);
+		my Str $prompt-string = self.get-completion-prompt($messages.get-messages, $xml-schema, $xml-example);
 
 		my $xml-messages = LLM::Messages.new;
 		$xml-messages.build-messages('You are an expert in xml data extraction.', LLM::Messages.SYSTEM);

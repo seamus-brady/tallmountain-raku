@@ -14,22 +14,10 @@ use lib 'lib';
 use LLM::Client::OpenAI;
 use LLM::Messages;
 
-plan 5;
+plan 4;
 
 # Create an instance of the OpenAIClient
 my $client = LLM::Client::OpenAI.new();
-
-subtest 'LLM::Client::OpenAI Chat Completion' => {
-    # Define the messages to send
-    my @messages = (
-        { role => "system", content => "You are a helpful assistant." },
-        { role => "user", content => "Hello!" }
-    );
-    my $response = $client.completion-string(@messages);
-    ok $response, 'Chat completion should return a response';
-    ok $response.chars > 0, 'Chat completion should return a non-empty response';
-}
-
 
 subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     my $messages = LLM::Messages.new;
@@ -37,7 +25,7 @@ subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     $messages.build-messages('Knock knock.', LLM::Messages.USER);
     $messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
     $messages.build-messages('Orange.', LLM::Messages.USER);
-    my $response = $client.completion-string($messages.get-messages());
+    my $response = $client.completion-string($messages);
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
 }
@@ -83,7 +71,7 @@ subtest 'LLM::Client::OpenAI structured output' => {
     $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
     $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
-    my %family = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    my %family = $client.completion-structured-output($messages, $xml-schema.trim, $xml-doc.trim);
     is %family<parent>, 'Mary', 'Test parent.';
     is %family<child>[0]<name>, 'Tom', 'Test child name.';
     is %family<child>[1]<name>, 'Laura', 'Test child name.';
@@ -134,7 +122,7 @@ subtest 'LLM::Client::OpenAI structured output extracts string' => {
     It is made from bright mild steel and vegan leather
     END
     $messages.build-messages($prompt, LLM::Messages.USER);
-    my %response = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    my %response = $client.completion-structured-output($messages, $xml-schema.trim, $xml-doc.trim);
     is %response<name>, 'Steering Wheel', 'Test string extracted.';
 }
 
@@ -171,7 +159,7 @@ subtest 'LLM::Client::OpenAI structured output invalid schema' => {
     $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
     dies-ok {
-        $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim)
+        $client.completion-structured-output($messages, $xml-schema.trim, $xml-doc.trim)
     }, 'Exception thrown for invalid xml';
 }
 
