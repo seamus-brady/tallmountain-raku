@@ -78,6 +78,57 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		}
 	}
 
+
+	method completion-tools(
+			LLM::Messages $messages is copy,
+			Str $tools is copy;
+			Str $tool-choice = "auto",
+			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode()
+			--> Any) {
+
+		self.LOGGER.debug("completion-tool starting...");
+
+		my $client = HTTP::Tinyish.new;
+		my Str $json-messages = $messages.to-json;
+
+		my $payload = q:to/END/;
+		{
+		  "messages":
+		END
+		$payload = $payload ~ $json-messages ~ ",\n";
+		$payload = $payload ~ $tools;
+		$payload = $payload  ~ "\"tool_choice\": \"$tool-choice\",\n";
+		$payload = $payload  ~ "\"temperature\": $mode.temperature(),\n";
+		$payload = $payload  ~ "\"top_p\": $mode.top-p(),\n";
+		$payload = $payload  ~ "\"model\": \"$.model\"\n}";
+
+		# Prepare headers with API key for authorization
+		my %headers = (
+		"Content-Type" => "application/json",
+		"Authorization" => "Bearer " ~ $.api-key
+		);
+
+		# Send a POST request with the JSON-encoded payload
+		my $response = $client.post(
+				$.api-url,
+				headers => %headers,
+				content => $payload
+				);
+
+		# Handle the response
+		if $response<success> {
+			my %result = from-json($response<content>);
+			return %result;
+		}
+		else {
+			my Str $message = "Error: { $response<status> } - { $response<reason> }";
+			self.LOGGER.error($message);
+			self.LOGGER.error("OpenAI API response:\n$response ");
+			LLM::Client::OpenAIException.new(message => $message).throw;
+		}
+	}
+
+
 	method completion-structured-output(
 			LLM::Messages $messages is copy,
 			Str $xml-schema is copy,

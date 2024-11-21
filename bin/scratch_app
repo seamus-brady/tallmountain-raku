@@ -6,13 +6,40 @@ use LLM::Messages;
 use JSON::Fast;
 
 my $messages = LLM::Messages.new;
-$messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-$messages.build-messages('Knock knock.', LLM::Messages.USER);
-$messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
-$messages.build-messages('Orange.', LLM::Messages.USER);
 
-say $messages.to-json;
+$messages.build-messages('Is it snowing in Dublin?', LLM::Messages.USER);
+
+my Str $tools = q:to/END/;
+		  "tools": [
+			{
+			  "type": "function",
+			  "function": {
+				"parameters": {
+				  "required": [
+					"location"
+				  ],
+				  "type": "object",
+				  "properties": {
+					"unit": {
+					  "type": "string",
+					  "enum": [
+						"celsius",
+						"fahrenheit"
+					  ]
+					},
+					"location": {
+					  "description": "The city and state, e.g. San Francisco, CA",
+					  "type": "string"
+					}
+				  }
+				},
+				"name": "get_current_weather",
+				"description": "Get the current weather in a given location"
+			  }
+			}
+		  ],
+		END
 
 my $client = LLM::Client::OpenAI.new();
-my $response = $client.completion-string($messages);
+my $response = $client.completion-tools($messages, $tools);
 say $response;
