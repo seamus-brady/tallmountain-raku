@@ -32,7 +32,7 @@ class Cycle::Cognitive {
         self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
         # build a response
         self.chat-buffer.add-user-message($tainted-string.payload);
-        my $response = $.llm_client.completion-string(self.chat-buffer.messages);
+        my $response = $.llm_client.completion-string(self.chat-buffer.as-llm-messages);
         self.chat-buffer.add-assistant-message($response);
         return $response;
     }
