@@ -41,5 +41,5 @@ my Str $tools = q:to/END/;
 		END
 
 my $client = LLM::Client::OpenAI.new();
-my $response = $client.completion-tools($messages, $tools);
-say $response;
+my %result = $client.completion-tools($messages, $tools);
+say %result<choices>[0]<message><tool_calls>[0]<function><name>

@@ -14,7 +14,7 @@ use lib 'lib';
 use LLM::Client::OpenAI;
 use LLM::Messages;
 
-plan 4;
+plan 5;
 
 # Create an instance of the OpenAIClient
 my $client = LLM::Client::OpenAI.new();
@@ -28,6 +28,47 @@ subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     my $response = $client.completion-string($messages);
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
+}
+
+
+
+subtest 'LLM::Client::OpenAI completion tools' => {
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('Is it snowing in Dublin?', LLM::Messages.USER);
+    my Str $tools = q:to/END/;
+		  "tools": [
+			{
+			  "type": "function",
+			  "function": {
+				"parameters": {
+				  "required": [
+					"location"
+				  ],
+				  "type": "object",
+				  "properties": {
+					"unit": {
+					  "type": "string",
+					  "enum": [
+						"celsius",
+						"fahrenheit"
+					  ]
+					},
+					"location": {
+					  "description": "The city and state, e.g. San Francisco, CA",
+					  "type": "string"
+					}
+				  }
+				},
+				"name": "get_current_weather",
+				"description": "Get the current weather in a given location"
+			  }
+			}
+		  ],
+		END
+    my $client = LLM::Client::OpenAI.new();
+    my %response = $client.completion-tools($messages, $tools);
+    ok %response, 'Chat completion should return a response';
+    is %response<choices>[0]<message><tool_calls>[0]<function><name>, 'get_current_weather', 'Tools completion called correct function';
 }
 
 

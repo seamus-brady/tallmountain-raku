@@ -91,16 +91,7 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		my $client = HTTP::Tinyish.new;
 		my Str $json-messages = $messages.to-json;
 
-		my $payload = q:to/END/;
-		{
-		  "messages":
-		END
-		$payload = $payload ~ $json-messages ~ ",\n";
-		$payload = $payload ~ $tools;
-		$payload = $payload  ~ "\"tool_choice\": \"$tool-choice\",\n";
-		$payload = $payload  ~ "\"temperature\": $mode.temperature(),\n";
-		$payload = $payload  ~ "\"top_p\": $mode.top-p(),\n";
-		$payload = $payload  ~ "\"model\": \"$.model\"\n}";
+		my $payload = self.format-payload-for-completion-tools($messages, $tools, $tool-choice, $mode);
 
 		# Prepare headers with API key for authorization
 		my %headers = (
@@ -128,6 +119,30 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		}
 	}
 
+	method format-payload-for-completion-tools(
+			LLM::Messages $messages is copy,
+			Str $tools is copy,
+			Str $tool-choice = "auto",
+			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode()
+			--> Str) {
+
+		self.LOGGER.debug("format_payload_for_completion-tools starting...");
+
+		my $json-messages = $messages.to-json;
+
+		my $payload = q:to/END/;
+		{
+		  "messages":
+		END
+		$payload = $payload ~ $json-messages ~ ",\n";
+		$payload = $payload ~ $tools;
+		$payload = $payload  ~ "\"tool_choice\": \"$tool-choice\",\n";
+		$payload = $payload  ~ "\"temperature\": $mode.temperature(),\n";
+		$payload = $payload  ~ "\"top_p\": $mode.top-p(),\n";
+		$payload = $payload  ~ "\"model\": \"$.model\"\n}";
+
+		return $payload;
+	}
 
 	method completion-structured-output(
 			LLM::Messages $messages is copy,
