@@ -33,24 +33,24 @@ class LLM::AdaptiveRequestMode {
     has Int $.max-tokens is rw = DEFAULT-MAX-TOKENS;
 
     # Constructors for each mode
-    method precision-mode() {
-        self.new(:mode(Mode::PRECISION_MODE)).init-mode;
+    method precision-mode(--> LLM::AdaptiveRequestMode) {
+        return LLM::AdaptiveRequestMode.new(:mode(Mode::PRECISION_MODE)).init-mode;
     }
 
-    method controlled-creative-mode() {
-        self.new(:mode(Mode::CONTROLLED_CREATIVE_MODE)).init-mode;
+    method controlled-creative-mode(--> LLM::AdaptiveRequestMode) {
+        return LLM::AdaptiveRequestMode.new(:mode(Mode::CONTROLLED_CREATIVE_MODE)).init-mode;
     }
 
-    method dynamic-focused-mode() {
-        self.new(:mode(Mode::DYNAMIC_FOCUSED_MODE)).init-mode;
+    method dynamic-focused-mode(--> LLM::AdaptiveRequestMode) {
+        return LLM::AdaptiveRequestMode.new(:mode(Mode::DYNAMIC_FOCUSED_MODE)).init-mode;
     }
 
-    method exploratory-mode() {
-        self.new(:mode(Mode::EXPLORATORY_MODE)).init-mode;
+    method exploratory-mode(--> LLM::AdaptiveRequestMode) {
+        return LLM::AdaptiveRequestMode.new(:mode(Mode::EXPLORATORY_MODE)).init-mode;
     }
 
-    method balanced-mode() {
-        self.new(:mode(Mode::BALANCED_MODE)).init-mode;
+    method balanced-mode(--> LLM::AdaptiveRequestMode) {
+        return LLM::AdaptiveRequestMode.new(:mode(Mode::BALANCED_MODE)).init-mode;
     }
 
     # Initialize mode settings based on selected mode

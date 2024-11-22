@@ -1,19 +1,45 @@
 #!/usr/bin/env raku
 use v6.d;
 use lib 'lib';
-use Cycle::Buffer::ChatBuffer;
-use Memory::ConversationBuffer;
+use LLM::Client::OpenAI;
+use LLM::Messages;
+use JSON::Fast;
 
+my $messages = LLM::Messages.new;
 
-#my $buffer = Memory::ConversationBuffer.new();
-#for 1..51 -> $i {
-#    $buffer.add-entry("Hello there number $i");
-#}
-#my @recent-entries = $buffer.get-recent();
-#say @recent-entries;
+$messages.build-messages('Is it snowing in Dublin?', LLM::Messages.USER);
 
-my $chat-buffer = Cycle::ChatBuffer.new();
-$chat-buffer.add-message('hello there!');
-$chat-buffer.add-message('hello there again!');
-my @messages = $chat-buffer.messages();
-say @messages;
+my Str $tools = q:to/END/;
+		  "tools": [
+			{
+			  "type": "function",
+			  "function": {
+				"parameters": {
+				  "required": [
+					"location"
+				  ],
+				  "type": "object",
+				  "properties": {
+					"unit": {
+					  "type": "string",
+					  "enum": [
+						"celsius",
+						"fahrenheit"
+					  ]
+					},
+					"location": {
+					  "description": "The city and state, e.g. San Francisco, CA",
+					  "type": "string"
+					}
+				  }
+				},
+				"name": "get_current_weather",
+				"description": "Get the current weather in a given location"
+			  }
+			}
+		  ],
+		END
+
+my $client = LLM::Client::OpenAI.new();
+my %result = $client.completion-tools($messages, $tools);
+say %result<choices>[0]<message><tool_calls>[0]<function><name>
