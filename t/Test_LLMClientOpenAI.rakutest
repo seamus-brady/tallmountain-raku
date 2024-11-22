@@ -68,7 +68,9 @@ subtest 'LLM::Client::OpenAI completion tools' => {
     my $client = LLM::Client::OpenAI.new();
     my %response = $client.completion-tools($messages, $tools);
     ok %response, 'Chat completion should return a response';
-    is %response<choices>[0]<message><tool_calls>[0]<function><name>, 'get_current_weather', 'Tools completion called correct function';
+    is %response<choices>[0]<message><tool_calls>[0]<function><name>,
+            'get_current_weather',
+            'Tools completion called correct function';
 }
 
 
