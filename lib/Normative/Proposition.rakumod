@@ -2,10 +2,13 @@ use v6.d;
 use UUID::V4;
 
 class Normative::Proposition {
-    has Str $.uuid = uuid-v4();
-    has Str $.proposition-value;
+    # A normative proposition
 
-    has Normative::NormOperator $.norm-operator;
-    has Int $.norm-subscript;
-    has Normative::ModalOperator $.modal-operator;
+    has Str $.uuid = uuid-v4();
+    has Str $.proposition-value is required;
+    # TODO add endeavour
+    has Normative::NormOperator $.operator is required;
+    has Normative::NormLevel $.level is required;
+    has Normative::Modality $.modality is required;
+    has Normative::ModalitySubscript $.modal-subscript is required;
 }

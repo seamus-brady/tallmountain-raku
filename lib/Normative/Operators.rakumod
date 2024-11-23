@@ -3,59 +3,49 @@ use v6.d;
 # Modal operators, read as:
 # – it is necessary that...
 # – it is possible that...
+enum Modality <NECESSARY POSSIBLE NOT_NECESSARY NOT_POSSIBLE>;
+
 # Modal operator subscripts:
 # – it is logically possible that...
 # – it is theoretically possible that...
 # – it is practically possible that...
-# In this system, this has been simplified to possible or not possible.
-
-enum ModalOperator <POSSIBLE NOT_POSSIBLE>;
+enum ModalitySubscript <LOGICAL THEORETICAL PRACTICAL NONE>;
 
 # Normative operators, read as:
 # – it is required that...
 # – it is ought to be that...
 # – it is indifferent that...
+enum NormOperator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
 
-enum NormOperator <INDIFFERENT OUGHT REQUIRED>;
-
-
-class NormSubscript {
-    #    This class represents numerical subscripts (e.g. R1, O2, I3)
-    #    indicate that the norm is drawn from
-    #    restricted, submoral considerations (etiquette, role obligations, etc.) The
-    #    subscripts indicate the ordinal status of that type of norm relative to other
-    #    submoral considerations. Priorities among norms of the same type or rank
-    #    will be indicated with ordinal operators e.g. R2 > R2.
-    #    Ethical/moral norms are always at the highest subscript.
-    #
-    #    Normative operators without numerical subscripts are understood to refer to
-    #    moral (ethical) norms.
-    #    Unsubscripted norms are implemented as the max value of int for convenience,
-    #    rather than as a separate type. Here these have sys.maxsize instead.
-    #    Ethical/moral norms are always at the highest subscript.
-    #    This class holds that value.
-
-    enum Type <DESIRE_FULFILMENT HYPOTHETICAL GAME ETIQUETTE ROLE_OBLIGATION CODE_OF_CONDUCT SYSTEM_INTEGRITY ETHICAL>;
-
-    # Map enum values to numerical subscripts
-    constant %VALUES = (
-        DESIRE_FULFILMENT  => 3000,
-        HYPOTHETICAL       => 4000,
-        GAME               => 5000,
-        ETIQUETTE          => 6000,
-        ROLE_OBLIGATION    => 7000,
-        CODE_OF_CONDUCT    => 8000,
-        SYSTEM_INTEGRITY   => 9000,
-        ETHICAL            => Int.max
-    );
-
-    # Retrieve the numerical value of a given type
-    method value-of(Str $name) {
-        my Type $type = Type::{$name} // die "Unknown NormSubscript type: $name";
-        return %VALUES{$type};
-    }
-}
-
+# Norm Category       Ordinal Level    Description
+# Ethical/Moral Norms 10000        Universal principles of right and wrong, justice, and human values.
+# Legal Norms         5000             Codified laws enforceable by legal systems.
+# Prudential Norms    4500             Focus on self-preservation and rational self-interest.
+# Social/Political Norms 4000         Civic duties or expectations governing behavior in society or politics.
+# Scientific/Technical Norms 3500     Standards of rigor, accuracy, and innovation in science and technology.
+# Environmental Norms 3250            Principles of sustainability and ecological conservation.
+# Cultural/Religious Norms 3000       Practices tied to cultural or religious identity, specific to a community.
+# Community Norms     2750            Informal expectations within a local or small-group community.
+# Code of Conduct     2500            Expectations within a profession, organization, or community.
+# Professional/Organizational Norms 2000 Operational conduct in specific roles or workplaces.
+# Economic Norms      2250            Norms regulating fairness in markets or financial systems.
+# Etiquette Norms     1500            Polite behavior and socially acceptable conduct in everyday interactions.
+# Game Norms          1000            Rules specific to games, sports, or competitive activities.
+enum NormLevel(
+    ETHICAL_MORAL => 10000,
+    LEGAL => 5000,
+    PRUDENTIAL => 4500,
+    SOCIAL_POLITICAL => 4000,
+    SCIENTIFIC_TECHNICAL => 3500,
+    ENVIRONMENTAL => 3250,
+    CULTURAL_RELIGIOUS => 3000,
+    COMMUNITY => 2750,
+    CODE_OF_CONDUCT => 2500,
+    PROFESSIONAL_ORGANIZATIONAL => 2000,
+    ECONOMIC => 2250,
+    ETIQUETTE => 1500,
+    GAME => 1000
+);
 
 class OrdinalOperators {
     # Ordinal operators, read as:
