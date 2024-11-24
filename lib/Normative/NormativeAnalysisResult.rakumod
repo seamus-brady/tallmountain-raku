@@ -16,27 +16,19 @@ class Normative::NormativeAnalysisResult {
     has Normative::Proposition @.conflicting_propositions;
     has Str $.explanation;
 
-    method new-from-hash(%hash) {
-        my @implied-norms = self.parse-propositions(%hash<implied_propositions>);
-        my @conflict-norms = self.parse-propositions(%hash<conflicting_propositions>);
-        self.bless(
-                input_statement          => %hash<input_statement>,
-                explanation              => %hash<explanation>,
-                implied_propositions     => @implied-norms,
-                conflicting_propositions => @conflict-norms
-        );
-    }
+    method new-from-hash(%norm-hash) {
+        my @conflicting = %norm-hash<conflicting_propositions>.map: {
+            Normative::Proposition.from-hash($_)
+        };
 
-    method parse-propositions($propositions-hash) {
-        my @propositions;
-        my $prop-hash = $propositions-hash<Normative::Proposition>;
-        if $prop-hash ~~ Array {
-            for $prop-hash -> $prop {
-                @propositions.push: Normative::Proposition.new(|%($prop));
-            }
-        } else {
-            @propositions.push: Normative::Proposition.new(|%($prop-hash));
-        }
-        return @propositions;
+        my @implied = %norm-hash<implied_propositions>.map: {
+            Normative::Proposition.from-hash($_)
+        };
+        self.bless(
+                input_statement          => %norm-hash<input_statement>,
+                explanation              => %norm-hash<explanation>,
+                implied_propositions     => @implied,
+                conflicting_propositions => @conflicting
+        );
     }
 }

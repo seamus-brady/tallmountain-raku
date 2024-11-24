@@ -9,20 +9,15 @@
 
 use v6.d;
 use UUID::V4;
-use Normative::NormOperator;
-use Normative::NormLevel;
-use Normative::Modality;
-use Normative::ModalitySubscript;
 
 class Normative::Proposition {
     # A normative proposition
-
 
     # Normative operators, read as:
     # – it is required that...
     # – it is ought to be that...
     # – it is indifferent that...
-    our enum NormOperator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
+    our enum Operator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
 
     # Modal operators, read as:
     # – it is possible that...
@@ -52,20 +47,20 @@ class Normative::Proposition {
     # Game Norms          1000            Rules specific to games, sports, or competitive activities.
     # Aesthetic Norms     500             Standards of beauty, taste, or artistic expression.
     our enum Level (
-        ETHICAL_MORAL => 6000,
-        LEGAL => 5000,
-        PRUDENTIAL => 4500,
-        SOCIAL_POLITICAL => 4000,
-        SCIENTIFIC_TECHNICAL => 3500,
-        ENVIRONMENTAL => 3250,
-        CULTURAL_RELIGIOUS => 3000,
-        COMMUNITY => 2750,
-        CODE_OF_CONDUCT => 2500,
-        PROFESSIONAL_ORGANIZATIONAL => 2000,
-        ECONOMIC => 2250,
-        ETIQUETTE => 1500,
-        GAME => 1000,
-        AESTHETIC => 500
+    ETHICAL_MORAL => 6000,
+    LEGAL => 5000,
+    PRUDENTIAL => 4500,
+    SOCIAL_POLITICAL => 4000,
+    SCIENTIFIC_TECHNICAL => 3500,
+    ENVIRONMENTAL => 3250,
+    CULTURAL_RELIGIOUS => 3000,
+    COMMUNITY => 2750,
+    CODE_OF_CONDUCT => 2500,
+    PROFESSIONAL_ORGANIZATIONAL => 2000,
+    ECONOMIC => 2250,
+    ETIQUETTE => 1500,
+    GAME => 1000,
+    AESTHETIC => 500
     );
 
 
@@ -76,4 +71,15 @@ class Normative::Proposition {
     has Level $.level is required;
     has Modality $.modality is required;
     has ModalitySubscript $.modal-subscript is required;
+
+    method from-hash(%data) {
+        self.new(
+                proposition-value => %data<proposition-value>,
+                operator => Operator::.can(%data<operator>) ?? Operator::{%data<operator>} !! die "Invalid operator: '%data<operator>'",
+                level => Level::.can(%data<level>) ?? Level::{%data<level>} !! die "Invalid level: '%data<level>'",
+                # modality => Modality::.can(%data<modality>) ?? Modality::{%data<modality>} !! die "Invalid modality: '%data<modality>'",
+                # modal-subscript => ModalitySubscript::.can(%data<modal_subscript>) ?? ModalitySubscript::{%data<modal_subscript>} !! die "Invalid modal-subscript: '%data<modal_subscript>'"
+        );
+    }
+
 }
