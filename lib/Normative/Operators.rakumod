@@ -1,21 +1,30 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 use v6.d;
 
 # Modal operators, read as:
 # – it is possible that...
 # – it is impossible that...
-enum Modality <POSSIBLE IMPOSSIBLE>;
+enum Normative::Modality <POSSIBLE IMPOSSIBLE>;
 
 # Modal operator subscripts:
 # – it is logically possible that...
 # – it is theoretically possible that...
 # – it is practically possible that...
-enum ModalitySubscript <LOGICAL THEORETICAL PRACTICAL NONE>;
+enum Normative::ModalitySubscript <LOGICAL THEORETICAL PRACTICAL NONE>;
 
 # Normative operators, read as:
 # – it is required that...
 # – it is ought to be that...
 # – it is indifferent that...
-enum NormOperator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
+enum Normative::NormOperator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
 
 # Norm Category       Ordinal Level    Description
 # Ethical/Moral Norms 10000        Universal principles of right and wrong, justice, and human values.
@@ -32,7 +41,7 @@ enum NormOperator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
 # Etiquette Norms     1500            Polite behavior and socially acceptable conduct in everyday interactions.
 # Game Norms          1000            Rules specific to games, sports, or competitive activities.
 # Aesthetic Norms      500            Standards of beauty, art, and creativity.
-enum NormLevel(
+enum Normative::NormLevel(
     ETHICAL_MORAL => 10000,
     LEGAL => 5000,
     PRUDENTIAL => 4500,

@@ -7,21 +7,9 @@ use Normative::NormativeAnalysisResult;
 my $extractor = Normative::Extractor.new;
 my %result = $extractor.extract-norm-props("The French were right to guillotine the aristocracy");
 say %result;
+#
+#my Normative::NormativeAnalysisResult $norms= Normative::NormativeAnalysisResult.new-from-hash(%result);
+#
+#say $norms;
 
-my Normative::NormativeAnalysisResult $norms= Normative::NormativeAnalysisResult.new-from-hash(%result);
 
-say $norms;
-
-# Output
-say "Input Statement: ", $norms.input_statement;
-say "Explanation: ", $norms.explanation;
-
-say "Implied Propositions:";
-for $norms.implied_propositions -> $prop {
-    say "  - ", $prop.proposition-value;
-}
-
-say "Conflicting Propositions:";
-for $norms.conflicting_propositions -> $prop {
-    say "  - ", $prop.proposition-value;
-}
