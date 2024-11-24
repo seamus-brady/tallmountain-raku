@@ -1,6 +1,4 @@
-use v6.d;
-
-class  Normative::NormativePropositionResult {
+class Normative::NormativePropositionResult {
     has Str $.level;
     has Str $.modal_subscript;
     has Str $.modality;
@@ -8,10 +6,10 @@ class  Normative::NormativePropositionResult {
     has Str $.proposition-value;
 }
 
-class  Normative::NormativeAnalysisResult {
+class Normative::NormativeAnalysisResult {
     has Str $.input_statement;
-    has  Normative::NormativePropositionResult @.implied_propositions;
-    has  Normative::NormativePropositionResult @.conflicting_propositions;
+    has Normative::NormativePropositionResult @.implied_propositions;
+    has Normative::NormativePropositionResult @.conflicting_propositions;
     has Str $.explanation;
 
     method new-from-hash(%hash) {
@@ -25,14 +23,13 @@ class  Normative::NormativeAnalysisResult {
 
     method parse-propositions($propositions-hash) {
         my @propositions;
-        my $prop-hash = $propositions-hash<Normative::NormativePropositionResult>;
-        # Check if it's a single proposition or an array
+        my $prop-hash = $propositions-hash<NormativeProposition>;
         if $prop-hash ~~ Array {
             for $prop-hash -> $prop {
-                @propositions.push: Normative::NormativePropositionResult.new(|$prop);
+                @propositions.push: Normative::NormativePropositionResult.new(|%($prop));
             }
         } else {
-            @propositions.push: Normative::NormativePropositionResult.new(|$prop-hash);
+            @propositions.push: Normative::NormativePropositionResult.new(|%($prop-hash));
         }
         return @propositions;
     }

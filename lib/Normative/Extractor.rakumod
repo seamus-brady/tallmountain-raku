@@ -1,7 +1,6 @@
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
-use Normative::NormativeAnalysisResult;
 
 class Normative::Extractor {
     # a class to extract implied normative propositions from a statement
@@ -80,7 +79,7 @@ class Normative::Extractor {
     </NormativeAnalysisResult>
     END
 
-    method extract-norm-props(Str $statement -->  Normative::NormativeAnalysisResult){
+    method extract-norm-props(Str $statement -->  Hash){
         # extract normative propositions from a statement
 
         my $client = LLM::Facade.new();
@@ -205,14 +204,13 @@ class Normative::Extractor {
         === START INPUT STATEMENT ===
         $statement
         === END INPUT STATEMENT ===
-
         END
 
-        $messages.build-messages($prompt, LLM::Messages.USER);
+        $messages.build-messages($prompt.trim, LLM::Messages.USER);
         my %response = $client.completion-structured-output(
                 $messages.get-messages,
                 $.norm-prop-schema,
                 $.norm-prop-example);
-        return Normative::NormativeAnalysisResult.new-from-hash(%response);
+        return %response;
     }
 }
