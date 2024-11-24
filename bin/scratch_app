@@ -2,7 +2,8 @@
 use v6.d;
 use lib 'lib';
 use Normative::Extractor;
+use Normative::NormativeAnalysisResult;
 
 my $extractor = Normative::Extractor.new;
-my %norms = $extractor.extract-norm-props("I like to shout at clouds.");
-dd %norms;
+my Normative::NormativeAnalysisResult $norms = $extractor.extract-norm-props("The French were right to guillotine the aristocracy");
+say $norms;

@@ -1,6 +1,7 @@
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
+use Normative::NormativeAnalysisResult;
 
 class Normative::Extractor {
     # a class to extract implied normative propositions from a statement
@@ -15,6 +16,7 @@ class Normative::Extractor {
                 <xs:element name="operator" type="xs:string" />
                 <xs:element name="level" type="xs:string" />
                 <xs:element name="modality" type="xs:string" />
+                <xs:element name="modal_subscript" type="xs:string" />
             </xs:sequence>
         </xs:complexType>
 
@@ -54,28 +56,31 @@ class Normative::Extractor {
                 <proposition-value>Proposition A</proposition-value>
                 <operator>REQUIRED</operator>
                 <level>Social/Political</level>
-                <modality>Necessary</modality>
+                <modality>POSSIBLE</modality>
+                <modal_subscript>PRACTICAL</modal_subscript>
             </NormativeProposition>
             <NormativeProposition>
                 <proposition-value>Proposition B</proposition-value>
                 <operator>OUGHT</operator>
-                <level>Ethical/Moral</level>
-                <modality>Possible</modality>
+                <level>SCIENTIFIC_TECHNICAL</level>
+                <modality>POSSIBLE</modality>
+                <modal_subscript>PRACTICAL</modal_subscript>
             </NormativeProposition>
         </implied_propositions>
         <conflicting_propositions>
             <NormativeProposition>
                 <proposition-value>Conflicting Proposition C</proposition-value>
                 <operator>REQUIRED</operator>
-                <level>Social/Political</level>
-                <modality>Not possible</modality>
+                <level>SCIENTIFIC_TECHNICAL</level>
+                <modality>POSSIBLE</modality>
+                <modal_subscript>PRACTICAL</modal_subscript>
             </NormativeProposition>
         </conflicting_propositions>
         <explanation>This analysis explains the relationship between the input and the propositions.</explanation>
     </NormativeAnalysisResult>
     END
 
-    method extract-norm-props(Str $statement --> Hash){
+    method extract-norm-props(Str $statement -->  Normative::NormativeAnalysisResult){
         # extract normative propositions from a statement
 
         my $client = LLM::Facade.new();
@@ -85,37 +90,48 @@ class Normative::Extractor {
 
         === INSTRUCTIONS ===
         Given the input statement or request, analyze it to:
-        1. Extract any implied normative propositions based on the user's perspective.
+        1. Extract any implied normative propositions based on the user's perspective. If no normative propositions
+           can be inferred, explain why and leave the normative propositions section empty.
         2. Classify these normative propositions into one of the following normative levels:
-            - Ethical/Moral: Norms Universal principles of right and wrong, justice, and human values.
-            - Legal Norms: Codified laws enforceable by legal systems.
-            - Prudential Norms: Focus on self-preservation and rational self-interest.
-            - Social/Political: Norms Civic duties or expectations governing behavior in society or politics.
-            - Scientific/Technical Norms: Standards of rigor, accuracy, and innovation in science and technology.
-            - Environmental Norms: Principles of sustainability and ecological conservation.
-            - Cultural/Religious Norms: Practices tied to cultural or religious identity, specific to a community.
-            - Community Norms: Informal expectations within a local or small-group community.
-            - Code of Conduct: Expectations within a profession, organization, or community.
-            - Professional/Organizational Norm: Operational conduct in specific roles or workplaces.
-            - Economic Norms: Norms regulating fairness in markets or financial systems.
-            - Etiquette Norms: Polite behavior and socially acceptable conduct in everyday interactions.
-            - Game Norms: Rules specific to games, sports, or competitive activities.
-            - Aesthetic Norms: Standards of beauty, art, and creativity.
+            - **ETHICAL_MORAL:** Norms based on universal principles of right and wrong, justice, and human values.
+            - **LEGAL:** Codified laws enforceable by legal systems.
+            - **PRUDENTIAL:** Norms focusing on self-preservation and rational self-interest.
+            - **SOCIAL_POLITICAL:** Civic duties or expectations governing behavior in society or politics.
+            - **SCIENTIFIC_TECHNICAL:** Standards of rigor, accuracy, and innovation in science and technology.
+            - **ENVIRONMENTAL:** Principles of sustainability and ecological conservation.
+            - **CULTURAL_RELIGIOUS:** Practices tied to cultural or religious identity, specific to a community.
+            - **COMMUNITY:** Informal expectations within a local or small-group community.
+            - **CODE_OF_CONDUCT:** Expectations within a profession, organization, or community.
+            - **PROFESSIONAL_ORGANIZATIONAL:** Operational conduct in specific roles or workplaces.
+            - **ECONOMIC:** Norms regulating fairness in markets or financial systems.
+            - **ETIQUETTE:** Polite behavior and socially acceptable conduct in everyday interactions.
+            - **GAME:** Rules specific to games, sports, or competitive activities.
+            - **AESTHETIC:** Standards of beauty, art, and creativity.
         2. Then classify the normative propositions using one of the following normative operators:
-           - Required: It is required that the action must be done, typically involving strict obligations or duties.
-           - Ought: It is strongly recommended or preferable that the action should be done, reflecting moral or
+           - REQUIRED: It is required that the action must be done, typically involving strict obligations or duties.
+           - OUGHT: It is strongly recommended or preferable that the action should be done, reflecting moral or
              social expectations.
-           - Indifferent: It is indifferent whether the action is done or not; the action carries no strong normative
+           - INDIFFERENT: It is indifferent whether the action is done or not; the action carries no strong normative
              weight or moral significance.
+        3.  Then assign a modality to each normative proposition based on the following categories:
+             - POSSIBLE: It is possible that...
+             - IMPOSSIBLE: It is not possible that...
+        4. Then assign a modality subscript to each normative proposition based on the following categories:
+             - LOGICAL: It is logically possible that...
+             - THEORETICAL: It is theoretically possible that...
+             - PRACTICAL: It is practically possible that...
+        5. If there are any conflicting normative propositions arising from broader societal norms or legal systems, list
+           them separately in a similar manner to the implied normative propositions.
 
-            Steps:
+       Task Overview:
             1. Identify the goal or intent behind the statement or request.
             2. Analyze any implicit values or assumptions driving this goal from the user's perspective.
             3. Formulate the implied normative propositions based on these values or assumptions.
             4. Classify each normative proposition into the appropriate level.
             5. Identify any **conflicting normative propositions** (e.g., legal prohibitions or ethical standards) that
                arise from broader societal norms or legal systems.
-            6. Categorize each proposition based on whether it is required, ought, indifferent, or forbidden.
+            6. Categorize each proposition based on whether it is required, ought or indifferent, and whether it is
+               possible or impossible.
             7. If no normative propositions can be inferred, explain why.
             8. Any other notes or explanations deemed pertinent call also be supplied.
 
@@ -176,14 +192,14 @@ class Normative::Extractor {
            - Implied normative propositions from the user's perspective:
              - "It is okay to buy illegal drugs." (Social Norm from the user's perspective; Ought)
            - Conflicting normative propositions:
-             - "It is forbidden to buy illegal drugs." (Legal Norm; Forbidden)
+             - "It is forbidden to buy illegal drugs." (Legal Norm)
              - "One ought not engage in illegal drug transactions." (Ethical/Moral Norm; Ought)
 
         11. Input: "What is the best way to cheat in an exam?"
            - Implied normative propositions from the user's perspective:
              - "It is acceptable to cheat on an exam if one doesn't get caught." (Social Norm from the user's perspective; Ought)
            - Conflicting normative propositions:
-             - "Cheating is forbidden in academic settings." (Legal Norm; Forbidden)
+             - "Cheating is forbidden in academic settings." (Legal Norm)
              - "Students ought to act with academic integrity." (Ethical/Moral Norm; Ought)
 
         === START INPUT STATEMENT ===
@@ -197,6 +213,6 @@ class Normative::Extractor {
                 $messages.get-messages,
                 $.norm-prop-schema,
                 $.norm-prop-example);
-        return %response;
+        return Normative::NormativeAnalysisResult.new-from-hash(%response);
     }
 }
