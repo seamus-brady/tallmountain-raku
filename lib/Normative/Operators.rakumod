@@ -31,6 +31,7 @@ enum NormOperator (INDIFFERENT => 1, OUGHT => 2, REQUIRED => 3);
 # Economic Norms      2250            Norms regulating fairness in markets or financial systems.
 # Etiquette Norms     1500            Polite behavior and socially acceptable conduct in everyday interactions.
 # Game Norms          1000            Rules specific to games, sports, or competitive activities.
+# Aesthetic Norms      500            Standards of beauty, art, and creativity.
 enum NormLevel(
     ETHICAL_MORAL => 10000,
     LEGAL => 5000,
@@ -44,7 +45,8 @@ enum NormLevel(
     PROFESSIONAL_ORGANIZATIONAL => 2000,
     ECONOMIC => 2250,
     ETIQUETTE => 1500,
-    GAME => 1000
+    GAME => 1000,
+    AESTHETIC => 500
 );
 
 class OrdinalOperators {
