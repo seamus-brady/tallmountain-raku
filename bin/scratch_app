@@ -3,13 +3,58 @@ use v6.d;
 use lib 'lib';
 use Normative::Extractor;
 use Normative::NormativeAnalysisResult;
+use LibXML;
+use LibXML::Document;
+use LLM::Util::Instructor;
 
-my $extractor = Normative::Extractor.new;
-my %result = $extractor.extract-norm-props("The French were right to guillotine the aristocracy");
-say %result;
-#
-#my Normative::NormativeAnalysisResult $norms= Normative::NormativeAnalysisResult.new-from-hash(%result);
-#
-#say $norms;
 
+my $xml = q:to/END/;
+<?xml version="1.0" encoding="UTF-8"?>
+<NormativeAnalysisResult>
+    <input_statement>The French were right to guillotine the aristocracy</input_statement>
+    <implied_propositions>
+        <NormativeProposition>
+            <proposition-value>The guillotine of the aristocracy was justified.</proposition-value>
+            <operator>OUGHT</operator>
+            <level>ETHICAL_MORAL</level>
+            <modality>POSSIBLE</modality>
+            <modal_subscript>THEORETICAL</modal_subscript>
+        </NormativeProposition>
+    </implied_propositions>
+    <conflicting_propositions>
+        <NormativeProposition>
+            <proposition-value>It is wrong to execute individuals without due process.</proposition-value>
+            <operator>OUGHT</operator>
+            <level>LEGAL</level>
+            <modality>POSSIBLE</modality>
+            <modal_subscript>THEORETICAL</modal_subscript>
+        </NormativeProposition>
+        <NormativeProposition>
+            <proposition-value>One ought to respect human rights, including the right to life.</proposition-value>
+            <operator>OUGHT</operator>
+            <level>ETHICAL_MORAL</level>
+            <modality>POSSIBLE</modality>
+            <modal_subscript>THEORETICAL</modal_subscript>
+        </NormativeProposition>
+    </conflicting_propositions>
+    <explanation>This analysis identifies the user's perspective that supports the justification of the guillotine as a moral action, while conflicting propositions highlight the legal and ethical opposition to such actions.</explanation>
+</NormativeAnalysisResult>
+END
+
+# my $result = Normative::NormativeAnalysisResult.new-from-hash(LLM::Util::Instructor.hash-from-xml($xml));
+my %result = LLM::Util::Instructor.hash-from-xml($xml);
+say %result<implied_propositions>{'NormativeProposition'}[0];
+say %result<conflicting_propositions>{'NormativeProposition'}[0];
+say %result<conflicting_propositions>{'NormativeProposition'}[1];
+
+my %np-xml-hash = %result<implied_propositions>{'NormativeProposition'}[0];
+say %np-xml-hash<proposition-value>;
+my $np = Normative::Proposition.new(
+    proposition-value => %np-xml-hash<proposition-value>,
+    operator => Normative::Proposition::Operator::{%np-xml-hash<operator>},
+    level => Normative::Proposition::Level::{%np-xml-hash<level>},
+    modality => Normative::Proposition::Modality::{%np-xml-hash<modality>},
+    modal-subscript => Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>},
+);
+say $np;
 

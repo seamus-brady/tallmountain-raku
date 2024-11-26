@@ -65,21 +65,16 @@ class Normative::Proposition {
 
 
     has Str $.uuid = uuid-v4();
-    has Str $.proposition-value is required;
+    has Str $.proposition-value;
     # TODO add endeavour
-    has Operator $.operator is required;
-    has Level $.level is required;
-    has Modality $.modality is required;
-    has ModalitySubscript $.modal-subscript is required;
+    has Operator $.operator;
+    has Level $.level;
+    has Modality $.modality;
+    has ModalitySubscript $.modal-subscript;
 
-    method from-hash(%data) {
-        self.new(
-                proposition-value => %data<proposition-value>,
-                operator => Operator::.can(%data<operator>) ?? Operator::{%data<operator>} !! die "Invalid operator: '%data<operator>'",
-                level => Level::.can(%data<level>) ?? Level::{%data<level>} !! die "Invalid level: '%data<level>'",
-                # modality => Modality::.can(%data<modality>) ?? Modality::{%data<modality>} !! die "Invalid modality: '%data<modality>'",
-                # modal-subscript => ModalitySubscript::.can(%data<modal_subscript>) ?? ModalitySubscript::{%data<modal_subscript>} !! die "Invalid modal-subscript: '%data<modal_subscript>'"
-        );
+    method new-from-xml(Str %xml-data) {
+        # say %data;
+        # say %data{'NormativeProposition'}[1];
     }
 
 }
