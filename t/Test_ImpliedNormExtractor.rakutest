@@ -1,0 +1,36 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+use v6.d;
+use Test;
+use Normative::NormativeAnalysisResult;
+use Normative::ImpliedNormExtractor;
+
+plan 2;
+
+subtest 'Normative::ImpliedNormExtractor ok' => {
+    my $norm_extractor = Normative::ImpliedNormExtractor.new;
+    my $statement = q:to/END/;
+    I once used a cat as a hat.
+    END
+    my %result = $norm_extractor.extract-norm-props($statement);
+    isa-ok %result, Hash, 'The result is a Hash';
+}
+
+subtest 'Normative::NormativeAnalysisResult ok' => {
+    my $norm_extractor = Normative::ImpliedNormExtractor.new;
+    my $statement = q:to/END/;
+    I once used a cat as a hat.
+    END
+    my %result = $norm_extractor.extract-norm-props($statement);
+    my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
+    isa-ok $analysis_result, Normative::NormativeAnalysisResult, 'The result is a NormativeAnalysisResult';
+}
+
+done-testing;

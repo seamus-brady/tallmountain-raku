@@ -33,25 +33,6 @@ class Normative::NormativeAnalysisResult {
         # get the input statement
         my Str $input_statement = %norm-hash<input_statement>;
 
-        # get the analysis
-        my Str $explanation = %norm-hash<explanation>;
-
-        # get the conflicting propositions
-        my @conflict_props_collect;
-        # need to loop through the array of conflicting propositions as the array context messes kv.map
-        loop (my $i = 0; $i < Normative::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $i++) {
-            try {
-                my $test_np = %norm-hash<conflicting_propositions>{'NormativeProposition'}[$i];
-                @conflict_props_collect.push(
-                        Normative::Proposition.new-from-data($test_np)
-                );
-                LEAVE {
-                    my Str $message = "Error extracting conflicting norm props. Logging only.";
-                    Normative::Proposition.new.LOGGER.error($message);
-                }
-            }
-        }
-
         # get the implied propositions
         my @implied_props_collect;
         # need to loop through the array of implied propositions as the array context messes kv.map
@@ -72,24 +53,17 @@ class Normative::NormativeAnalysisResult {
         self.bless(
             :$input_statement,
             :implied_propositions(@implied_props_collect),
-            :conflicting_propositions(@conflict_props_collect),
-            :$explanation
         );
     }
 
     method gist {
         return "NormativeAnalysisResult:\n" ~
                 "  input_statement: {$!input_statement}\n" ~
-                "  explanation: {$!explanation}\n" ~
-                "  implied_propositions: {self.gist_implied_propositions}\n" ~
-                "  conflicting_propositions: {self.gist_conflicting_propositions}";
+                "  implied_propositions: {self.gist_implied_propositions}\n";
     }
 
     method gist_implied_propositions() {
         "Items: [\n" ~ @!implied_propositions.gist ~ "]\n"
     }
 
-    method gist_conflicting_propositions() {
-        "Items: [\n" ~ @!conflicting_propositions.gist ~ "]\n"
-    }
 }

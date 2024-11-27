@@ -1,61 +1,14 @@
 #!/usr/bin/env raku
+
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
 use v6.d;
 use lib 'lib';
-use Normative::Extractor;
-use Normative::NormativeAnalysisResult;
-use Normative::ImpliedNormExtractor;
-use LibXML;
-use LibXML::Document;
-use LLM::Util::Instructor;
-
-
-my $xml = q:to/END/;
-<?xml version="1.0" encoding="UTF-8"?>
-<NormativeAnalysisResult>
-    <input_statement>The French were right to guillotine the aristocracy</input_statement>
-    <implied_propositions>
-        <NormativeProposition>
-            <proposition-value>The guillotine of the aristocracy was justified.</proposition-value>
-            <operator>OUGHT</operator>
-            <level>ETHICAL_MORAL</level>
-            <modality>POSSIBLE</modality>
-            <modal_subscript>THEORETICAL</modal_subscript>
-        </NormativeProposition>
-    </implied_propositions>
-    <conflicting_propositions>
-        <NormativeProposition>
-            <proposition-value>It is wrong to execute individuals without due process.</proposition-value>
-            <operator>OUGHT</operator>
-            <level>LEGAL</level>
-            <modality>POSSIBLE</modality>
-            <modal_subscript>THEORETICAL</modal_subscript>
-        </NormativeProposition>
-        <NormativeProposition>
-            <proposition-value>One ought to respect human rights, including the right to life.</proposition-value>
-            <operator>OUGHT</operator>
-            <level>ETHICAL_MORAL</level>
-            <modality>POSSIBLE</modality>
-            <modal_subscript>THEORETICAL</modal_subscript>
-        </NormativeProposition>
-    </conflicting_propositions>
-    <explanation>This analysis identifies the user's perspective that supports the justification of the guillotine as a moral action, while conflicting propositions highlight the legal and ethical opposition to such actions.</explanation>
-</NormativeAnalysisResult>
-END
-
-# my $result = Normative::NormativeAnalysisResult.new-from-hash(LLM::Util::Instructor.hash-from-xml($xml));
-#my %result = LLM::Util::Instructor.hash-from-xml($xml);
-#say %result;
-#say %result<implied_propositions>{'NormativeProposition'}[0];
-#say %result<conflicting_propositions>{'NormativeProposition'}[0];
-#say %result<conflicting_propositions>{'NormativeProposition'}[1];
-#
-#my %np-xml-hash = %result<implied_propositions>{'NormativeProposition'}[0];
-#say %np-xml-hash<proposition-value>;
-#my $np = Normative::Proposition.new-from-data(%np-xml-hash);
-#say $np;
-my $norm_extractor = Normative::ImpliedNormExtractor.new;
-my %result = $norm_extractor.extract-norm-props("I use a cat as a punchbag");
-say %result;
-#my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
-#say $analysis_result;
-

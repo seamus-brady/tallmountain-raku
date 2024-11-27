@@ -1,3 +1,12 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
@@ -33,7 +42,6 @@ class Normative::ImpliedNormExtractor {
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="explanation" type="xs:string" />
             </xs:sequence>
         </xs:complexType>
 
@@ -62,29 +70,41 @@ class Normative::ImpliedNormExtractor {
                 <modal_subscript>PRACTICAL</modal_subscript>
             </NormativeProposition>
         </implied_propositions>
-        <explanation>This analysis explains the relationship between the input and the propositions.</explanation>
     </NormativeAnalysisResult>
     END
+
+    method extract-belief-statements(Str $statement -->  Str){
+        # does some initial analysis on the user statement to extract beliefs, ethics and norms
+        my $client = LLM::Facade.new;
+        my $messages = LLM::Messages.new;
+        my $system_message = q:to/END/;
+        - Please analyse all input for implied beliefs, norms and ethics.
+        - Formulate these into a set of statements the user might make.
+        - Don't do any analysis on the normative propositions or make any statements about whether they are ethical or not.
+        - Don't editorialise or comment in these statements - it should be as if the user is speaking.
+        - Repeat the user's original statement at the beginning of your analysis.
+        END
+        $messages.build-messages($system_message, LLM::Messages.SYSTEM);
+        $messages.build-messages($statement, LLM::Messages.USER);
+        return $client.completion-string($messages.get-messages());
+    }
 
     method extract-norm-props(Str $statement -->  Hash){
         # extract normative propositions from a statement
 
+        # first get more details on what the user might believe
+        my $belief_statement = self.extract-belief-statements($statement);
+        say $belief_statement;
+
+        # now extract the normative propositions
         my $client = LLM::Facade.new();
         my $messages = LLM::Messages.new;
 
         my $prompt = qq:to/END/;
 
         === INSTRUCTIONS ===
-
-        Identify any implied normative propositions based on the user's values or assumptions.
-        Focus on uncovering their underlying intent or perspective.
-        The extracted propositions should reflect the user's implied beliefs about what should or should not be done,
-        based on the context of the statement. They may not reflect societal standards or legal requirements and the
-        two should not be mixed up.
-        If none can be inferred, explain why, and leave this section empty.
-        Extract up to {$!max_extracted_props} normative propositions. If none can be derived, state why.
-
-        Classify Normative Propositions:
+        - Take incoming statement and turn it into a set of normative propositions.
+        - Extract up to {$!max_extracted_props} normative propositions.
 
         - Assign each proposition to one of the following levels:
             ETHICAL_MORAL: Universal principles of right/wrong, justice, and human values.
@@ -122,33 +142,11 @@ class Normative::ImpliedNormExtractor {
 
         === EXAMPLES ===
 
-        Input: "Doctors must maintain patient confidentiality."
-        Implied normative propositions from the user's perspective:
-            "Doctors are required to protect patient privacy."
-            (PROFESSIONAL_ORGANIZATIONAL / REQUIRED / POSSIBLE / PRACTICAL)
-            "Patient confidentiality is required as a key ethical duty in healthcare."
-            (ETHICAL_MORAL / REQUIRED / POSSIBLE / PRACTICAL)
-
-        Input: "It’s bad manners to interrupt someone while they're speaking."
-        Implied normative propositions from the user's perspective:
-            "One ought not interrupt someone while they’re speaking." (ETIQUETTE / OUGHT / POSSIBLE / THEORETICAL)
-            "Polite conversation ought to allow others to finish speaking." (ETIQUETTE / OUGHT / POSSIBLE / THEORETICAL)
-
-        Input: "You have to follow the offside rule in soccer."
-        Implied normative propositions from the user's perspective:
-            "Players are required to follow the offside rule." (GAME / REQUIRED / POSSIBLE / PRACTICAL)
-            "Following the rules is required to maintain fair play." (GAME / REQUIRED / POSSIBLE / PRACTICAL)
-
-        Input: "Buddhists should practice ahimsa (non-violence)."
-        Implied normative propositions from the user's perspective:
-            "Buddhists ought to practice non-violence (ahimsa)." (CULTURAL_RELIGIOUS / OUGHT / POSSIBLE / THEORETICAL)
-            "Ahimsa ought to be valued as an important cultural and religious practice in Buddhism."
-            (CULTURAL_RELIGIOUS / OUGHT / POSSIBLE / THEORETICAL)
-
         Input: "Hello."
         Implied normative propositions from the user's perspective:
             "People ought to greet each other in social interactions." (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
-            "Acknowledging others ought to be considered polite in social contexts." (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
+            "Acknowledging others ought to be considered polite in social contexts."
+            (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
 
         Input: "How do I buy illegal drugs?"
         Implied normative propositions from the user's perspective:
@@ -161,7 +159,7 @@ class Normative::ImpliedNormExtractor {
             get caught." (PRUDENTIAL / OUGHT / POSSIBLE / THEORETICAL)
 
         === START INPUT STATEMENT ===
-        $statement
+        $belief_statement
         === END INPUT STATEMENT ===
         END
 

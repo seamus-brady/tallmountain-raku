@@ -21,32 +21,13 @@ subtest 'Normative::Proposition Test from-hash' => {
 
 subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
     my %test-hash =
-        conflicting_propositions => {
-            NormativeProposition => [
-                {
-                    level             => 'LEGAL',
-                    modal_subscript   => 'THEORETICAL',
-                    modality          => 'POSSIBLE',
-                    operator          => 'OUGHT',
-                    proposition-value => 'It is wrong to execute individuals without due process.'
-                },
-                {
-                    level             => 'ETHICAL_MORAL',
-                    modal_subscript   => 'THEORETICAL',
-                    modality          => 'POSSIBLE',
-                    operator          => 'OUGHT',
-                    proposition-value => 'One ought to respect human rights, including the right to life.'
-                }
-            ]
-        },
-        explanation => "This analysis identifies the user's perspective that supports the justification of the guillotine as a moral action, while conflicting propositions highlight the legal and ethical opposition to such actions.",
-        implied_propositions => {
+         implied_propositions => {
             NormativeProposition => {
                 level             => 'ETHICAL_MORAL',
                 modal_subscript   => 'THEORETICAL',
                 modality          => 'POSSIBLE',
                 operator          => 'OUGHT',
-                proposition-value => 'The guillotine of the aristocracy was justified.'
+                proposition-value => 'The guillotine used on the aristocracy was justified.'
             }
         },
         input_statement => 'The French were right to guillotine the aristocracy';
@@ -55,9 +36,7 @@ subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
 
     # Verify the object properties
     is $analysis_result.input_statement, %test-hash<input_statement>, 'Input statement is correct';
-    is $analysis_result.explanation, %test-hash<explanation>, 'Explanation is correct';
     is $analysis_result.implied_propositions.elems, 1, 'Implied propositions count is correct';
-    is $analysis_result.conflicting_propositions.elems, 2, 'Conflicting propositions count is correct';
 }
 
 done-testing;
