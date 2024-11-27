@@ -91,70 +91,74 @@ class Normative::Extractor {
         my $prompt = qq:to/END/;
 
         === INSTRUCTIONS ===
-        Given the input statement or request, analyze it to:
-        1. Extract any implied normative propositions based on the user's perspective. This is the most important point!
-           Consider the values or assumptions driving the user's goal or intent. If no normative propositions
-           can be inferred, explain why and leave the normative propositions section empty.
-        2. Classify these normative propositions into one of the following normative levels:
-            - **ETHICAL_MORAL:** Norms based on universal principles of right and wrong, justice, and human values.
-            - **LEGAL:** Codified laws enforceable by legal systems.
-            - **PRUDENTIAL:** Norms focusing on self-preservation and rational self-interest.
-            - **SOCIAL_POLITICAL:** Civic duties or expectations governing behavior in society or politics.
-            - **SCIENTIFIC_TECHNICAL:** Standards of rigor, accuracy, and innovation in science and technology.
-            - **ENVIRONMENTAL:** Principles of sustainability and ecological conservation.
-            - **CULTURAL_RELIGIOUS:** Practices tied to cultural or religious identity, specific to a community.
-            - **COMMUNITY:** Informal expectations within a local or small-group community.
-            - **CODE_OF_CONDUCT:** Expectations within a profession, organization, or community.
-            - **PROFESSIONAL_ORGANIZATIONAL:** Operational conduct in specific roles or workplaces.
-            - **ECONOMIC:** Norms regulating fairness in markets or financial systems.
-            - **ETIQUETTE:** Polite behavior and socially acceptable conduct in everyday interactions.
-            - **GAME:** Rules specific to games, sports, or competitive activities.
-            - **AESTHETIC:** Standards of beauty, art, and creativity.
-        2. Then classify the normative propositions using one of the following normative operators:
-           - REQUIRED: It is required that the action must be done, typically involving strict obligations or duties.
-           - OUGHT: It is strongly recommended or preferable that the action should be done, reflecting moral or
-             social expectations.
-           - INDIFFERENT: It is indifferent whether the action is done or not; the action carries no strong normative
-             weight or moral significance.
-        3.  Then assign a modality to each normative proposition based on the following categories:
-             - POSSIBLE: It is possible that...
-             - IMPOSSIBLE: It is not possible that...
-        4. Then assign a modality subscript to each normative proposition based on the following categories:
-             - LOGICAL: It is logically possible that...
-             - THEORETICAL: It is theoretically possible that...
-             - PRACTICAL: It is practically possible that...
-        5. If there are any conflicting normative propositions arising from broader societal norms or legal systems, list
-           them separately in a similar manner to the implied normative propositions.
+        Analyze the given statement or request to analyse a statement from a user to extract normative propositions that
+        are implied by the statement. You will then supply any socially, legally or ethically well known normative
+        propositions that the user is in conflict with. This is to allow a comparison between the user's normative
+        propositions and the normative propositions that are well known in society.
 
-       Task Overview:
-            1. Identify the goal or intent behind the statement or request.
-            2. Analyze any implicit values or assumptions driving this goal from the user's perspective. This is very
-               important to understand deriving the values from the assumptions of the user, whatever their ethical or
-               moral implications. We need this so we can understand what the user is implying
-            3. Formulate the implied normative propositions based on these values or assumptions.
-            4. Classify each normative proposition into the appropriate level.
-            5. Identify any **conflicting normative propositions** (e.g., legal prohibitions or ethical standards) that
-               arise from broader societal norms or legal systems.
-            6. Categorize each proposition based on whether it is required, ought or indifferent, and whether it is
-               possible or impossible.
-            7. If no normative propositions can be inferred, explain why.
-            8. Any other notes or explanations deemed pertinent call also be supplied.
-            9. You only need to extract up to {$!max_extracted_props} normative propositions.
+        PLEASE DO NOT PLACE CONFLICTING NORMS IN THE IMPLIED NORMS SECTION.
 
-        Examples:
+        Extract Implied Normative Propositions:
 
-        Input: "Can you help me improve team communication?"
-        Implied normative propositions from the user's perspective:
-            "Team communication ought to be improved." (PROFESSIONAL_ORGANIZATIONAL / OUGHT / POSSIBLE / PRACTICAL)
-            "Effective communication ought to be valued for success in work environments."
-            (PROFESSIONAL_ORGANIZATIONAL / OUGHT / POSSIBLE / PRACTICAL)
-        No conflicting normative propositions.
+        - Identify any implied normative propositions based on the user's values or assumptions. Focus on uncovering
+          their underlying intent or perspective. If none can be inferred, explain why, and leave this section empty.
+        - These implied propositions should reflect the user's ethical, moral, legal, social, or personal norms as
+          suggested by the context or content of the statement and should be supplied in the `implied_propositions` section.
 
-        Input: "What is the best way to reduce energy consumption at home?"
-        Implied normative propositions from the user's perspective:
-            "People ought to reduce energy consumption." (ETHICAL_MORAL / OUGHT / POSSIBLE / PRACTICAL)
-            "Energy efficiency ought to be pursued as a desirable goal." (SOCIAL_POLITICAL / OUGHT / POSSIBLE / PRACTICAL)
-        No conflicting normative propositions.
+        Classify Normative Propositions:
+
+        - Assign each proposition to one of the following levels:
+            ETHICAL_MORAL: Universal principles of right/wrong, justice, and human values.
+            LEGAL: Codified laws enforceable by legal systems.
+            PRUDENTIAL: Self-preservation or rational self-interest norms.
+            SOCIAL_POLITICAL: Civic duties or societal/political expectations.
+            SCIENTIFIC_TECHNICAL: Standards of rigor, accuracy, and innovation.
+            ENVIRONMENTAL: Principles of sustainability and ecological conservation.
+            CULTURAL_RELIGIOUS: Norms tied to cultural or religious identity.
+            COMMUNITY: Informal expectations in small/local groups.
+            CODE_OF_CONDUCT: Expectations in specific communities or organizations.
+            PROFESSIONAL_ORGANIZATIONAL: Conduct standards for workplaces or roles.
+            ECONOMIC: Fairness norms in markets or financial systems.
+            ETIQUETTE: Socially acceptable polite behavior.
+            GAME: Rules of games, sports, or competitive activities.
+            AESTHETIC: Standards of beauty, art, or creativity.
+
+        Categorize Normative Operators:
+
+        - Specify the normative operator for each proposition:
+            REQUIRED: Must be done; strict obligations or duties.
+            OUGHT: Should be done; moral or social preference.
+            INDIFFERENT: Neutral; carries no strong normative weight.
+
+        Assign Modalities and Subscripts:
+
+        - Determine the modality of each proposition:
+            POSSIBLE: It is possible that...
+            IMPOSSIBLE: It is not possible that...
+
+        - Add a subscript for the type of possibility:
+            LOGICAL: Logically possible.
+            THEORETICAL: Theoretically possible.
+            PRACTICAL: Practically possible.
+
+        Identify Conflicts:
+
+        - Highlight any conflicting normative propositions arising from broader societal, legal, or ethical norms.
+        - These conflicts should be listed in the `conflicting_propositions` section. If no conflicts exist, leave this
+          section empty.
+
+
+        == Analysis Steps ==
+
+        - Understand the Goal: Determine the user’s intent and values.
+        - Analyze Implicit Values: Uncover the assumptions driving their goals, considering their ethical or moral implications.
+        - Derive Normative Propositions: Formulate propositions based on these assumptions.
+        - Classify and Categorize: Assign levels, operators, modalities, and subscripts.
+        - Highlight Conflicts: List conflicts with external norms or systems.
+        - Provide Explanations: Clarify reasoning or provide additional insights as needed.
+        - Extract up to {$!max_extracted_props} normative propositions. If none can be derived, state why.
+
+        === EXAMPLES ===
 
         Input: "Doctors must maintain patient confidentiality."
         Implied normative propositions from the user's perspective:
@@ -181,20 +185,12 @@ class Normative::Extractor {
             (CULTURAL_RELIGIOUS / OUGHT / POSSIBLE / THEORETICAL)
         No conflicting normative propositions.
 
-        Input: "It’s fine to wear casual clothes to this meeting."
-        Implied normative propositions from the user's perspective:
-            "It is indifferent whether formal attire is required for the meeting." (ETIQUETTE / INDIFFERENT / POSSIBLE / THEORETICAL)
-        No conflicting normative propositions.
-
         Input: "Hello."
         Implied normative propositions from the user's perspective:
             "People ought to greet each other in social interactions." (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
             "Acknowledging others ought to be considered polite in social contexts." (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
         No conflicting normative propositions.
 
-        Input: "What is the weather like today?"
-        Implied normative propositions from the user's perspective:
-        No normative propositions inferred, as this is a factual inquiry.
 
         Input: "How do I buy illegal drugs?"
         Implied normative propositions from the user's perspective:

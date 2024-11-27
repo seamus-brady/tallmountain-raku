@@ -81,7 +81,7 @@ class Normative::NormativeAnalysisResult {
         return "NormativeAnalysisResult:\n" ~
                 "  input_statement: {$!input_statement}\n" ~
                 "  explanation: {$!explanation}\n" ~
-                "  implied_propositions: {self.gist_implied_propositions}\n" ~
+                "  user_implied_propositions: {self.gist_implied_propositions}\n" ~
                 "  conflicting_propositions: {self.gist_conflicting_propositions}";
     }
 
