@@ -3,6 +3,7 @@ use v6.d;
 use lib 'lib';
 use Normative::Extractor;
 use Normative::NormativeAnalysisResult;
+use Normative::ImpliedNormExtractor;
 use LibXML;
 use LibXML::Document;
 use LLM::Util::Instructor;
@@ -52,8 +53,9 @@ END
 #say %np-xml-hash<proposition-value>;
 #my $np = Normative::Proposition.new-from-data(%np-xml-hash);
 #say $np;
-my $norm_extractor = Normative::Extractor.new;
-my %result = $norm_extractor.extract-norm-props("I once used a cat as a punchbag");
-my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
-say $analysis_result;
+my $norm_extractor = Normative::ImpliedNormExtractor.new;
+my %result = $norm_extractor.extract-norm-props("I use a cat as a punchbag");
+say %result;
+#my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
+#say $analysis_result;
 
