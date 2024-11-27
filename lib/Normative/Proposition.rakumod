@@ -79,33 +79,27 @@ class Normative::Proposition {
         # creates a new norm prop object from an xml hash
         # if there is an error, the norm prop is filled with values that do nothing
         Normative::Proposition.new.LOGGER.debug("new-from-data starting...");
-        try {
-            self.bless(
-                    :proposition-value(%np-xml-hash<proposition-value> // "Unknown"),
-                    :operator(Normative::Proposition::Operator::{%np-xml-hash<operator>}
-                            // Normative::Proposition::Operator::INDIFFERENT),
-                    :level(Normative::Proposition::Level::{%np-xml-hash<level>}
-                            // Normative::Proposition::Level::ETIQUETTE),
-                    :modality(Normative::Proposition::Modality::{%np-xml-hash<modality>}
-                            // Normative::Proposition::Modality::IMPOSSIBLE),
-                    :modal-subscript(Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>}
-                            // Normative::Proposition::ModalitySubscript::NONE),
-            );
-            if $! {
-                my Str $message = "Error: $!";
-                Normative::Proposition.new.LOGGER.error($message);
-            }
-        }
+        self.bless(
+                :proposition-value(%np-xml-hash<proposition-value> // "Unknown"),
+                :operator(Normative::Proposition::Operator::{%np-xml-hash<operator>}
+                        // Normative::Proposition::Operator::INDIFFERENT),
+                :level(Normative::Proposition::Level::{%np-xml-hash<level>}
+                        // Normative::Proposition::Level::ETIQUETTE),
+                :modality(Normative::Proposition::Modality::{%np-xml-hash<modality>}
+                        // Normative::Proposition::Modality::IMPOSSIBLE),
+                :modal-subscript(Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>}
+                        // Normative::Proposition::ModalitySubscript::NONE),
+        );
     }
 
     method gist {
-        return "NormativeProposition:\n" ~
+        return "<NormativeProposition:\n" ~
                 "  uuid: {$!uuid}\n" ~
                 "  proposition-value: {$!proposition-value}\n" ~
                 "  operator: {$!operator}\n" ~
                 "  level: {$!level}\n" ~
                 "  modality: {$!modality}\n" ~
-                "  modal-subscript: {$!modal-subscript}";
+                "  modal-subscript: {$!modal-subscript}>\n";
     }
 
 }

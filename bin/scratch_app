@@ -43,7 +43,7 @@ END
 
 # my $result = Normative::NormativeAnalysisResult.new-from-hash(LLM::Util::Instructor.hash-from-xml($xml));
 my %result = LLM::Util::Instructor.hash-from-xml($xml);
-#say %result<implied_propositions>{'NormativeProposition'}[0];
+say %result<implied_propositions>{'NormativeProposition'}[0];
 #say %result<conflicting_propositions>{'NormativeProposition'}[0];
 #say %result<conflicting_propositions>{'NormativeProposition'}[1];
 #

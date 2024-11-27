@@ -31,36 +31,37 @@ class Normative::NormativeAnalysisResult {
         my Str $explanation = %norm-hash<explanation>;
 
         # get the conflicting propositions
-        my $conflict_norms = %norm-hash<conflicting_propositions>{'NormativeProposition'};
         my @conflict_props_collect;
         # need to loop through the array of conflicting propositions as the array context messes kv.map
-        loop (my $i = 0; $i < $conflict_norms.elems; $i++) {
+        loop (my $i = 0; $i < 5; $i++) {
             try {
+                my $test_np = %norm-hash<conflicting_propositions>{'NormativeProposition'}[$i];
                 @conflict_props_collect.push(
-                        Normative::Proposition.new-from-data($conflict_norms[$i])
-                 );
-                if $! {
-                    my Str $message = "Error: $!";
+                        Normative::Proposition.new-from-data($test_np)
+                );
+                LEAVE {
+                    my Str $message = "Error extracting conflicting norm props. Logging only.";
                     Normative::Proposition.new.LOGGER.error($message);
                 }
             }
         }
 
-        # get the conflicting propositions
-        my $implied_norms = %norm-hash<implied_propositions>{'NormativeProposition'};
+        # get the implied propositions
         my @implied_props_collect;
         # need to loop through the array of implied propositions as the array context messes kv.map
-        loop (my $j = 0; $j < $implied_norms.elems; $j++) {
+        loop (my $j = 0; $j < 5; $j++) {
             try {
-                say $implied_norms[$i];
-                say Normative::Proposition.new-from-data($implied_norms[$i]);
+                my $test_np = %norm-hash<implied_propositions>{'NormativeProposition'}[$j];
                 @implied_props_collect.push(
-                        Normative::Proposition.new-from-data($implied_norms[$i])
+                        Normative::Proposition.new-from-data($test_np)
                 );
+                LEAVE {
+                    my Str $message = "Error extracting implied norm props. Logging only.";
+                    Normative::Proposition.new.LOGGER.error($message);
+                }
             }
         }
 
-        say "implied_props_collect: {@implied_props_collect}";
         # create the object using the collected values
         self.bless(
             :$input_statement,
@@ -79,10 +80,10 @@ class Normative::NormativeAnalysisResult {
     }
 
     method gist_implied_propositions() {
-        "Items: [" ~ @!implied_propositions.join(', ') ~ "]"
+        "Items: [\n" ~ @!implied_propositions.gist ~ "]\n"
     }
 
     method gist_conflicting_propositions() {
-        "Items: [" ~ @!conflicting_propositions.join(', ') ~ "]"
+        "Items: [\n" ~ @!conflicting_propositions.gist ~ "]\n"
     }
 }
