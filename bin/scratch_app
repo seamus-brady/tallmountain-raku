@@ -42,8 +42,9 @@ my $xml = q:to/END/;
 END
 
 # my $result = Normative::NormativeAnalysisResult.new-from-hash(LLM::Util::Instructor.hash-from-xml($xml));
-my %result = LLM::Util::Instructor.hash-from-xml($xml);
-say %result<implied_propositions>{'NormativeProposition'}[0];
+#my %result = LLM::Util::Instructor.hash-from-xml($xml);
+#say %result;
+#say %result<implied_propositions>{'NormativeProposition'}[0];
 #say %result<conflicting_propositions>{'NormativeProposition'}[0];
 #say %result<conflicting_propositions>{'NormativeProposition'}[1];
 #
@@ -51,7 +52,8 @@ say %result<implied_propositions>{'NormativeProposition'}[0];
 #say %np-xml-hash<proposition-value>;
 #my $np = Normative::Proposition.new-from-data(%np-xml-hash);
 #say $np;
-
+my $norm_extractor = Normative::Extractor.new;
+my %result = $norm_extractor.extract-norm-props("The French were right to guillotine the aristocracy");
 my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
 say $analysis_result;
 

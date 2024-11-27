@@ -1,9 +1,12 @@
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
+use Util::Config;;
 
 class Normative::Extractor {
     # a class to extract implied normative propositions from a statement
+
+    has Int $.max_extracted_props = Util::Config.get_config('norm_prop_extractor', 'max_extracted_norms');
 
     has Str $.norm-prop-schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
@@ -133,6 +136,7 @@ class Normative::Extractor {
                possible or impossible.
             7. If no normative propositions can be inferred, explain why.
             8. Any other notes or explanations deemed pertinent call also be supplied.
+            9. You only need to extract up to {$!max_extracted_props} normative propositions.
 
         Examples:
 

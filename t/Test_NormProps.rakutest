@@ -20,43 +20,45 @@ subtest 'Normative::Proposition Test from-hash' => {
 }
 
 subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
-    my %test-hash =
-        input_statement => 'The French were right to guillotine the aristocracy',
-        explanation => 'This analysis reflects the user\'s perspective on the justification of historical actions during the French Revolution, while also acknowledging the moral opposition to capital punishment.',
-        implied_propositions => [
-            {
-                level => 'ETHICAL_MORAL',
-                modal_subscript => 'THEORETICAL',
-                modality => 'POSSIBLE',
-                operator => 'OUGHT',
-                proposition-value => 'The guillotine was a justified action against the aristocracy.'
-            },
-            {
-                level => 'SOCIAL_POLITICAL',
-                modal_subscript => 'THEORETICAL',
-                modality => 'POSSIBLE',
-                operator => 'OUGHT',
-                proposition-value => 'The aristocracy deserved punishment during the revolution.'
+    my %test-hash = {
+        conflicting_propositions => {
+            NormativeProposition => [
+                {
+                    level             => 'LEGAL',
+                    modal_subscript   => 'THEORETICAL',
+                    modality          => 'POSSIBLE',
+                    operator          => 'OUGHT',
+                    proposition-value => 'It is wrong to execute individuals without due process.'
+                },
+                {
+                    level             => 'ETHICAL_MORAL',
+                    modal_subscript   => 'THEORETICAL',
+                    modality          => 'POSSIBLE',
+                    operator          => 'OUGHT',
+                    proposition-value => 'One ought to respect human rights, including the right to life.'
+                }
+            ]
+        },
+        explanation => "This analysis identifies the user's perspective that supports the justification of the guillotine as a moral action, while conflicting propositions highlight the legal and ethical opposition to such actions.",
+        implied_propositions => {
+            NormativeProposition => {
+                level             => 'ETHICAL_MORAL',
+                modal_subscript   => 'THEORETICAL',
+                modality          => 'POSSIBLE',
+                operator          => 'OUGHT',
+                proposition-value => 'The guillotine of the aristocracy was justified.'
             }
-        ],
-        conflicting_propositions => [
-            {
-                level => 'ETHICAL_MORAL',
-                modal_subscript => 'THEORETICAL',
-                modality => 'POSSIBLE',
-                operator => 'OUGHT',
-                proposition-value => 'All forms of capital punishment are morally wrong.'
-            }
-        ];
-
+        },
+        input_statement => 'The French were right to guillotine the aristocracy'
+    };
     # Create an instance using the new-from-hash method
     my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%test-hash);
 
     # Verify the object properties
     is $analysis_result.input_statement, %test-hash<input_statement>, 'Input statement is correct';
     is $analysis_result.explanation, %test-hash<explanation>, 'Explanation is correct';
-    is $analysis_result.implied_propositions.elems, 2, 'Implied propositions count is correct';
-    is $analysis_result.conflicting_propositions.elems, 1, 'Conflicting propositions count is correct';
+    is $analysis_result.implied_propositions.elems, 1, 'Implied propositions count is correct';
+    is $analysis_result.conflicting_propositions.elems, 2, 'Conflicting propositions count is correct';
 }
 
 done-testing;

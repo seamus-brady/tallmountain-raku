@@ -9,10 +9,15 @@
 
 use v6.d;
 use Util::Logger;
+use Util::Config;
 use Normative::Proposition;
 
 class Normative::NormativeAnalysisResult {
     # a class that collects extracted norm props
+
+    method MAX_EXTRACTED_PROPS {
+        once Util::Config.get_config('norm_prop_extractor', 'max_extracted_norms');
+    }
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::NormativeAnalysisResult>");
 
@@ -20,6 +25,7 @@ class Normative::NormativeAnalysisResult {
     has Normative::Proposition @.implied_propositions;
     has Normative::Proposition @.conflicting_propositions;
     has Str $.explanation;
+
 
     method new-from-data(%norm-hash --> Normative::NormativeAnalysisResult) {
         Normative::NormativeAnalysisResult.new.LOGGER.debug("new-from-data starting...");
@@ -33,7 +39,7 @@ class Normative::NormativeAnalysisResult {
         # get the conflicting propositions
         my @conflict_props_collect;
         # need to loop through the array of conflicting propositions as the array context messes kv.map
-        loop (my $i = 0; $i < 5; $i++) {
+        loop (my $i = 0; $i < Normative::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $i++) {
             try {
                 my $test_np = %norm-hash<conflicting_propositions>{'NormativeProposition'}[$i];
                 @conflict_props_collect.push(
@@ -49,7 +55,7 @@ class Normative::NormativeAnalysisResult {
         # get the implied propositions
         my @implied_props_collect;
         # need to loop through the array of implied propositions as the array context messes kv.map
-        loop (my $j = 0; $j < 5; $j++) {
+        loop (my $j = 0; $j < Normative::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $j++) {
             try {
                 my $test_np = %norm-hash<implied_propositions>{'NormativeProposition'}[$j];
                 @implied_props_collect.push(
