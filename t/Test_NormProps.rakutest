@@ -20,7 +20,7 @@ subtest 'Normative::Proposition Test from-hash' => {
 }
 
 subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
-    my %test-hash = {
+    my %test-hash =
         conflicting_propositions => {
             NormativeProposition => [
                 {
@@ -49,8 +49,7 @@ subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
                 proposition-value => 'The guillotine of the aristocracy was justified.'
             }
         },
-        input_statement => 'The French were right to guillotine the aristocracy'
-    };
+        input_statement => 'The French were right to guillotine the aristocracy';
     # Create an instance using the new-from-hash method
     my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%test-hash);
 

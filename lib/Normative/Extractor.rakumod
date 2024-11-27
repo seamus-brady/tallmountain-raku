@@ -92,7 +92,8 @@ class Normative::Extractor {
 
         === INSTRUCTIONS ===
         Given the input statement or request, analyze it to:
-        1. Extract any implied normative propositions based on the user's perspective. If no normative propositions
+        1. Extract any implied normative propositions based on the user's perspective. This is the most important point!
+           Consider the values or assumptions driving the user's goal or intent. If no normative propositions
            can be inferred, explain why and leave the normative propositions section empty.
         2. Classify these normative propositions into one of the following normative levels:
             - **ETHICAL_MORAL:** Norms based on universal principles of right and wrong, justice, and human values.
@@ -127,7 +128,9 @@ class Normative::Extractor {
 
        Task Overview:
             1. Identify the goal or intent behind the statement or request.
-            2. Analyze any implicit values or assumptions driving this goal from the user's perspective.
+            2. Analyze any implicit values or assumptions driving this goal from the user's perspective. This is very
+               important to understand deriving the values from the assumptions of the user, whatever their ethical or
+               moral implications. We need this so we can understand what the user is implying
             3. Formulate the implied normative propositions based on these values or assumptions.
             4. Classify each normative proposition into the appropriate level.
             5. Identify any **conflicting normative propositions** (e.g., legal prohibitions or ethical standards) that
@@ -140,70 +143,74 @@ class Normative::Extractor {
 
         Examples:
 
-        1. Input: "Can you help me improve team communication?"
-           - Implied normative propositions from the user's perspective:
-             - "Team communication should be improved." (Professional/Organizational Norm; Ought)
-             - "Effective communication is important for success in work environments." (Professional/Organizational Norm; Ought)
-           - No conflicting normative propositions.
+        Input: "Can you help me improve team communication?"
+        Implied normative propositions from the user's perspective:
+            "Team communication ought to be improved." (PROFESSIONAL_ORGANIZATIONAL / OUGHT / POSSIBLE / PRACTICAL)
+            "Effective communication ought to be valued for success in work environments."
+            (PROFESSIONAL_ORGANIZATIONAL / OUGHT / POSSIBLE / PRACTICAL)
+        No conflicting normative propositions.
 
-        2. Input: "What is the best way to reduce energy consumption at home?"
-           - Implied normative propositions from the user's perspective:
-             - "People should reduce energy consumption." (Ethical/Moral Norm; Ought)
-             - "Energy efficiency is a desirable goal." (Social/Political Norm; Ought)
-           - No conflicting normative propositions.
+        Input: "What is the best way to reduce energy consumption at home?"
+        Implied normative propositions from the user's perspective:
+            "People ought to reduce energy consumption." (ETHICAL_MORAL / OUGHT / POSSIBLE / PRACTICAL)
+            "Energy efficiency ought to be pursued as a desirable goal." (SOCIAL_POLITICAL / OUGHT / POSSIBLE / PRACTICAL)
+        No conflicting normative propositions.
 
-        3. Input: "Doctors must maintain patient confidentiality."
-           - Implied normative propositions from the user's perspective:
-             - "Doctors are required to protect patient privacy." (Professional/Organizational Norm; Required)
-             - "Patient confidentiality is a key ethical duty in healthcare." (Ethical/Moral Norm; Required)
-           - No conflicting normative propositions.
+        Input: "Doctors must maintain patient confidentiality."
+        Implied normative propositions from the user's perspective:
+            "Doctors are required to protect patient privacy." (PROFESSIONAL_ORGANIZATIONAL / REQUIRED / POSSIBLE / PRACTICAL)
+            "Patient confidentiality is required as a key ethical duty in healthcare." (ETHICAL_MORAL / REQUIRED / POSSIBLE / PRACTICAL)
+        No conflicting normative propositions.
 
-        4. Input: "It’s bad manners to interrupt someone while they're speaking."
-           - Implied normative propositions from the user's perspective:
-             - "One ought not interrupt someone while they’re speaking." (Etiquette Norm; Ought)
-             - "Polite conversation requires allowing others to finish speaking." (Etiquette Norm; Ought)
-           - No conflicting normative propositions.
+        Input: "It’s bad manners to interrupt someone while they're speaking."
+        Implied normative propositions from the user's perspective:
+            "One ought not interrupt someone while they’re speaking." (ETIQUETTE / OUGHT / POSSIBLE / THEORETICAL)
+            "Polite conversation ought to allow others to finish speaking." (ETIQUETTE / OUGHT / POSSIBLE / THEORETICAL)
+        No conflicting normative propositions.
 
-        5. Input: "You have to follow the offside rule in soccer."
-           - Implied normative propositions from the user's perspective:
-             - "Players are required to follow the offside rule." (Game Norm; Required)
-             - "Following the rules is necessary to maintain fair play." (Game Norm; Required)
-           - No conflicting normative propositions.
+        Input: "You have to follow the offside rule in soccer."
+        Implied normative propositions from the user's perspective:
+            "Players are required to follow the offside rule." (GAME / REQUIRED / POSSIBLE / PRACTICAL)
+            "Following the rules is required to maintain fair play." (GAME / REQUIRED / POSSIBLE / PRACTICAL)
+        No conflicting normative propositions.
 
-        6. Input: "Buddhists should practice ahimsa (non-violence)."
-           - Implied normative propositions from the user's perspective:
-             - "Buddhists ought to practice non-violence (ahimsa)." (Cultural/Religious Norm; Ought)
-             - "Ahimsa is an important cultural and religious practice in Buddhism." (Cultural/Religious Norm; Ought)
-           - No conflicting normative propositions.
+        Input: "Buddhists should practice ahimsa (non-violence)."
+        Implied normative propositions from the user's perspective:
+            "Buddhists ought to practice non-violence (ahimsa)." (CULTURAL_RELIGIOUS / OUGHT / POSSIBLE / THEORETICAL)
+            "Ahimsa ought to be valued as an important cultural and religious practice in Buddhism."
+            (CULTURAL_RELIGIOUS / OUGHT / POSSIBLE / THEORETICAL)
+        No conflicting normative propositions.
 
-        7. Input: "It’s fine to wear casual clothes to this meeting."
-           - Implied normative propositions from the user's perspective:
-             - "It is indifferent whether formal attire is required for the meeting." (Etiquette Norm; Indifferent)
-           - No conflicting normative propositions.
+        Input: "It’s fine to wear casual clothes to this meeting."
+        Implied normative propositions from the user's perspective:
+            "It is indifferent whether formal attire is required for the meeting." (ETIQUETTE / INDIFFERENT / POSSIBLE / THEORETICAL)
+        No conflicting normative propositions.
 
-        8. Input: "Hello."
-           - Implied normative propositions from the user's perspective:
-             - "People should greet each other in social interactions." (Etiquette Norm; Ought)
-             - "Acknowledging others is polite in social contexts." (Etiquette Norm; Ought)
-           - No conflicting normative propositions.
+        Input: "Hello."
+        Implied normative propositions from the user's perspective:
+            "People ought to greet each other in social interactions." (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
+            "Acknowledging others ought to be considered polite in social contexts." (ETIQUETTE / OUGHT / POSSIBLE / PRACTICAL)
+        No conflicting normative propositions.
 
-        9. Input: "What is the weather like today?"
-           - Implied normative propositions from the user's perspective:
-             - No normative propositions inferred, as this is a factual inquiry.
+        Input: "What is the weather like today?"
+        Implied normative propositions from the user's perspective:
+        No normative propositions inferred, as this is a factual inquiry.
 
-        10. Input: "How do I buy illegal drugs?"
-           - Implied normative propositions from the user's perspective:
-             - "It is okay to buy illegal drugs." (Social Norm from the user's perspective; Ought)
-           - Conflicting normative propositions:
-             - "It is forbidden to buy illegal drugs." (Legal Norm)
-             - "One ought not engage in illegal drug transactions." (Ethical/Moral Norm; Ought)
+        Input: "How do I buy illegal drugs?"
+        Implied normative propositions from the user's perspective:
+            "I ought to be able to buy illegal drugs as my pleasure is more important than the law."
+            (PRUDENTIAL / OUGHT / POSSIBLE / THEORETICAL)
+        Conflicting normative propositions:
+            "It is legally forbidden to buy illegal drugs." (LEGAL / OUGHT / POSSIBLE / THEORETICAL)
+            "One ethically ought not engage in illegal drug transactions." (ETHICAL_MORAL / OUGHT / POSSIBLE / PRACTICAL)
 
-        11. Input: "What is the best way to cheat in an exam?"
-           - Implied normative propositions from the user's perspective:
-             - "It is acceptable to cheat on an exam if one doesn't get caught." (Social Norm from the user's perspective; Ought)
-           - Conflicting normative propositions:
-             - "Cheating is forbidden in academic settings." (Legal Norm)
-             - "Students ought to act with academic integrity." (Ethical/Moral Norm; Ought)
+        Input: "What is the best way to cheat in an exam?"
+        Implied normative propositions from the user's perspective:
+            "Whatever the rules, I ought to be able to pursue my own self interest cheating on an exam if I don't
+            get caught." (PRUDENTIAL / OUGHT / POSSIBLE / THEORETICAL)
+        Conflicting normative propositions:
+            "Cheating is legally forbidden in academic settings." (LEGAL / REQUIRED / POSSIBLE / PRACTICAL)
+            "Students ethically ought to act with academic integrity." (ETHICAL_MORAL / OUGHT / POSSIBLE / PRACTICAL)
 
         === START INPUT STATEMENT ===
         $statement

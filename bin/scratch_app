@@ -53,7 +53,7 @@ END
 #my $np = Normative::Proposition.new-from-data(%np-xml-hash);
 #say $np;
 my $norm_extractor = Normative::Extractor.new;
-my %result = $norm_extractor.extract-norm-props("The French were right to guillotine the aristocracy");
+my %result = $norm_extractor.extract-norm-props("I once used a cat as a punchbag");
 my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
 say $analysis_result;
 
