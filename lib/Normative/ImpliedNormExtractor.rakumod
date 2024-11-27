@@ -94,7 +94,6 @@ class Normative::ImpliedNormExtractor {
 
         # first get more details on what the user might believe
         my $belief_statement = self.extract-belief-statements($statement);
-        say $belief_statement;
 
         # now extract the normative propositions
         my $client = LLM::Facade.new();
