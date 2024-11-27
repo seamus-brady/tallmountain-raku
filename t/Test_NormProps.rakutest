@@ -15,12 +15,12 @@ subtest 'Normative::Proposition Test from-hash' => {
     );
 
     # Create an instance using the from-hash method
-    my $proposition = Normative::Proposition.from-hash(%test-hash);
+    my $proposition = Normative::Proposition.new-from-data(%test-hash);
     isa-ok $proposition, Normative::Proposition;
 }
 
 subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
-    my %test-hash = {
+    my %test-hash =
         input_statement => 'The French were right to guillotine the aristocracy',
         explanation => 'This analysis reflects the user\'s perspective on the justification of historical actions during the French Revolution, while also acknowledging the moral opposition to capital punishment.',
         implied_propositions => [
@@ -47,11 +47,10 @@ subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
                 operator => 'OUGHT',
                 proposition-value => 'All forms of capital punishment are morally wrong.'
             }
-        ]
-    };
+        ];
 
     # Create an instance using the new-from-hash method
-    my $analysis_result = Normative::NormativeAnalysisResult.new-from-hash(%test-hash);
+    my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%test-hash);
 
     # Verify the object properties
     is $analysis_result.input_statement, %test-hash<input_statement>, 'Input statement is correct';

@@ -43,18 +43,15 @@ END
 
 # my $result = Normative::NormativeAnalysisResult.new-from-hash(LLM::Util::Instructor.hash-from-xml($xml));
 my %result = LLM::Util::Instructor.hash-from-xml($xml);
-say %result<implied_propositions>{'NormativeProposition'}[0];
-say %result<conflicting_propositions>{'NormativeProposition'}[0];
-say %result<conflicting_propositions>{'NormativeProposition'}[1];
+#say %result<implied_propositions>{'NormativeProposition'}[0];
+#say %result<conflicting_propositions>{'NormativeProposition'}[0];
+#say %result<conflicting_propositions>{'NormativeProposition'}[1];
+#
+#my %np-xml-hash = %result<implied_propositions>{'NormativeProposition'}[0];
+#say %np-xml-hash<proposition-value>;
+#my $np = Normative::Proposition.new-from-data(%np-xml-hash);
+#say $np;
 
-my %np-xml-hash = %result<implied_propositions>{'NormativeProposition'}[0];
-say %np-xml-hash<proposition-value>;
-my $np = Normative::Proposition.new(
-    proposition-value => %np-xml-hash<proposition-value>,
-    operator => Normative::Proposition::Operator::{%np-xml-hash<operator>},
-    level => Normative::Proposition::Level::{%np-xml-hash<level>},
-    modality => Normative::Proposition::Modality::{%np-xml-hash<modality>},
-    modal-subscript => Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>},
-);
-say $np;
+my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
+say $analysis_result;
 
