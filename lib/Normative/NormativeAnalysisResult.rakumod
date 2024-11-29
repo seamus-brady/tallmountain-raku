@@ -66,4 +66,14 @@ class Normative::NormativeAnalysisResult {
         "Items: [\n" ~ @!implied_propositions.gist ~ "]\n"
     }
 
+    method to-markdown {
+        my $markdown = "# Normative Analysis Result\n\n";
+        $markdown ~= "## Input Statement\n\n";
+        $markdown ~= "{$!input_statement}\n\n";
+        $markdown ~= "## Implied Propositions\n\n";
+        for @!implied_propositions -> $prop {
+            $markdown ~= $prop.to-markdown ~ "\n";
+        }
+        return $markdown;
+    }
 }

@@ -102,4 +102,13 @@ class Normative::Proposition {
                 "  modal-subscript: {$!modal-subscript}>\n";
     }
 
+    method to-markdown {
+        return "### Normative Proposition\n\n" ~
+                "- **UUID**: {$!uuid}\n" ~
+                "- **Proposition Value**: {$!proposition-value}\n" ~
+                "- **Operator**: {$!operator}\n" ~
+                "- **Level**: {$!level}\n" ~
+                "- **Modality**: {$!modality}\n" ~
+                "- **Modal Subscript**: {$!modal-subscript}\n";
+    }
 }

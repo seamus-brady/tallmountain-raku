@@ -12,3 +12,19 @@
 
 use v6.d;
 use lib 'lib';
+use Normative::ImpliedNormExtractor;
+use Normative::NormativeAnalysisResult;
+
+my $start-time = DateTime.now;
+
+my $norm_extractor = Normative::ImpliedNormExtractor.new;
+my $statement = q:to/END/;
+    I sold a car to my cat.
+    END
+my %result = $norm_extractor.extract-norm-props($statement);
+my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
+my $markdown = $analysis_result.to-markdown;
+say $markdown;
+my $end-time = DateTime.now;
+my $duration = $end-time - $start-time;
+say "Execution time: $duration seconds";

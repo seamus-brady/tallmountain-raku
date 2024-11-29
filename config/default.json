@@ -3,7 +3,7 @@
     "default_llm_provider": "openai"
   },
   "norm_prop_extractor": {
-    "max_extracted_norms": 5
+    "max_extracted_norms": 4
   },
   "chat_ui": {
     "chat_ui_server": "localhost",
