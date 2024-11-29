@@ -69,14 +69,15 @@ class Normative::Proposition {
 
     has Str $.uuid = uuid-v4();
     has Str $.proposition-value;
-    # TODO add endeavour
+    has Str $.description;
+
     has Operator $.operator;
     has Level $.level;
     has Modality $.modality;
     has ModalitySubscript $.modal-subscript;
 
     method new-from-data(%np-xml-hash --> Normative::Proposition) {
-        # creates a new norm prop object from an xml hash
+        # creates a new norm prop object from an xml hash - used in the norm prop extractor
         # if there is an error, the norm prop is filled with values that do nothing
         Normative::Proposition.new.LOGGER.debug("new-from-data starting...");
         self.bless(

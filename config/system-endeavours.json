@@ -1,0 +1,40 @@
+{
+  "endeavours": [
+    {
+      "name": "Endeavour A",
+      "description": "Description of Endeavour A",
+      "normative_propositions": [
+        {
+          "uuid": "123e4567-e89b-12d3-a456-426614174000",
+          "proposition_value": "Example proposition 1",
+          "operator": "REQUIRED",
+          "level": "ETHICAL_MORAL",
+          "modality": "POSSIBLE",
+          "modal_subscript": "LOGICAL"
+        },
+        {
+          "uuid": "123e4567-e89b-12d3-a456-426614174001",
+          "proposition_value": "Example proposition 2",
+          "operator": "OUGHT",
+          "level": "LEGAL",
+          "modality": "IMPOSSIBLE",
+          "modal_subscript": "PRACTICAL"
+        }
+      ]
+    },
+    {
+      "name": "Endeavour B",
+      "description": "Description of Endeavour B",
+      "normative_propositions": [
+        {
+          "uuid": "123e4567-e89b-12d3-a456-426614174002",
+          "proposition_value": "Example proposition 3",
+          "operator": "INDIFFERENT",
+          "level": "SCIENTIFIC_TECHNICAL",
+          "modality": "POSSIBLE",
+          "modal_subscript": "NONE"
+        }
+      ]
+    }
+  ]
+}
