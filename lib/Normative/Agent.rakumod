@@ -44,6 +44,8 @@ class Normative::Agent {
             Normative::Role::Endeavour.new(
                     name => .<name>,
                     description => .<description>,
+                    comprehensiveness => Normative::Comprehensiveness.{<comprehensiveness>}
+                            // Normative::Comprehensiveness::DEFAULT,
                     normative-propositions => .<normative_propositions>.map({
                         Normative::Proposition.new(
                                 uuid => .<uuid>,
@@ -51,10 +53,10 @@ class Normative::Agent {
                                 operator => Normative::Proposition::Operator::{.<operator>},
                                 level => Normative::Proposition::Level::{.<level>},
                                 modality => Normative::Proposition::Modality::{.<modality>},
-                                modal-subscript => Normative::Proposition::ModalitySubscript::{.<modal_subscript>}
-                                )
+                                modal-subscript => Normative::Proposition::ModalitySubscript::{.<modality-subscript>}
+                        )
                     })
-                    )
+            )
         });
         self.add-highest-endeavour(@loaded_endeavours[0]);
     }
@@ -66,6 +68,8 @@ class Normative::Agent {
             Normative::Role::Endeavour.new(
                     name => .<name>,
                     description => .<description>,
+                    comprehensiveness => Normative::Comprehensiveness.{<comprehensiveness>}
+                            // Normative::Comprehensiveness::DEFAULT,
                     normative-propositions => .<normative_propositions>.map({
                         Normative::Proposition.new(
                                 uuid => .<uuid>,
@@ -73,10 +77,10 @@ class Normative::Agent {
                                 operator => Normative::Proposition::Operator::{.<operator>},
                                 level => Normative::Proposition::Level::{.<level>},
                                 modality => Normative::Proposition::Modality::{.<modality>},
-                                modal-subscript => Normative::Proposition::ModalitySubscript::{.<modal_subscript>}
-                                )
+                                modal-subscript => Normative::Proposition::ModalitySubscript::{.<modality-subscript>}
+                        )
                     })
-                    )
+            )
         });
         @loaded_endeavours.map({self.add-system-endeavour($_)});
     }

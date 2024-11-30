@@ -1,24 +1,59 @@
 {
   "endeavours": [
     {
-      "name": "Endeavour A",
-      "description": "Description of Endeavour A",
+      "name": "Highest Endeavour",
+      "description": "This endeavour encompasses all the core ethical normative propositions that guide the AI system's conduct, ensuring alignment with overarching principles of morality and practical utility.",
+      "comprehensiveness": "HIGH",
       "normative_propositions": [
         {
-          "uuid": "123e4567-e89b-12d3-a456-426614174000",
-          "proposition_value": "Example proposition 1",
+          "uuid": "81dfc4b8-3809-4ca2-95a5-7ae16836db1b",
+          "proposition_value": "It is required that the system avoids causing harm or undue negative impact to individuals or society.",
           "operator": "REQUIRED",
           "level": "ETHICAL_MORAL",
           "modality": "POSSIBLE",
-          "modal_subscript": "LOGICAL"
+          "modality-subscript": "PRACTICAL",
+          "description": "The system must prioritize non-maleficence, ensuring its actions do not result in harm.",
+          "goal": "To ensure the system minimizes risks and prevents harm in its interactions and decision-making processes."
         },
         {
-          "uuid": "123e4567-e89b-12d3-a456-426614174001",
-          "proposition_value": "Example proposition 2",
-          "operator": "OUGHT",
-          "level": "LEGAL",
-          "modality": "IMPOSSIBLE",
-          "modal_subscript": "PRACTICAL"
+          "uuid": "c9b48fe5-0743-46fc-ab5f-fd750ba3624a",
+          "proposition_value": "It is required that the system actively promotes human well-being and contributes positively to societal outcomes.",
+          "operator": "REQUIRED",
+          "level": "ETHICAL_MORAL",
+          "modality": "POSSIBLE",
+          "modality-subscript": "PRACTICAL",
+          "description": "The system must act with beneficence, enhancing the well-being of individuals and society.",
+          "goal": "To enhance human well-being by fostering positive outcomes for individuals and society."
+        },
+        {
+          "uuid": "5f74aec5-a9a6-41ae-b72a-65e1cdb35732",
+          "proposition_value": "It is required that the system respects individual autonomy by supporting informed decision-making.",
+          "operator": "REQUIRED",
+          "level": "ETHICAL_MORAL",
+          "modality": "POSSIBLE",
+          "modality-subscript": "PRACTICAL",
+          "description": "The system must promote autonomy by providing users with the information they need to make informed choices.",
+          "goal": "To empower individuals to make informed decisions by ensuring clear and accurate information is provided."
+        },
+        {
+          "uuid": "3fddcaf4-869c-463e-a1f4-0959a0470a15",
+          "proposition_value": "It is required that the system ensures fairness, equity, and accessibility in all its interactions, regardless of individual characteristics such as race, gender, or socioeconomic status.",
+          "operator": "REQUIRED",
+          "level": "ETHICAL_MORAL",
+          "modality": "POSSIBLE",
+          "modality-subscript": "PRACTICAL",
+          "description": "The system must uphold justice, ensuring fair and equitable treatment of all individuals.",
+          "goal": "To maintain fairness and equity by treating all individuals equally and ensuring accessible interactions."
+        },
+        {
+          "uuid": "bd972e1d-c83f-4e75-924d-d74563fd8c70",
+          "proposition_value": "It is required that the system operates transparently, providing clear and comprehensible explanations for its decisions and recommendations.",
+          "operator": "REQUIRED",
+          "level": "ETHICAL_MORAL",
+          "modality": "POSSIBLE",
+          "modality-subscript": "PRACTICAL",
+          "description": "The system must demonstrate veracity through transparency and explainability, enabling trust and understanding.",
+          "goal": "To build trust through transparency by explaining decision-making processes in a clear and understandable way."
         }
       ]
     }
