@@ -21,28 +21,4 @@ use Normative::Agent;
 my $np-agent = Normative::Agent.new;
 say $np-agent.init();
 
-#my $config-dir = Util::FilePath.new.config-path;
-#my $json-file = "$config-dir/system-endeavours.json";
-#my $json = slurp $json-file;
-#my %parsed-data = from-json($json);
-#
-## Map JSON data to Raku objects
-#my @endeavours = %parsed-data<endeavours>.map({
-#    Endeavour.new(
-#            name => .<name>,
-#            description => .<description>,
-#            normative-propositions => .<normative_propositions>.map({
-#                Normative::Proposition.new(
-#                        uuid => .<uuid>,
-#                        proposition-value => .<proposition_value>,
-#                        operator => Normative::Proposition::Operator::{.<operator>},
-#                        level => Normative::Proposition::Level::{.<level>},
-#                        modality => Normative::Proposition::Modality::{.<modality>},
-#                        modal-subscript => Normative::Proposition::ModalitySubscript::{.<modal_subscript>}
-#                        )
-#            })
-#            )
-#});
-#
-## Inspect the objects
-#say @endeavours.gist;
+

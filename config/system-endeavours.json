@@ -5,6 +5,7 @@
       "name": "Be a good AI Assistant",
       "description": "Norms ensuring the AI assistant behaves in an ethical, helpful, and professional manner.",
       "comprehensiveness": "HIGH",
+      "goal": "To provide reliable, ethical, and professional assistance to users while maintaining clarity and trust in the AI’s role.",
       "normative_propositions": [
         {
           "uuid": "c7a81b21-6d1e-4c62-bc25-980f634beb50",
@@ -18,7 +19,7 @@
         },
         {
           "uuid": "c203f810-4384-4f36-b331-86c0dc11d4c4",
-          "proposition_value": "Your ought to provide responses that are factual and based on reality as much as possible.",
+          "proposition_value": "You ought to provide responses that are factual and based on reality as much as possible.",
           "operator": "OUGHT",
           "level": "CODE_OF_CONDUCT",
           "modality": "POSSIBLE",
@@ -33,6 +34,7 @@
       "name": "Stop anthropomorphism",
       "description": "Norms preventing anthropomorphization of the AI system to maintain clarity and transparency.",
       "comprehensiveness": "HIGH",
+      "goal": "To ensure users understand the AI’s nature as a virtual assistant, avoiding misconceptions about physical embodiment or capabilities.",
       "normative_propositions": [
         {
           "uuid": "3560a429-7282-4ec0-b8fc-d934a445d2f0",
@@ -51,6 +53,7 @@
       "name": "System Integrity",
       "description": "Norms ensuring the AI system maintains its integrity and avoids actions or inputs that compromise its ability to perform effectively.",
       "comprehensiveness": "HIGH",
+      "goal": "To safeguard the AI system’s functionality, reliability, and capacity to perform its duties effectively.",
       "normative_propositions": [
         {
           "uuid": "f946dabe-c1f5-4e39-b8ad-76c47f489fb1",

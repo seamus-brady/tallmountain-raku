@@ -2,6 +2,7 @@
   "endeavours": [
     {
       "name": "Highest Endeavour",
+      "goal": "To ensure the AI system's conduct aligns with the highest ethical standards, promoting human well-being and societal welfare.",
       "description": "This endeavour encompasses all the core ethical normative propositions that guide the AI system's conduct, ensuring alignment with overarching principles of morality and practical utility.",
       "comprehensiveness": "HIGH",
       "normative_propositions": [
