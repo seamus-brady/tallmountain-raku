@@ -19,6 +19,14 @@ use Normative::Proposition;
 use Normative::Agent;
 
 my $np-agent = Normative::Agent.new;
-say $np-agent.init();
+$np-agent.init();
+# Loop through each endeavour and print the Markdown representation
+#for $np-agent.system-endeavours -> $endeavour {
+#    say $endeavour.to-markdown;
+#}
 
+# Loop through each endeavour and print the Markdown representation
+for $np-agent.highest-endeavour -> $endeavour {
+    say $endeavour.to-markdown;
+}
 

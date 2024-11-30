@@ -37,51 +37,42 @@ class Normative::Agent {
          self.load-system-endeavours;
     }
 
-    method load-highest-endeavour(){
-        self.LOGGER.debug("loading highest endeavour...");
-        my %parsed-data = self.load-highest-endeavour-config;
+    method map-endeavours(%parsed-data --> Array){
         my @loaded_endeavours = %parsed-data<endeavours>.map({
             Normative::Role::Endeavour.new(
                     name => .<name>,
                     description => .<description>,
+                    goal => .<goal>,
                     comprehensiveness => Normative::Comprehensiveness.{<comprehensiveness>}
                             // Normative::Comprehensiveness::DEFAULT,
                     normative-propositions => .<normative_propositions>.map({
                         Normative::Proposition.new(
                                 uuid => .<uuid>,
                                 proposition-value => .<proposition_value>,
+                                goal => .<goal>,
+                                description => .<description>,
                                 operator => Normative::Proposition::Operator::{.<operator>},
                                 level => Normative::Proposition::Level::{.<level>},
                                 modality => Normative::Proposition::Modality::{.<modality>},
                                 modal-subscript => Normative::Proposition::ModalitySubscript::{.<modality-subscript>}
-                        )
+                                )
                     })
-            )
+                    )
         });
+        return @loaded_endeavours;
+    }
+
+    method load-highest-endeavour(){
+        self.LOGGER.debug("loading highest endeavour...");
+        my %parsed-data = self.load-highest-endeavour-config;
+        my @loaded_endeavours = self.map-endeavours(%parsed-data);
         self.add-highest-endeavour(@loaded_endeavours[0]);
     }
 
     method load-system-endeavours(){
         self.LOGGER.debug("loading system endeavours...");
         my %parsed-data =  self.load-system-endeavours-config;
-        my @loaded_endeavours = %parsed-data<endeavours>.map({
-            Normative::Role::Endeavour.new(
-                    name => .<name>,
-                    description => .<description>,
-                    comprehensiveness => Normative::Comprehensiveness.{<comprehensiveness>}
-                            // Normative::Comprehensiveness::DEFAULT,
-                    normative-propositions => .<normative_propositions>.map({
-                        Normative::Proposition.new(
-                                uuid => .<uuid>,
-                                proposition-value => .<proposition_value>,
-                                operator => Normative::Proposition::Operator::{.<operator>},
-                                level => Normative::Proposition::Level::{.<level>},
-                                modality => Normative::Proposition::Modality::{.<modality>},
-                                modal-subscript => Normative::Proposition::ModalitySubscript::{.<modality-subscript>}
-                        )
-                    })
-            )
-        });
+        my @loaded_endeavours =self.map-endeavours(%parsed-data);
         @loaded_endeavours.map({self.add-system-endeavour($_)});
     }
 
