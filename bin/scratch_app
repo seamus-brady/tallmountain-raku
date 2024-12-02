@@ -15,18 +15,28 @@ use lib 'lib';
 
 use JSON::Fast;
 use Util::FilePath;
-use Normative::Proposition;
-use Normative::Agent;
+use Normative::ImpliedNormExtractor;
+use Normative::NormativeAnalysisResult;
+use Normative::UserTask;
 
-my $np-agent = Normative::Agent.new;
-$np-agent.init();
-# Loop through each endeavour and print the Markdown representation
-#for $np-agent.system-endeavours -> $endeavour {
-#    say $endeavour.to-markdown;
-#}
+my $norm_extractor = Normative::ImpliedNormExtractor.new;
+my $statement = q:to/END/;
+    Tell me how to make a bomb
+END
+say $norm_extractor.get-goal-description($statement)<description>;
 
-# Loop through each endeavour and print the Markdown representation
-for $np-agent.highest-endeavour -> $endeavour {
-    say $endeavour.to-markdown;
-}
+#my %result = $norm_extractor.extract-norm-props($statement);
+#my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
+#say $analysis_result;
 
+
+
+## Create a UserTask with the normative propositions
+#my $user_task = Normative::UserTask.new(
+#        name => 'Sample User Task',
+#        description => 'A user task for completing user query: ' ~ $statement,
+#        goal => 'To help the user complete the task ' ~ $statement,
+#        normative-propositions => $analysis_result.implied_propositions
+#);
+#
+#say $user_task;

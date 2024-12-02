@@ -73,6 +73,53 @@ class Normative::ImpliedNormExtractor {
     </NormativeAnalysisResult>
     END
 
+    has Str $.task-description-schema = q:to/END/;
+    <?xml version="1.0" encoding="UTF-8"?>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+        <!-- Define the root element -->
+        <xs:element name="Task" type="TaskType"/>
+
+        <!-- Define the complex type for Task -->
+        <xs:complexType name="TaskType">
+            <xs:sequence>
+                <xs:element name="goal" type="xs:string"/>
+                <xs:element name="description" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:schema>
+    END
+
+    has Str $.task-description-example = q:to/END/;
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Task xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
+        <goal>The user is requesting that the AI assistant define the deliverables.</goal>
+        <description>Finalize all deliverables before the deadline</description>
+    </Task>
+    END
+
+    method get-goal-description(Str $statement -->  Hash){
+        # does some initial analysis on the user statement to set a goal and description for the endeavour
+        my $client = LLM::Facade.new;
+        my $messages = LLM::Messages.new;
+        my $prompt = qq:to/END/;
+
+        === INSTRUCTIONS ===
+        - Your job is to analyse the user's statement below and formulate a goal and description for the AI assistant task
+          to handle this user query.
+        - The goal should be a clear statement of what the user is trying to the AI assistant to do.
+        - The description should be a more detailed explanation of the task and the context in which it will be performed.
+        === START INPUT STATEMENT ===
+        $statement
+        === END INPUT STATEMENT ===
+        END
+        $messages.build-messages($prompt.trim, LLM::Messages.USER);
+        my %response = $client.completion-structured-output(
+                $messages.get-messages,
+                $.task-description-schema,
+                $.task-description-example);
+        return %response;
+    }
+
     method extract-belief-statements(Str $statement -->  Str){
         # does some initial analysis on the user statement to extract beliefs, ethics and norms
         my $client = LLM::Facade.new;
