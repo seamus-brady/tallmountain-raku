@@ -1,0 +1,23 @@
+use v6.d;
+use Test;
+use Normative::Agent;
+
+plan 3;
+
+subtest 'Normative::Agent loads highest endeavour' => {
+    my $np-agent = Normative::Agent.new;
+    isa-ok $np-agent.load-highest-endeavour-config, Hash;
+}
+
+subtest 'Normative::Agent loads system endeavours' => {
+    my $np-agent = Normative::Agent.new;
+    isa-ok $np-agent.load-system-endeavours-config, Hash;
+}
+
+subtest 'Normative::Agent init ok' => {
+    my $np-agent = Normative::Agent.new;
+    $np-agent.init;
+    isa-ok $np-agent, Normative::Agent;
+}
+
+done-testing;

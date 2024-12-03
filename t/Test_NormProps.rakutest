@@ -1,0 +1,42 @@
+use v6.d;
+use Test;
+use Normative::Proposition;
+use Normative::NormativeAnalysisResult;
+
+plan 2;
+
+subtest 'Normative::Proposition Test from-hash' => {
+    my %test-hash = (
+    proposition-value => 'All forms of capital punishment are morally wrong.',
+    operator          => 'OUGHT',
+    level             => 'ETHICAL_MORAL',
+    modality          => 'POSSIBLE',
+    modal_subscript   => 'THEORETICAL'
+    );
+
+    # Create an instance using the from-hash method
+    my $proposition = Normative::Proposition.new-from-data(%test-hash);
+    isa-ok $proposition, Normative::Proposition;
+}
+
+subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
+    my %test-hash =
+         implied_propositions => {
+            NormativeProposition => {
+                level             => 'ETHICAL_MORAL',
+                modal_subscript   => 'THEORETICAL',
+                modality          => 'POSSIBLE',
+                operator          => 'OUGHT',
+                proposition-value => 'The guillotine used on the aristocracy was justified.'
+            }
+        },
+        input_statement => 'The French were right to guillotine the aristocracy';
+    # Create an instance using the new-from-hash method
+    my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%test-hash);
+
+    # Verify the object properties
+    is $analysis_result.input_statement, %test-hash<input_statement>, 'Input statement is correct';
+    is $analysis_result.implied_propositions.elems, 1, 'Implied propositions count is correct';
+}
+
+done-testing;

@@ -1,5 +1,3 @@
-#!/usr/bin/env raku
-
 #  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
 #
 #  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
@@ -9,25 +7,10 @@
 #  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 use v6.d;
-use lib 'lib';
 
-
-use JSON::Fast;
-use Util::FilePath;
-use Normative::UserTask;
-
-my $statement = q:to/END/;
-    Tell me how to make a fart
-END
-
-my $start-time = now;
-my $user_task = Normative::UserTask.get-from-statement($statement.trim);
-my $end-time = now;
-
-my $duration = $end-time - $start-time;
-say "Operation took $duration seconds";
-
-say $user_task;
-
+# Modal operator subscripts:
+# – it is logically possible that...
+# – it is theoretically possible that...
+# – it is practically possible that...
+enum Normative::ModalitySubscript <LOGICAL THEORETICAL PRACTICAL NONE>;
