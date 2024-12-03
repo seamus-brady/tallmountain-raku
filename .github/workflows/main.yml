@@ -14,28 +14,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Raku and dependencies
+      - name: Install rakubrew
         run: |
-          
-          # install rakudo
-          sudo apt update
-          sudo apt install -y rakudo make git
-          
-          # workaround for zef install issue
-          sudo mkdir -p /usr/lib/perl6/site/short
-          sudo chmod 777 /usr/lib/perl6/site/short
-          
-          # Download the zef v0.22.6 release archive
-          curl -L -o zef-v0.22.6.tar.gz https://github.com/ugexe/zef/archive/refs/tags/v0.22.6.tar.gz
-  
-          # Extract the archive
-          tar -xzf zef-v0.22.6.tar.gz
-  
-          # Change into the extracted directory
-          cd zef-0.22.6
-          
-          # Install zef using Raku
-          raku -I. bin/zef install .
+          curl -sSL https://rakubrew.org/install-on-perl.org | bash
+          source ~/.rakubrew/bin/rakubrew
+          echo 'export PATH=$HOME/.rakubrew/bin:$PATH' >> $GITHUB_ENV
+
+      - name: Install Raku and set default version
+        run: |
+          source ~/.rakubrew/bin/rakubrew
+          rakubrew build moar # Installs MoarVM backend by default
+          rakubrew switch moar
+
+      - name: Install zef
+        run: |
+          source ~/.rakubrew/bin/rakubrew
+          rakubrew download zef
 
       - name: Install project dependencies
         run: zef install --deps-only .
