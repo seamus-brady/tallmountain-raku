@@ -8,11 +8,19 @@ on:
 
 jobs:
   test:
-    runs-on: rakudo-star:latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Install Raku and dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y rakudo make git
+          git clone https://github.com/ugexe/zef.git
+          cd zef
+          raku -I. bin/zef install .
 
       - name: Install project dependencies
         run: zef install --deps-only .
