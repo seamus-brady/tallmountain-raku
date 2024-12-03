@@ -6,13 +6,6 @@ class Cycle::Buffer::Chat {
 
     has Memory::ConversationBuffer $.message-buffer = Memory::ConversationBuffer.new();
 
-    method as-llm-messages(--> LLM::Messages) {
-        # convert to LLM::Messages, just a wrapper but useful
-        my $llm-messages = LLM::Messages.new();
-        $llm-messages.set-messages(self.messages());
-        return $llm-messages;
-    }
-
     method messages {
         $.message-buffer.get-recent();
     }

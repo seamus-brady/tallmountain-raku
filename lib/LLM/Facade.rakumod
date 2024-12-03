@@ -27,10 +27,10 @@ class LLM::Facade {
     }
 
     method completion-string(
-            LLM::Messages $messages,
+            @messages,
             LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
             --> Str) {
-            return $.client.completion-string($messages, $mode);
+            return $.client.completion-string(@messages, $mode);
     }
 
     method completion-structured-output(

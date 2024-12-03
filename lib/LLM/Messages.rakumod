@@ -9,7 +9,6 @@
 
 use v6.d;
 use Util::Logger;
-use JSON::Fast;
 
 class LLM::Messages {
 
@@ -20,10 +19,6 @@ class LLM::Messages {
     has $.LOGGER = Util::Logger.new(namespace => "<LLM::Messages>");
 
     has @!messages;
-
-    method to-json() {
-        return to-json(self.get-messages);
-    }
 
     method get-messages() {
         return @!messages

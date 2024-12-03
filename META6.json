@@ -15,6 +15,7 @@
     "Array::Circular"
   ],
   "provides": {
+    "Cycle::Buffer::Chat": "lib/Cycle/Buffer/Chat.rakumod",
     "Cycle::Payload::OkString": "lib/Cycle/Payload/OkString.rakumod",
     "Cycle::Payload::TaintedString": "lib/Cycle/Payload/TaintedString.rakumod",
     "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",

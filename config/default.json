@@ -10,7 +10,7 @@
     "chat_ui_port": 10000
   },
   "openai": {
-    "openai_chat_completion_model": "gpt-4o",
+    "openai_chat_completion_model": "gpt-4o-mini",
     "openai_structured_output_attempts": 4
   },
   "for_testing": {
