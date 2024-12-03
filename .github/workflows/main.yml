@@ -21,6 +21,10 @@ jobs:
           sudo apt update
           sudo apt install -y rakudo make git
           
+          # workaround for zef install issue
+          sudo mkdir -p /usr/lib/perl6/site/short
+          sudo chmod 777 /usr/lib/perl6/site/short
+          
           # Download the zef v0.22.6 release archive
           curl -L -o zef-v0.22.6.tar.gz https://github.com/ugexe/zef/archive/refs/tags/v0.22.6.tar.gz
   
