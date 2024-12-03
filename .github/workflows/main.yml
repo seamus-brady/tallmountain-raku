@@ -16,8 +16,8 @@ jobs:
 
       - name: Install rakubrew
         run: |
-          curl -sSL https://rakubrew.org/install-on-perl.org | bash
-          source ~/.rakubrew/bin/rakubrew
+          sudo curl -sSL https://rakubrew.org/install-on-perl.org | bash
+          sudo source ~/.rakubrew/bin/rakubrew
           echo 'export PATH=$HOME/.rakubrew/bin:$PATH' >> $GITHUB_ENV
 
       - name: Install Raku and set default version
