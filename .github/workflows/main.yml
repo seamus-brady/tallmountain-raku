@@ -8,27 +8,11 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: rakudo-star:latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Install Raku and dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y rakudo make git
-          
-          # Workaround for https://github.com/rakudo/rakudo/issues/1515
-          mkdir -p $INSTALL_ROOT/share/perl6/site/short \
-          $INSTALL_ROOT/share/perl6/vendor/short
-  
-          touch $INSTALL_ROOT/share/perl6/site/short/.keep \
-          $INSTALL_ROOT/share/perl6/vendor/short/.keep
-          
-          git clone https://github.com/ugexe/zef.git
-          cd zef
-          raku -I. bin/zef install .
 
       - name: Install project dependencies
         run: zef install --deps-only .
