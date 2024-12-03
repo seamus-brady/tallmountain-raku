@@ -16,11 +16,22 @@ jobs:
 
       - name: Install Raku and dependencies
         run: |
+          
+          # install rakudo
           sudo apt update
           sudo apt install -y rakudo make git
-          sudo git clone https://github.com/ugexe/zef.git
-          cd zef
-          sudo raku -I. bin/zef install .
+          
+          # Download the zef v0.22.6 release archive
+          curl -L -o zef-v0.22.6.tar.gz https://github.com/ugexe/zef/archive/refs/tags/v0.22.6.tar.gz
+  
+          # Extract the archive
+          tar -xzf zef-v0.22.6.tar.gz
+  
+          # Change into the extracted directory
+          cd zef-0.22.6
+          
+          # Install zef using Raku
+          raku -I. bin/zef install .
 
       - name: Install project dependencies
         run: zef install --deps-only .
