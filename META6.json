@@ -4,6 +4,7 @@
   "version": "0.1",
   "auth": "Seamus Brady <seamus@corvideon.ie>",
   "depends": [
+    "App::Prove6",
     "Env::Dotenv",
     "HTTP::Tinyish",
     "JSON::Fast",
