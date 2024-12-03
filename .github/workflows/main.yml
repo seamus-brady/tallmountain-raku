@@ -18,6 +18,14 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y rakudo make git
+          
+          # Workaround for https://github.com/rakudo/rakudo/issues/1515
+          mkdir -p $INSTALL_ROOT/share/perl6/site/short \
+          $INSTALL_ROOT/share/perl6/vendor/short
+  
+          touch $INSTALL_ROOT/share/perl6/site/short/.keep \
+          $INSTALL_ROOT/share/perl6/vendor/short/.keep
+          
           git clone https://github.com/ugexe/zef.git
           cd zef
           raku -I. bin/zef install .
