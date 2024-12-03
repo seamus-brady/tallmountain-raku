@@ -19,27 +19,58 @@ plan 5;
 # Create an instance of the OpenAIClient
 my $client = LLM::Client::OpenAI.new();
 
-subtest 'LLM::Client::OpenAI Chat Completion' => {
-    # Define the messages to send
-    my @messages = (
-        { role => "system", content => "You are a helpful assistant." },
-        { role => "user", content => "Hello!" }
-    );
-    my $response = $client.completion-string(@messages);
-    ok $response, 'Chat completion should return a response';
-    ok $response.chars > 0, 'Chat completion should return a non-empty response';
-}
-
-
 subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     my $messages = LLM::Messages.new;
     $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
     $messages.build-messages('Knock knock.', LLM::Messages.USER);
     $messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
     $messages.build-messages('Orange.', LLM::Messages.USER);
-    my $response = $client.completion-string($messages.get-messages());
+    my $response = $client.completion-string($messages);
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
+}
+
+
+
+subtest 'LLM::Client::OpenAI completion tools' => {
+    my $messages = LLM::Messages.new;
+    $messages.build-messages('Is it snowing in Dublin?', LLM::Messages.USER);
+    my Str $tools = q:to/END/;
+		  "tools": [
+			{
+			  "type": "function",
+			  "function": {
+				"parameters": {
+				  "required": [
+					"location"
+				  ],
+				  "type": "object",
+				  "properties": {
+					"unit": {
+					  "type": "string",
+					  "enum": [
+						"celsius",
+						"fahrenheit"
+					  ]
+					},
+					"location": {
+					  "description": "The city and state, e.g. San Francisco, CA",
+					  "type": "string"
+					}
+				  }
+				},
+				"name": "get_current_weather",
+				"description": "Get the current weather in a given location"
+			  }
+			}
+		  ],
+		END
+    my $client = LLM::Client::OpenAI.new();
+    my %response = $client.completion-tools($messages, $tools);
+    ok %response, 'Chat completion should return a response';
+    is %response<choices>[0]<message><tool_calls>[0]<function><name>,
+            'get_current_weather',
+            'Tools completion called correct function';
 }
 
 
@@ -83,7 +114,7 @@ subtest 'LLM::Client::OpenAI structured output' => {
     $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
     $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
-    my %family = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    my %family = $client.completion-structured-output($messages, $xml-schema.trim, $xml-doc.trim);
     is %family<parent>, 'Mary', 'Test parent.';
     is %family<child>[0]<name>, 'Tom', 'Test child name.';
     is %family<child>[1]<name>, 'Laura', 'Test child name.';
@@ -134,7 +165,7 @@ subtest 'LLM::Client::OpenAI structured output extracts string' => {
     It is made from bright mild steel and vegan leather
     END
     $messages.build-messages($prompt, LLM::Messages.USER);
-    my %response = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    my %response = $client.completion-structured-output($messages, $xml-schema.trim, $xml-doc.trim);
     is %response<name>, 'Steering Wheel', 'Test string extracted.';
 }
 
@@ -171,7 +202,7 @@ subtest 'LLM::Client::OpenAI structured output invalid schema' => {
     $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
     dies-ok {
-        $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim)
+        $client.completion-structured-output($messages, $xml-schema.trim, $xml-doc.trim)
     }, 'Exception thrown for invalid xml';
 }
 

@@ -9,17 +9,30 @@
 
 use v6.d;
 use LLM::AdaptiveRequestMode;
+use LLM::Messages;
 
 role LLM::Role::Client {
+
     method completion-string(
-            @messages,
+            LLM::Messages $messages,
             LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
             --> Str) {
         die X::AdHoc.new(:payload("This method is not implemented."));
     }
 
+
+    method completion-tools(
+            LLM::Messages $messages,
+            Str $tools;
+            Str $tool-choice = "auto",
+            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+            --> Any) {
+        die X::AdHoc.new(:payload("This method is not implemented."));
+    }
+
+
     method completion-structured-output(
-            @messages is copy,
+            LLM::Messages $messages is copy,
             Str $xml-schema is copy,
             Str $xml-example is copy,
             LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
