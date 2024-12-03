@@ -18,9 +18,9 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y rakudo make git
-          git clone https://github.com/ugexe/zef.git
+          sudo git clone https://github.com/ugexe/zef.git
           cd zef
-          raku -I. bin/zef install .
+          sudo raku -I. bin/zef install .
 
       - name: Install project dependencies
         run: zef install --deps-only .
