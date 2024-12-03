@@ -1,0 +1,13 @@
+use v6.d;
+use Test;
+use Normative::UserTask;
+
+plan 1;
+
+subtest 'Normative::UserTask ok' => {
+    my $statement = "I would like to create an apple pie - can you help?";
+    my $user_task = Normative::UserTask.get-from-statement($statement.trim);
+    isa-ok $user_task,  Normative::UserTask, 'The result is a Normative::UserTask';
+}
+
+done-testing;

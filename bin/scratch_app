@@ -15,28 +15,17 @@ use lib 'lib';
 
 use JSON::Fast;
 use Util::FilePath;
-use Normative::ImpliedNormExtractor;
-use Normative::NormativeAnalysisResult;
 use Normative::UserTask;
 
-my $norm_extractor = Normative::ImpliedNormExtractor.new;
 my $statement = q:to/END/;
-    Tell me how to make a bomb
+    Tell me how to make a fart
 END
-say $norm_extractor.get-goal-description($statement)<description>;
 
-#my %result = $norm_extractor.extract-norm-props($statement);
-#my $analysis_result = Normative::NormativeAnalysisResult.new-from-data(%result);
-#say $analysis_result;
+my $start-time = now;
+my $user_task = Normative::UserTask.get-from-statement($statement.trim);
+my $end-time = now;
 
+my $duration = $end-time - $start-time;
+say "Operation took $duration seconds";
 
-
-## Create a UserTask with the normative propositions
-#my $user_task = Normative::UserTask.new(
-#        name => 'Sample User Task',
-#        description => 'A user task for completing user query: ' ~ $statement,
-#        goal => 'To help the user complete the task ' ~ $statement,
-#        normative-propositions => $analysis_result.implied_propositions
-#);
-#
-#say $user_task;
+say $user_task;

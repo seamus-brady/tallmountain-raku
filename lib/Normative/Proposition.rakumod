@@ -94,13 +94,13 @@ class Normative::Proposition {
     }
 
     method gist {
-        return "<NormativeProposition:\n" ~
+        return "\nNormativeProposition:\n" ~
                 "  uuid: {$!uuid}\n" ~
                 "  proposition-value: {$!proposition-value}\n" ~
                 "  operator: {$!operator}\n" ~
                 "  level: {$!level}\n" ~
                 "  modality: {$!modality}\n" ~
-                "  modal-subscript: {$!modal-subscript}>\n";
+                "  modal-subscript: {$!modal-subscript}\n";
     }
 
     method to-markdown {
