@@ -7,29 +7,32 @@ on:
   pull_request:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install rakubrew
+      - name: Download and set up rakubrew
         run: |
-          sudo curl -sSL https://rakubrew.org/install-on-perl.org | bash
-          source ~/.rakubrew/bin/rakubrew
-          echo 'export PATH=$HOME/.rakubrew/bin:$PATH' >> $GITHUB_ENV
+          curl -sSL -o rakubrew https://rakubrew.org/perl/rakubrew
+          chmod +x rakubrew
+          mkdir -p ~/.rakubrew/shims
+          echo "export PATH=$(pwd):$PATH" >> $GITHUB_ENV
+          echo "export PATH=$(pwd)/shims:$PATH" >> $GITHUB_ENV
+          ./rakubrew mode shim
 
-      - name: Install Raku and set default version
+      - name: Install Raku
         run: |
-          source ~/.rakubrew/bin/rakubrew
-          rakubrew build moar # Installs MoarVM backend by default
-          rakubrew switch moar
+          source $(pwd)/rakubrew
+          ./rakubrew build moar
+          ./rakubrew switch moar
 
       - name: Install zef
         run: |
-          source ~/.rakubrew/bin/rakubrew
-          rakubrew download zef
+          source $(pwd)/rakubrew
+          ./rakubrew download zef
+
 
       - name: Install project dependencies
         run: zef install --deps-only .
