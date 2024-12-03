@@ -1,31 +1,4 @@
-name: Makefile CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-  build:
-
-    runs-on: rakudo-star:latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Install Raku and dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y rakudo make git
-        git clone https://github.com/ugexe/zef.git
-        cd zef
-        raku -I. bin/zef install .
-
-If you don't want to use Docker in your GitHub Actions workflow, you can directly set up the environment in the workflow file using apt to install Raku, zef, and other dependencies. Here's how you can do it:
-  GitHub Actions Workflow Without Docker
-
-name: Raku Tests
+name: TallMountain Build
 
 on:
   push:
