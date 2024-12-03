@@ -8,31 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: rakudo-star:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Download and set up rakubrew
-        run: |
-          curl -sSL -o rakubrew https://rakubrew.org/perl/rakubrew
-          chmod +x rakubrew
-          mkdir -p ~/.rakubrew/shims
-          echo "export PATH=$(pwd):$PATH" >> $GITHUB_ENV
-          echo "export PATH=$(pwd)/shims:$PATH" >> $GITHUB_ENV
-          ./rakubrew mode shim
-
-      - name: Install Raku
-        run: |
-          source $(pwd)/rakubrew
-          ./rakubrew build moar
-          ./rakubrew switch moar
-
-      - name: Install zef
-        run: |
-          source $(pwd)/rakubrew
-          ./rakubrew download zef
-
 
       - name: Install project dependencies
         run: zef install --deps-only .
