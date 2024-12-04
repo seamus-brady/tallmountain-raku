@@ -20,4 +20,4 @@ echo $OPENAI_API_KEY
 # build image
 # ********************************
 echo "Building docker image..."
-docker build --no-cache --build-arg OPENAI_API_KEY_ARG=$OPENAI_API_KEY -t tallmountain .
+docker build --build-arg OPENAI_API_KEY_ARG=$OPENAI_API_KEY -t tallmountain .

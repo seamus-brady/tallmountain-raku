@@ -49,8 +49,11 @@ class WWW::ChatUI {
         my $host = Util::Config.get_config('chat_ui', 'chat_ui_server');
         my $port = Util::Config.get_config('chat_ui', 'chat_ui_port');
 
+        self.LOGGER.debug("Found config: $host $port");
+
         # Start the chat ui server in the background
         start {
+            say "Starting Chat UI server...";
             my $server = Cro::HTTP::Server.new: host => $host, port => $port, application => $.chat-ui-app;
             $server.start;
             self.LOGGER.debug("TallMountain Chat UI available at http://$host:$port");

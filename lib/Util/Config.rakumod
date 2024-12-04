@@ -26,9 +26,9 @@ class Util::Config {
         my Hash:D %config = Config::Clever.load(
                 :environment($CONFIG_FILE),
                 :config-dir(Util::FilePath.new.config-path));
-
         # attempt to return the configuration value
         my $config-entry = %config{$section}{$key};
+        say "Config entry: $config-entry";
         if !$config-entry.defined {
             my $msg = "Configuration entry not found for section: $section, key: $key";
             Util::ConfigException.new(message => $msg).throw;
