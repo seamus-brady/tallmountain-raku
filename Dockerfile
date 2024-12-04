@@ -3,8 +3,7 @@ FROM rakudo-star:latest
 
 RUN apt update && \
     apt upgrade -y && \
-    apt install zip -y && \
-    apt install build-essential -y && \
+    apt install -y curl uuid-dev libpq-dev libssl-dev unzip build-essential zip && \
     rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
@@ -18,7 +17,9 @@ COPY ./t /app/t
 COPY ./META6.json /app
 COPY ./www /app/www
 
-RUN zef upgrade zef
+RUN git clone https://github.com/ugexe/zef.git /tmp/zef && \
+    cd /tmp/zef && \
+    raku -I. bin/zef install . --/test
 
 # install dependencies not in raku.land
 RUN git clone https://github.com/JuneKelly/perl6-config-clever && \
@@ -31,11 +32,9 @@ RUN git clone https://github.com/skinkade/crypt-random && \
 
 # Install project dependencies
 RUN zef install --verbose --force --/test Array::Circular
-RUN zef install --verbose --force --/test Docker::File
-RUN zef install --verbose --force --/test File::Ignore
-RUN zef install --verbose --force --/test IO::Socket::Async::SSL
-RUN zef install --verbose --force --/test Digest::SHA1::Native
-RUN zef install --debug --/test cro
+ARG cro_version=0.8.9
+RUN zef install 'Cro::Core:ver<'$cro_version'>'
+RUN zef install --/test 'Cro::HTTP:ver<'$cro_version'>'
 RUN zef install --verbose --force --/test --deps-only .
 
 # Expose any necessary ports (optional)
