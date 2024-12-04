@@ -14,6 +14,7 @@
     "Cro::HTTP::Server",
     "UUID::V4",
     "Array::Circular"
+    "LibXML"
   ],
   "provides": {
     "Cycle::Buffer::Chat": "lib/Cycle/Buffer/Chat.rakumod",

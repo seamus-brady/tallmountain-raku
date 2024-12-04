@@ -9,4 +9,4 @@ cd ..
 
 echo "Running docker image..."
 
-docker run --rm tallmountain
+docker run -d --rm --name tallmountain --env-file .env -p 10000:10000 tallmountain:latest

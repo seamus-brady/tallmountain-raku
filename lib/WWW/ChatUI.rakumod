@@ -42,6 +42,10 @@ class WWW::ChatUI {
 
     method start-chat-ui() {
         self.LOGGER.debug("Chat UI starting...");
+
+        # Check for OPENAI_API_KEY environment variable
+        my $api-key = %*ENV<OPENAI_API_KEY> // die "OPENAI_API_KEY environment variable not found";
+
         my $host = Util::Config.get_config('chat_ui', 'chat_ui_server');
         my $port = Util::Config.get_config('chat_ui', 'chat_ui_port');
 
@@ -49,7 +53,7 @@ class WWW::ChatUI {
         start {
             my $server = Cro::HTTP::Server.new: host => $host, port => $port, application => $.chat-ui-app;
             $server.start;
-            self.LOGGER.debug("TallMountain Chat UI available at http:://$host:$port");
+            self.LOGGER.debug("TallMountain Chat UI available at http://$host:$port");
             say "TallMountain Chat UI available at http:://$host:$port";
             react {
                 whenever signal(SIGINT) {
