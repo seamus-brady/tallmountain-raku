@@ -1,0 +1,2363 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass scrartcl
+\begin_preamble
+\def\thesection{\alph{section}}
+\exhyphenpenalty=10000\hyphenpenalty=10000
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family sfdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style british
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Normative Calculus
+\end_layout
+
+\begin_layout Section*
+Introduction
+\end_layout
+
+\begin_layout Standard
+This document is an interpreted axiomatic system with the aim of applying
+ existing logic to ethics.
+ This system is based on Stoic virtue ethics.
+\end_layout
+
+\begin_layout Itemize
+The system employs three normative operators:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+\emph on
+Required
+\emph default
+ or mandatory.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Ought
+\emph default
+ which is advisable but not mandatory.
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Indifferent
+\emph default
+ which is completely optional.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Normative propositions are always constructed from facts about the endeavours
+ of individual agents.
+\end_layout
+
+\begin_layout Itemize
+Conflicts between normative propositions are preserved as accurate representatio
+ns of conflicts between and within agents.
+ Inconsistencies are resolved using the strategies of rank-ordering and
+ force choice.
+\end_layout
+
+\begin_layout Standard
+All quotations taken from the 
+\shape italic
+Appendix: A Calculus of Normative Constructs
+\shape default
+ in Becker (1999) and should be consulted for full details of the system.
+ 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Becker, Lawrence C.
+ 
+\begin_inset Quotes bld
+\end_inset
+
+A New Stoicism
+\begin_inset Quotes brd
+\end_inset
+
+.
+ Princeton University Press, 1999.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Notation
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Propositional
+\emph default
+ variables: 
+\begin_inset Formula $p,q,r,...$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Predicate
+\emph default
+ constants: 
+\begin_inset Formula $A,B,...U$
+\end_inset
+
+ and variables: 
+\begin_inset Formula $X,Y,Z$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Individual
+\emph default
+ constants: 
+\begin_inset Formula $a,b,...u$
+\end_inset
+
+ and variables: 
+\begin_inset Formula $x,y,z$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Existential and universal 
+\emph on
+Quantifiers:
+\emph default
+ 
+\begin_inset Formula $\left(\exists x\right)$
+\end_inset
+
+ and: 
+\begin_inset Formula $\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Truth functional operators:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For negation: 
+\begin_inset Formula $\sim$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+For the inclusive disjunction (
+\begin_inset Quotes bld
+\end_inset
+
+either p or q or both'): 
+\begin_inset Formula $\vee$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+For the exclusive disjunction (
+\begin_inset Quotes bld
+\end_inset
+
+either p or q but not both'): 
+\begin_inset Formula $\veebar$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+For the conjunction 
+\begin_inset Quotes bld
+\end_inset
+
+and': 
+\begin_inset Formula $\&$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+For the material conditional 
+\begin_inset Quotes bld
+\end_inset
+
+if p then q: 
+\begin_inset Formula $\supset$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+For the material biconditional 
+\begin_inset Quotes bld
+\end_inset
+
+p if and only if q': 
+\begin_inset Formula $\equiv$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Punctuation
+\emph default
+: 
+\begin_inset Formula $\left(\right)\left[\right]\left\{ \right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Modal
+\emph default
+ operators, read as:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+'it is necessary that': 
+\begin_inset Formula $\boxempty$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+'it is possible that': 
+\begin_inset Formula $\diamond$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Modal
+\emph default
+ operator subscripts:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+'it is logically possible that': 
+\begin_inset Formula $\diamond_{l}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+'it is theoretically possible that': 
+\begin_inset Formula $\diamond_{t}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+'it is practically possible that': 
+\begin_inset Formula $\diamond_{p}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Note, when a subscript is not given, the operator is shorthand for the disjuncti
+on of all subscripts: 
+\begin_inset Formula $\sim\diamond p$
+\end_inset
+
+ stands for 
+\begin_inset Formula $\left(\sim\diamond_{l}p\ \vee\ \sim\diamond_{t}p\ \vee\ \sim\diamond_{p}p\right)$
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Normative
+\emph default
+ operators, read as:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+'it is required that': 
+\begin_inset Formula $R$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+'it is ought to be that': 
+\begin_inset Formula $O$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+'it is indifferent that': 
+\begin_inset Formula $I$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+Notes:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Numerical subscripts (e.g.
+ 
+\begin_inset Formula $R_{1,}O_{2},I_{3}$
+\end_inset
+
+) indicate that the norm is drawn from restricted, submoral considerations
+ (etiquette, role obligations, etc.) The subscripts indicate the ordinal
+ status of that 
+\emph on
+type 
+\emph default
+of norm relative to other submoral considerations.
+ Priorities among norms of the same type or rank will be indicated with
+ ordinal operators (see below) e.g.
+ 
+\begin_inset Formula $R_{2}\ >\ R_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The subscript letter 
+\begin_inset Formula $_{t}$
+\end_inset
+
+ will be used to identify norms that arise from transactions between individuals.
+\end_layout
+
+\begin_layout Itemize
+Normative operators without numerical subscripts are understood to refer
+ to moral (ethical) norms.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Itemize
+
+\emph on
+Ordinal
+\emph default
+ operators, read as:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+'...
+ is subordinate to ..': 
+\begin_inset Formula $<$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+'...
+ is superordinate to ..': 
+\begin_inset Formula $>$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+'...
+ is coordinate to ..': 
+\begin_inset Formula $<>$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+'...
+ is subordinate or coordinate to ..': 
+\begin_inset Formula $\leq$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+'...
+ is superordinate or coordinate to ..': 
+\begin_inset Formula $\geq$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection*
+Well-Formed Formulas
+\end_layout
+
+\begin_layout Enumerate
+Any individual propositional variable or constant is a wff.
+\end_layout
+
+\begin_layout Enumerate
+Any predicate constant or variable that is bound with individual constants
+ or quantified variables is a wff.
+\end_layout
+
+\begin_layout Enumerate
+If anything 
+\emph on
+w
+\emph default
+ is a wff, the 
+\begin_inset Formula $\sim w,$
+\end_inset
+
+
+\begin_inset Formula $\boxempty w$
+\end_inset
+
+ , or 
+\begin_inset Formula $\diamond w$
+\end_inset
+
+ is a wff, provided no quantifiers range over 
+\begin_inset Formula $\boxempty$
+\end_inset
+
+, 
+\begin_inset Formula $\diamond$
+\end_inset
+
+ , 
+\begin_inset Formula $R$
+\end_inset
+
+, O or 
+\begin_inset Formula $I$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+If anything 
+\emph on
+w
+\emph default
+ is a wff, and if 
+\begin_inset Formula $Rw$
+\end_inset
+
+, 
+\begin_inset Formula $Ow$
+\end_inset
+
+ or 
+\begin_inset Formula $Iw$
+\end_inset
+
+ is a construct as defined below, then 
+\begin_inset Formula $Rw$
+\end_inset
+
+, 
+\begin_inset Formula $Ow$
+\end_inset
+
+ or 
+\begin_inset Formula $Iw$
+\end_inset
+
+ is a wff, provided no quantifiers range over 
+\begin_inset Formula $\boxempty$
+\end_inset
+
+, 
+\begin_inset Formula $\diamond$
+\end_inset
+
+ , 
+\begin_inset Formula $R$
+\end_inset
+
+, O or 
+\begin_inset Formula $I$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+If anything 
+\emph on
+w
+\emph default
+ is a wff, and if anything 
+\emph on
+y
+\emph default
+ is a wff, then 
+\begin_inset Formula $w\vee y$
+\end_inset
+
+, 
+\begin_inset Formula $w\veebar y$
+\end_inset
+
+, 
+\begin_inset Formula $w\&y$
+\end_inset
+
+, 
+\begin_inset Formula $w\supset y$
+\end_inset
+
+, 
+\begin_inset Formula $w\equiv y$
+\end_inset
+
+, 
+\begin_inset Formula $w<y$
+\end_inset
+
+, 
+\begin_inset Formula $w<>y$
+\end_inset
+
+, 
+\begin_inset Formula $w>y$
+\end_inset
+
+, 
+\begin_inset Formula $w\leq y$
+\end_inset
+
+, or 
+\begin_inset Formula $w\geq y$
+\end_inset
+
+ is a wff, provided no quantifiers range over 
+\begin_inset Formula $\boxempty$
+\end_inset
+
+, 
+\begin_inset Formula $\diamond$
+\end_inset
+
+ , 
+\begin_inset Formula $R$
+\end_inset
+
+, O or 
+\begin_inset Formula $I$
+\end_inset
+
+ or within 
+\emph on
+w
+\emph default
+ or 
+\emph on
+y
+\emph default
+.
+\end_layout
+
+\begin_layout Enumerate
+Nothing is a wff unless its being so follows rules 1-5.
+\end_layout
+
+\begin_layout Section
+First Order Constructs
+\end_layout
+
+\begin_layout Standard
+Rules governing the construction of well-formed normative propositions from
+ descriptive bases.
+\end_layout
+
+\begin_layout Subsection
+Best Means
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e is an Endeavour for agent s, and g is a Goal of e, and c is a course of
+ conduct or state of being that is a practically possible Means by which
+ s can achieve g, and there is no other Means by which s can achieve g that
+ is equal to or superordinate to c, then s ought to Undertake to do or be
+ c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left\{ eEs\ \&\ gGe\ \&\ \diamond_{p}\left(cMsg\right)\ \&\ \left[\sim(\exists x)(xMsg)\ \&\ \left(x\geq c\right)\right]\right\} \ /∴\ O\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Multiple Means
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e is an Endeavour for agent s, and g is a Goal of e, and c is a course of
+ conduct or state of being that is a practically possible Means by which
+ s can achieve g, and b is another (coordinate) Means by which s can achieve
+ g, then (again, nothing-else-considered), s ought to make a Arbitrary choice
+ between c and b.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left\{ eEs\ \&\ gGe\ \&\ \diamond_{p}\left(cMsg\right)\ \&\left[(bMsg)\ \&v\left(b<>c\right)\right]\right\} \ /∴\ O_{1}\left(sAcb\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Desires
+\end_layout
+
+\begin_layout Standard
+From desires to norms:
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e is an Endeavour for agent s, and d is a Desire of s to do or be c in e,
+ and d is a Sufficient reason for e for s to Undertake c, then (nothing-else-con
+sidered) s ought to Undertake to do or be c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ dDsc\ \&\ dSesc\right)\ /∴\ O_{1}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Commitments
+\end_layout
+
+\begin_layout Standard
+From commitments to norms:
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e an Endeavour for agent s, and c is defined as a Commitment for s in e,
+ then (nothing-else-considered) s is required to Undertake to do or be c
+ in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ cCse\right)\ /∴\ R_{1}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Appropriateness
+\end_layout
+
+\begin_layout Standard
+From standards to norms:
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e is an Endeavour for agent s, and c is defined as a Standard or fitting
+ conduct or character for s in e, then (nothing-else-considered) s ought
+ not to Undertake to do or be anything other than c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ cSse\right)\ /∴\ \thicksim O_{1}\left(sU\thicksim ce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Ideals
+\end_layout
+
+\begin_layout Standard
+From ideals to norms:
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e is an Endeavour for agent s, and c is defined as Ideal conduct or character
+ for s in e, then (nothing-else-considered) s ought to Undertake to do or
+ be c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ cIse\right)\ /∴\ O_{1}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Transactional Commitments
+\end_layout
+
+\begin_layout Standard
+From transactions to norms:
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e an Endeavour for agent s, and t is a Transaction in e that Generates commitmen
+t c for s, then s is 
+\shape italic
+transactionally
+\shape default
+ required to Undertake to do or be c in e
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Normative operators without 
+\begin_inset Formula $_{t}\ $
+\end_inset
+
+will be understood as nontransactional or 
+\begin_inset Quotes bld
+\end_inset
+
+structural
+\begin_inset Quotes brd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ cCse\ \&\ tTe\ \&\ tGcs\right)\ /∴\ R_{t1}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Transactional Standards
+\end_layout
+
+\begin_layout Standard
+For standards, or fittingness:
+\end_layout
+
+\begin_layout Standard
+If
+\shape italic
+ 
+\shape default
+e is an Endeavour for agent s, and t is a Transaction in e that Generates
+ a Standard of fittingness c for s, then
+\shape italic
+ transactionally
+\shape default
+ s ought not to Undertake to do or be anything other than c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ cSse\ \&\ tTe\ \&\ tGcs\right)\ /∴\ \thicksim O_{t1}\left(sU\thicksim ce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Transactional Ideals
+\end_layout
+
+\begin_layout Standard
+And for ideals: 
+\end_layout
+
+\begin_layout Standard
+If e is an Endeavour for agent s, and t is a Transaction in e that Generates
+ an Ideal c for s, then
+\shape italic
+ transactionally
+\shape default
+ s ought to Undertake to do or be c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ cIse\ \&\ tTe\ \&\ tGcs\right)\ /∴\ O_{t1}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Amendments
+\end_layout
+
+\begin_layout Standard
+From amendments to norms, for when changing the nature of a given endeavour:
+\end_layout
+
+\begin_layout Standard
+If e is an Endeavour for agent s, f is a given Factor or element in e, g
+ is a licit amenDment to f in e, then g replaces f in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\left(eEs\ \&\ fFe\ \&\ gDfe\right)\ /∴\ R_{t1}\left(gRfe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Ranking Same-Level, Same-Endeavour Norms
+\end_layout
+
+\begin_layout Standard
+Rules governing the ranking of normative propositions within a given ordinal
+ level.
+\end_layout
+
+\begin_layout Subsection
+Requirements over Oughts
+\end_layout
+
+\begin_layout Standard
+Requirements and oughts:
+\end_layout
+
+\begin_layout Standard
+If an agent s is required to do c in e but (from other considerations within
+ the endeavour) ought to do b, and undertaking both is logically or theoreticall
+y or practically impossible, then the requirement dominates the ought.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Requirements over Indifference
+\end_layout
+
+\begin_layout Standard
+Requirements and indifference:
+\end_layout
+
+\begin_layout Standard
+If an agent s is required to do c in e but (from other considerations within
+ the endeavour) b is a matter of indifference, and undertaking both is logically
+ or theoretically or practically impossible, then the requirement dominates
+ the indifference.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R_{n}\left(sUce\right)\ >\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Oughts over Indifference
+\end_layout
+
+\begin_layout Standard
+Oughts and indifference:
+\end_layout
+
+\begin_layout Standard
+If an agent s ought to do c in e but (from other considerations within the
+ endeavour) b is a matter of indifference, and undertaking both is logically
+ or theoretically or practically impossible, then the ought dominates the
+ indifference.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ O_{n}\left(sUce\right)\ >\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Coordinate Conflicting Norms of the Same Type
+\end_layout
+
+\begin_layout Standard
+Within an endeavour, there may be conflicts between requirements, between
+ oughts, or between judgements about indifference in cases where it is logically
+ or theoretically or practically impossible to carry out all the norms.
+ Coordinate conflicting requirements or oughts are replaced by a judgement
+ of indifference together with a requirement to choose.
+ Coordinate conflicting indifference generate a requirement to choose.
+\end_layout
+
+\begin_layout Subsubsection
+Coordinate Conflicting Requirements
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ \&\ R_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ <>\ R_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Coordinate Conflicting Oughts
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\left(sUce\right)\ <>\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Coordinate Conflicting Indifference
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}\left(sUce\right)\ <>\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Superordinate Conflicting Norms of the Same Type
+\end_layout
+
+\begin_layout Standard
+If the norms are not coordinate, the superordination relation simply falls
+ through into the conclusion.
+\end_layout
+
+\begin_layout Subsubsection
+Superordinate Conflicting Requirements
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ \&\ R_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Superordinate Conflicting Oughts
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ O_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Rules of Escalation
+\end_layout
+
+\begin_layout Standard
+Rules governing the construction of normative propositions of ordinal level
+ n + 1 from normative propositions of level n.
+\end_layout
+
+\begin_layout Standard
+When normative propositions from different endeavours conflict at level
+ n, we will represent the resolution of the conflict in terms of rules for
+ generating normative propositions at level n+1.
+ Forced choices will be made at level n to choose between conflicting courses
+ of conduct of states of being, either within or across endeavours.
+\end_layout
+
+\begin_layout Subsection
+Escalation from Endogenous Rankings 
+\end_layout
+
+\begin_layout Subsubsection
+Superordination for Coincident Endogenous Rankings 
+\end_layout
+
+\begin_layout Standard
+If both e and f are Endeavours for agent s, and s is required at level n
+ to Undertake both c in e and b in f, but although undertaking both is logically
+ or theoretically or practically impossible, each endeavour Defines c as
+ superordinate to b, then s ought, at level n + 1, to Undertake c in e.
+\end_layout
+
+\begin_layout Standard
+For conflicting requirements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eEs\ \&\ R_{n}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fEs\ \&\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ O_{n+1}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for conflicts between oughts, requirements and oughts, etc.
+\end_layout
+
+\begin_layout Standard
+This rule applies, 
+\shape italic
+mutatis mutandis
+\shape default
+, for any ordering > or < of any norms (
+\series bold
+R
+\series default
+, 
+\series bold
+O
+\series default
+, 
+\series bold
+I
+\series default
+) governing 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+sUce and sUbf.
+\end_layout
+
+\begin_layout Subsubsection
+Equivalence for Coincident Endogenous Rankings
+\end_layout
+
+\begin_layout Standard
+When the various endogenous rankings agree that neither of the conflicting
+ norms at level n dominates each other, they in effect agree that the choice
+ between the norms is arbitrary.
+ We will represent this by deriving norms of indifference at n + 1, coupled
+ with a requirement to choose.
+\end_layout
+
+\begin_layout Standard
+For conflicting requirements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eEs\ \&\ R_{n}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fEs\ \&\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\left(sUce\right)\ <>\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ I_{n+1}\left(sUce\right)\ \&\ I_{n+1}\left(sUbf\right)\ \&\ R_{n+1}\left[(sUce)\ \veebar\ (sUbf)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for conflicts between oughts, requirements and oughts, etc.
+\end_layout
+
+\begin_layout Standard
+This rule applies, 
+\shape italic
+mutatis mutandis
+\shape default
+, for any ordering > or < of any norms (
+\series bold
+R
+\series default
+, 
+\series bold
+O
+\series default
+, 
+\series bold
+I
+\series default
+) governing 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+sUce and sUbf.
+\end_layout
+
+\begin_layout Subsection
+Forced Choice Under Indifference
+\end_layout
+
+\begin_layout Standard
+If it is a matter of indifference at level n whether agent s Undertakes
+ c in e, or b in f, but s is required to choose exactly one, then s ought
+ at n + 1 to make an Arbitrary choice between c and b.
+\end_layout
+
+\begin_layout Subsubsection
+Forced Choice Under Indifference Within an Endeavour
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbe\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ O_{n+1}\left(sAcb\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Forced Choice Under Indifference Across Endeavours
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbf\right)\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ O_{n+1}\left(sAcb\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Escalation from Exogenous Rankings 
+\end_layout
+
+\begin_layout Subsubsection
+Comprehensiveness
+\end_layout
+
+\begin_layout Standard
+Some endeavours are embedded in more comprehensive endeavours, for example
+ a board game may be embedded in a childcare operation.
+ In such cases, where norms at level n conflict, those from the more comprehensi
+ve endeavour are elevated to n + 1.
+ Thus, if both e and f are Endeavours for agent s, but although undertaking
+ both is logically or theoretically or practically impossible, endeavour
+ e is defined as more Comprehensive than f for s, then s is required, at
+ level n + 1, to Undertake c in e.
+\end_layout
+
+\begin_layout Standard
+This rule preserves the normative operator from e, to represent the fact
+ that e is more comprehensive.
+ The less comprehensive norm is left intact at level n to represent the
+ fact that the norm from f has not been altered but merely overridden.
+\end_layout
+
+\begin_layout Standard
+For requirements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eEs\ \&\ R_{n}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fEs\ \&\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eCfs$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sUce)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For other norms, this rule applies, 
+\shape italic
+mutatis mutandis
+\shape default
+, for any 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+combination of norms.
+ Whatever the norm from the more comprehensive and controlling of the endeavours
+ at n, it escalates to n + 1 as a norm of the same type.
+\end_layout
+
+\begin_layout Subsubsection
+Exogenous Assessment
+\end_layout
+
+\begin_layout Standard
+Exogenous rankings also arise from the fact that some of our endeavours
+ are designed to assess or evaluate others, peer review, judicial review
+ and other types of activity where we monitor and assess our own activities
+ in terms of their prudence, effects on others, law, morality and so forth.
+ When we adopt an endeavour as an assessment mechanism for other target
+ endeavours, we use it to construct norms that are about those of its targets,
+ and superordinate to them.
+ We will represent that situation here by saying that when the norms of
+ an assessment (or critical endeavour) conflict an level n with those of
+ its target endeavour, the target's norms are rejected, and the norms from
+ the assessment (critique) are elevated to n + 1.
+\end_layout
+
+\begin_layout Standard
+Thus, if both e and f are Endeavours for agent s, but although undertaking
+ both is logically or theoretically or practically impossible, endeavour
+ e is defined as exogenous aSsessment of f for s, then s is required, at
+ level n + 1, to Undertake c in e.
+\end_layout
+
+\begin_layout Standard
+For conflicting requirements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eEs\ \&\ R_{n}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fEs\ \&\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eSfs$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R_{n+1}(sUce)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For other norms, this rule applies, 
+\shape italic
+mutatis mutandis
+\shape default
+, for any 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+combination of norms.
+ Whatever conflicting norms emerges from the assessment endeavour at n,
+ it escalates to n + 1 as a norm of the same type.
+\end_layout
+
+\begin_layout Section
+Transcendence
+\end_layout
+
+\begin_layout Standard
+Rules governing the construction of normative propositions without ordinal
+ subscripts (moral or ethical norms).
+\end_layout
+
+\begin_layout Subsection
+Transcendent Assessment
+\end_layout
+
+\begin_layout Standard
+Normative propositions representing practical reasoning all-things-considered
+ are written (or may be rewritten) with unsubscripted normative operators,
+ and are interpreted as representing moral norms.
+ Thus, if endeavour e for s is an aSsessment, and e for s is Practical reasoning
+ all-things-considered, and these things generate a normative proposition
+ via the rule of exogenous assessment, then that normative proposition is
+ unsubscripted.
+\end_layout
+
+\begin_layout Standard
+For requirements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eEs\ \&\ ePs\ \&\ R_{n}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fEs\ \&\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eSfs$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sUce)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Transcendent Comprehensiveness
+\end_layout
+
+\begin_layout Standard
+The same logic as above holds for applications of the rule of comprehensiveness.
+\end_layout
+
+\begin_layout Standard
+For requirements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eEs\ \&\ ePs\ \&\ R_{n}\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $fEs\ \&\ R_{n}\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $eCfs$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sUce)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For other norms, this rule applies, 
+\shape italic
+mutatis mutandis
+\shape default
+, for any 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+combination of norms.
+ Whatever the proposition from practical reasoning all-things-considered,
+ it escalates to an unsubscripted one of the same type.
+\end_layout
+
+\begin_layout Subsection
+Conflicting Moral Requirements
+\end_layout
+
+\begin_layout Standard
+Forced Moral Choice: 
+\end_layout
+
+\begin_layout Standard
+Conflicts amongst 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+unsubscripted, coordinate normative propositions may force an arbitrary
+ choice.
+ When this happens the arbitrary choice has effectively become the more
+ encompassing norm.
+ Thus, if it is impossible for s to do both c and b, in the same or different
+ endeavours, and if both c and b are unsubscripted requirements for s, and
+ there is an unsubscripted requirement that s do one or the other, then
+ the forced-choice requirements generates a moral requirement to make an
+ Arbitrary choice between the two.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R\left(sUce\right)\ \&\ R\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R\left(sUce\right)\ <>\ R\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R(sUce\ \veebar\ sUbf)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sAcb)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Conflicting Moral Oughts
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+If both c and b are unsubscripted oughts for s that are jointly impossible
+ to undertake, and a choice between them is forced, we get a moral requirement
+ to make an Arbitrary choice between the two.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O\left(sUce\right)\ \&\ O\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O\left(sUce\right)\ <>\ O\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R(sUce\ \veebar\ sUbf)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sAcb)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Conflicting Moral Indifference
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\xout off
+\uuline off
+\uwave off
+\noun off
+\color none
+If both c and b are unsubscripted indifferences, and a choice is forced,
+ we get a moral requirement to make an Arbitrary choice.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond\left(sUce\ \&\ sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I\left(sUce\right)\ \&\ I\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I\left(sUce\right)\ <>\ I\left(sUbf\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R(sUce\ \veebar\ sUbf)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sAcb)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Closure for Moral Indifference
+\end_layout
+
+\begin_layout Standard
+If it is a matter of indifference whether or not s Undertakes c in e, but
+ a choice between undertaking c or ~c is forced, we use a conjunction of
+ them to represent the forced choice, which then generates a moral requirement
+ for s to make an Arbitrary choice between c and ~c.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\sim\diamond[\left(sUce\ \&\ \sim\left(sUce\right)\right)]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $IsUce\ \&\ I\sim\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R\left(sUce\ \veebar\ \sim sUse\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $/∴\ R(sAc\sim c)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Axioms of Stoic Normative Logic
+\end_layout
+
+\begin_layout Standard
+Stoics add the following postulates specific to their ethical doctrines.
+\end_layout
+
+\begin_layout Subsection
+Axiom of Encompassment
+\end_layout
+
+\begin_layout Standard
+The exercise of agency through practical intelligence, including practical
+ reasoning all-things-considered, is the most comprehensive of an agents
+ endeavours.
+ That is, in every case, if endeavour x for agent s is the exercise of Agency
+ through practical intelligence and endeavour y for s is not, then x is
+ more comprehensive than y for s.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $⊢\ \left(x\right)\ \left(y\right)\ [\left(xEs\ \&\ yEs\ \&\ xAs\ \&\ y\sim As\right)\ \supset\ xCys]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Axiom of Finality
+\end_layout
+
+\begin_layout Standard
+There is no assessment endeavour exogenous to the exercise of practical
+ reasoning all-things-considered.
+ That is, in every case, if endeavour x for agent s is pracTical reasoning
+ all-things-considered and endeavour y for s is not, then y is not an aSsessment
+ mechanism for x for s.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $⊢\ \left(x\right)\ \left(y\right)\ [\left(xEs\ \&\ yEs\ \&\ xTs\ \&\ y\sim Ts\right)\ y\sim Sys]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Axiom of Moral Priority
+\end_layout
+
+\begin_layout Standard
+Unsubscripted norms are superordinate to subscripted ones.
+ If N stands for any normative operator and P stands for a wff of any form,
+ then:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $⊢\ NP\ >\ N_{n}P$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Axiom of Moral Rank
+\end_layout
+
+\begin_layout Standard
+The order R > O > I holds for unsubscripted (i.e.
+ moral) normative propositions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $⊢\ RP\ >\ OP\ >\ IP$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Axiom of Closure
+\end_layout
+
+\begin_layout Standard
+If no normative proposition at any level can be constructed for a given
+ course of conduct or state of being (that is, if a situation is normatively
+ open), the relevant proposition is closed with an unsubscripted ought-not.
+ That is, if it is not the case that either a subscripted or unsubscripted
+ normative operator N governs c for s in e, then s ought not to Undertake
+ c in e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $⊢\ [N\left(sUce\right)\ \vee\ N_{n}\left(sUce\right)]\ \supset\ O\sim\left(sUce\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Axiom of Futility
+\end_layout
+
+\begin_layout Standard
+If any norm represented by an atomic normative proposition (not a conjunction
+ of them), is logically, theoretically, or practically impossible to carry
+ out, it yields an unsubscripted prohibition.
+ That is, if any normative operator N governs c for s in e, and it is logically,
+ theoretically, or practically impossible for s to Undertake c in e, then
+ s is required not to Undertake c in e, and that requirement dominates the
+ original norm.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $⊢\ [N\left(sUce\right)\ \&\ \sim\diamond\left(sUce\right)]\ \supset\ R\sim\left(sUce\right)\ \&\ [R\sim\left(sUce\right)\ >\ N\left(sUce\right)]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Immediate Inferences
+\end_layout
+
+\begin_layout Subsection
+From Stronger to Weaker
+\end_layout
+
+\begin_layout Standard
+If the stronger proposition is proved, we can conclude the weaker counterparts
+ are proved:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}w\ /∴\ O_{n}w$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}w\ /∴\ \sim O_{n}w\ \&\ \sim R_{n}w$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+From Opposites
+\end_layout
+
+\begin_layout Subsubsection
+Contradictories
+\end_layout
+
+\begin_layout Standard
+Contradictories can be neither jointly true nor jointly false:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}w\ /∴\ \sim\left(R_{n}w\right)$
+\end_inset
+
+ and vice versa.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}w\ /∴\ \sim\left(R_{n}\sim w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}w\ /∴\ \sim\left(O_{n}w\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $I_{n}w\ /∴\ \sim\left(O_{n}\sim w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}w\ /∴\ \sim\left(I_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\sim w\ /∴\ \sim\left(I_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}w\ /∴\ \sim\left(I_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\sim w\ /∴\ \sim\left(I_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Contraries
+\end_layout
+
+\begin_layout Standard
+Contraries cannot be jointly true but can be jointly false:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}w\ /∴\ \sim\left(R_{n}\sim w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}w\ /∴\ \sim\left(O_{n}\sim w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\sim w\ /∴\ \sim\left(R_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $R_{n}\sim w\ /∴\ \sim\left(O_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}w\ /∴\ \sim\left(O_{n}\sim w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $O_{n}\sim w\ /∴\ \sim\left(O_{n}w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note 
+\begin_inset Formula $I_{n}w$
+\end_inset
+
+ and 
+\begin_inset Formula $I_{n}\sim w$
+\end_inset
+
+ are definitional equivalents and thus not contraries.
+\end_layout
+
+\end_body
+\end_document

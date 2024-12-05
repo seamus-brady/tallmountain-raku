@@ -6,7 +6,7 @@
     "max_extracted_norms": 4
   },
   "chat_ui": {
-    "chat_ui_server": "localhost",
+    "chat_ui_server": "0.0.0.0",
     "chat_ui_port": 10000
   },
   "openai": {

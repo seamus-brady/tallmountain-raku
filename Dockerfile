@@ -13,20 +13,19 @@ RUN apt update && \
 # Set the working directory inside the container
 WORKDIR /app
 
+# install dependencies
+COPY ./_scripts/install_deps.sh /app/install_deps.sh
+RUN chmod +x /app/install_deps.sh
+RUN /app/install_deps.sh
+
 # Copy your project files into the container
 COPY ./bin /app/bin
-
 COPY ./config /app/config
 COPY ./lib /app/lib
 COPY ./t /app/t
 COPY ./META6.json /app
 COPY ./www /app/www
-COPY ./_scripts/install_deps.sh /app/install_deps.sh
 COPY ./Makefile /app/Makefile
-
-RUN chmod +x /app/install_deps.sh
-
-RUN /app/install_deps.sh
 
 EXPOSE 10000
 

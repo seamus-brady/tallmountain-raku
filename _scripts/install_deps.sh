@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+set -x
 
 # ********************************
 # install project dependencies

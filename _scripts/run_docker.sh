@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+set -x
 
 # ********************************
 # go to project root
@@ -9,4 +10,4 @@ cd ..
 
 echo "Running docker image..."
 
-docker run --rm --name tallmountain --env-file .env -p 10000:10000 tallmountain:latest run-app
+docker run --rm --env-file .env -p 10000:10000 tallmountain:latest run-app
