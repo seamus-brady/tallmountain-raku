@@ -192,7 +192,19 @@ sub MAIN() {
 
     # start the web server for the chat ui
     $APP_LOGGER.debug("Starting the web server for the chat UI...");
-    my Cro::Service $http = init-cro-service;
+
+    # Start the chat ui server
+    my $host = Util::Config.get_config('chat_ui', 'chat_ui_server');
+    my $port = Util::Config.get_config('chat_ui', 'chat_ui_port');
+    my Cro::Service $http = Cro::HTTP::Server.new(
+            http => <1.1>,
+            host => $host,
+            port => $port,
+            application => routes(),
+            after => [
+                TallMountainHTTPLogger.new(logs => $*OUT, errors => $*ERR)
+            ]
+    );
     $http.start;
 
     # get a cognitive cycle instance
