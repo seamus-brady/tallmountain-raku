@@ -166,22 +166,6 @@ sub check-api-key {
     }
 }
 
-sub init-cro-service (--> Cro::Service) {
-    # Start the chat ui server
-    my $host = Util::Config.get_config('chat_ui', 'chat_ui_server');
-    my $port = Util::Config.get_config('chat_ui', 'chat_ui_port');
-    my Cro::Service $http = Cro::HTTP::Server.new(
-            http => <1.1>,
-            host => $host,
-            port => $port,
-            application => routes(),
-            after => [
-                TallMountainHTTPLogger.new(logs => $*OUT, errors => $*ERR)
-            ]
-    );
-    return $http;
-}
-
 sub MAIN() {
 
     # log the start of the app
