@@ -183,7 +183,6 @@ sub init-cro-service (--> Cro::Service) {
 }
 
 sub MAIN() {
-
     # log the start of the app
     $APP_LOGGER.debug("Starting TallMountain App... please wait");
 
