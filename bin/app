@@ -67,44 +67,58 @@ sub get_response(Str $prompt, Str $bot-response --> Str){
     return $response.trim;
 }
 
-my Cro::Service $http = Cro::HTTP::Server.new(
-        http => <1.1>,
-        host => "0.0.0.0",
-        port => 10000,
-        application => routes(),
-        after => [
-            Cro::HTTP::Log::File.new(logs => $*OUT, errors => $*ERR)
-        ]
-);
+sub check-api-key {
+    # Check for OPENAI_API_KEY environment variable
+    my $api-key = %*ENV<OPENAI_API_KEY>;
+    if not $api-key.defined {
+        my $msg = "OPENAI_API_KEY environment variable not found";
+        $APP_LOGGER.debug($msg);
+        die $msg;
+    }
+}
 
-$http.start;
+sub MAIN() {
+    check-api-key;
 
-my $cycle = Cycle::Cognitive.new;
+    my $host = Util::Config.get_config('chat_ui', 'chat_ui_server');
+    my $port = Util::Config.get_config('chat_ui', 'chat_ui_port');
+    my Cro::Service $http = Cro::HTTP::Server.new(
+            http => <1.1>,
+            host => $host,
+            port => $port,
+            application => routes(),
+            after => [
+                Cro::HTTP::Log::File.new(logs => $*OUT, errors => $*ERR)
+            ]
+            );
 
-# Start the chat ui server in the background
-start {
+    $http.start;
+
+    my $cycle = Cycle::Cognitive.new;
+
+    # Start the chat ui server in the background
+    start {
+        react {
+            # Whenever a chat request is received, process it
+            whenever $chat-request-supply -> $request {
+                $APP_LOGGER.debug("App received user request: '$request'");
+
+                # get a response but wrap in a tainted string
+                my $tainted-string = Cycle::TaintedString.new(payload => $request);
+                my $response = $cycle.run-one-cycle($tainted-string);
+                $APP_LOGGER.debug("App received bot response: '$response'");
+
+                # return the response
+                $chat-response-channel.send($response);
+            };
+        }
+    }
+
     react {
-        # Whenever a chat request is received, process it
-        whenever $chat-request-supply -> $request {
-            $APP_LOGGER.debug("App received user request: '$request'");
-
-            # get a response but wrap in a tainted string
-            my $tainted-string = Cycle::TaintedString.new(payload => $request);
-            my $response = $cycle.run-one-cycle($tainted-string);
-            $APP_LOGGER.debug("App received bot response: '$response'");
-
-            # return the response
-            $chat-response-channel.send($response);
-        };
+        whenever signal(SIGINT) {
+            say "Shutting down...";
+            $http.stop;
+            done;
+        }
     }
 }
-
-react {
-    whenever signal(SIGINT) {
-        say "Shutting down...";
-        $http.stop;
-        done;
-    }
-}
-
-

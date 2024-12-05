@@ -28,9 +28,10 @@ class Util::Config {
                 :config-dir(Util::FilePath.new.config-path));
         # attempt to return the configuration value
         my $config-entry = %config{$section}{$key};
-        say "Config entry: $config-entry";
+        Util::Config.new.LOGGER.debug("Loaded config entry: $section/$key - '$config-entry'");
         if !$config-entry.defined {
             my $msg = "Configuration entry not found for section: $section, key: $key";
+            Util::Config.new.error($msg);
             Util::ConfigException.new(message => $msg).throw;
         }
         return $config-entry;
