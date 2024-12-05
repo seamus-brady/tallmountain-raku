@@ -5,6 +5,7 @@ use Cycle::Payload::TaintedString;
 use Cycle::Buffer::Chat;
 use LLM::Messages;
 use LLM::Facade;
+use Normative::UserTask;
 
 class Cycle::Cognitive {
     # Represents a single cognitive cycle for handling a prompt input.
@@ -32,9 +33,10 @@ class Cycle::Cognitive {
         self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
         # build a response
         self.chat-buffer.add-user-message($tainted-string.payload);
-        my $response = $.llm_client.completion-string(self.chat-buffer.messages);
-        self.chat-buffer.add-assistant-message($response);
-        return $response;
+        my $user_task = Normative::UserTask.get-from-statement($tainted-string.payload);
+        # my $response = $.llm_client.completion-string(self.chat-buffer.messages);
+        self.chat-buffer.add-assistant-message($user_task.gist);
+        return $user_task.gist;
     }
 
     method gist() {

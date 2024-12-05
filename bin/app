@@ -13,47 +13,98 @@ use v6.d;
 use lib 'lib';
 use Util::Logger;
 use Cro::HTTP::Server;
+use Cro::HTTP::Router;
+use Cro::HTTP::Log::File;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
 use WWW::ChatUI;
 
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
+my Supplier $chat-request-supplier = Supplier.new;
+my Supply $chat-request-supply = $chat-request-supplier.Supply;
+my Channel $chat-response-channel = Channel.new;
 
-my $chat-ui = WWW::ChatUI.new;
+sub routes() {
+    route {
+        # process the user message and return the response
+        post -> 'chat' {
 
-# define a supply for the chat requests
-my $chat-request-supply = $chat-ui.chat-request-supply;
+            # get the user message from the request body
+            my $prompt;
+            request-body -> %fields {
+                $prompt = %fields<message>;
+            }
+            $APP_LOGGER.debug("Received user message: '$prompt'");
+            $chat-request-supplier.emit($prompt);
 
-# define a channel for responses
-my $chat-response-channel = $chat-ui.chat-response-channel;
+            # get the bot reply
+            my $bot-response = $chat-response-channel.receive;
+            $APP_LOGGER.debug("Received bot reply: '$bot-response'");
 
-# Start the chat ui server in the background
-$chat-ui.start-chat-ui();
+            # return the response as an htmx fragment
+            my $htmx-fragment = get_response($prompt, $bot-response);
+            content 'text/html', $htmx-fragment;
+        }
 
-# Main application logic
-$APP_LOGGER.debug("TallMountain is now running...");
-say("TallMountain is now running...");
+        # serve the chat UI
+        get -> {
+            static 'www/chat_ui.html';
+        }
+    }
+}
+
+sub get_response(Str $prompt, Str $bot-response --> Str){
+    my Str $response =  qq:to/END/;
+        <div class="message-container user-message-container">
+        <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
+        <span>{$prompt}</span>
+        </div>
+        <div class="message-container bot-message-container">
+        <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
+        <span class="bot-message">{$bot-response}</span>
+        </div>
+        END
+    return $response.trim;
+}
+
+my Cro::Service $http = Cro::HTTP::Server.new(
+        http => <1.1>,
+        host => "0.0.0.0",
+        port => 10000,
+        application => routes(),
+        after => [
+            Cro::HTTP::Log::File.new(logs => $*OUT, errors => $*ERR)
+        ]
+);
+
+$http.start;
 
 my $cycle = Cycle::Cognitive.new;
 
-react {
+# Start the chat ui server in the background
+start {
+    react {
+        # Whenever a chat request is received, process it
+        whenever $chat-request-supply -> $request {
+            $APP_LOGGER.debug("App received user request: '$request'");
 
-    # Whenever a chat request is received, process it
-    whenever $chat-request-supply -> $request {
-        $APP_LOGGER.debug("App received user request: '$request'");
+            # get a response but wrap in a tainted string
+            my $tainted-string = Cycle::TaintedString.new(payload => $request);
+            my $response = $cycle.run-one-cycle($tainted-string);
+            $APP_LOGGER.debug("App received bot response: '$response'");
 
-        # get a response but wrap in a tainted string
-        my $tainted-string = Cycle::TaintedString.new(payload => $request);
-        my $response = $cycle.run-one-cycle($tainted-string);
-        $APP_LOGGER.debug("App received bot response: '$response'");
-
-        # return the response
-        $chat-response-channel.send($response);
-    };
-
-    whenever signal(SIGINT) {
-        $APP_LOGGER.debug("Shutting down...");
-        $chat-response-channel.close;
-        exit;
+            # return the response
+            $chat-response-channel.send($response);
+        };
     }
 }
+
+react {
+    whenever signal(SIGINT) {
+        say "Shutting down...";
+        $http.stop;
+        done;
+    }
+}
+
+
