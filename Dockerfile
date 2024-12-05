@@ -22,6 +22,7 @@ COPY ./t /app/t
 COPY ./META6.json /app
 COPY ./www /app/www
 COPY ./_scripts/install_deps.sh /app/install_deps.sh
+COPY ./Makefile /app/Makefile
 
 RUN chmod +x /app/install_deps.sh
 
@@ -29,4 +30,5 @@ RUN /app/install_deps.sh
 
 EXPOSE 10000
 
-CMD ["raku", "/app/bin/app"]
+# Set entrypoint to make
+ENTRYPOINT ["make"]

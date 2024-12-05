@@ -5,10 +5,10 @@ ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 .PHONY: all run test clean
 
-all: run
+all: run-app
 
 # Run the Raku application
-run:
+run-app:
 	raku ./bin/app
 
 # Run the tests using prove6

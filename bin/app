@@ -15,45 +15,132 @@ use Util::Logger;
 use Cro::HTTP::Server;
 use Cro::HTTP::Router;
 use Cro::HTTP::Log::File;
+use Cro::HTTP::Middleware;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
-use WWW::ChatUI;
 
+# set up logger
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
+
+# set up chat request and response channels
 my Supplier $chat-request-supplier = Supplier.new;
 my Supply $chat-request-supply = $chat-request-supplier.Supply;
 my Channel $chat-response-channel = Channel.new;
 
-sub routes() {
-    route {
-        # process the user message and return the response
-        post -> 'chat' {
+class TallMountainHTTPLogger does Cro::HTTP::Middleware::Response {
+    # Log the HTTP request and response
+    has IO::Handle $.logs;
+    has IO::Handle $.errors;
+    has Bool $.flush;
 
-            # get the user message from the request body
-            my $prompt;
-            request-body -> %fields {
-                $prompt = %fields<message>;
-            }
-            $APP_LOGGER.debug("Received user message: '$prompt'");
-            $chat-request-supplier.emit($prompt);
-
-            # get the bot reply
-            my $bot-response = $chat-response-channel.receive;
-            $APP_LOGGER.debug("Received bot reply: '$bot-response'");
-
-            # return the response as an htmx fragment
-            my $htmx-fragment = get_response($prompt, $bot-response);
-            content 'text/html', $htmx-fragment;
+    submethod BUILD(:$logs, :$errors, :$!flush = True) {
+        with $logs {
+            $!logs = $logs;
+            with $errors { $!errors = $errors } else { $!errors = $logs }
         }
+        else {
+            $!logs = $*OUT;
+            with $errors { $!errors = $errors } else { $!errors = $*ERR }
+        }
+    }
 
-        # serve the chat UI
-        get -> {
-            static 'www/chat_ui.html';
+    method process(Supply $pipeline --> Supply) {
+        supply {
+            whenever $pipeline -> $resp {
+                if $resp.status < 400 {
+                    $!logs.say: "[OK] {$resp.status} {$resp.request.original-target} - {$resp.request.connection.peer-host}";
+                    $APP_LOGGER.debug( "<Cro Web Server> [OK] {$resp.status} " ~
+                            "{$resp.request.original-target} - {$resp.request.connection.peer-host}");
+                    $!logs.flush if $!flush;
+                } else {
+                    $!errors.say: "[ERROR] {$resp.status} {$resp.request.original-target} - {$resp.request.connection.peer-host}";
+                    $APP_LOGGER.error("<Cro Web Server> [ERROR] {$resp.status} " ~
+                            "{$resp.request.original-target} - {$resp.request.connection.peer-host}");
+                    $!errors.flush if $!flush;
+                }
+                emit $resp;
+            }
         }
     }
 }
 
+sub routes() {
+    # Set up the routes for the chat UI
+    route {
+        # process the user message and return the response
+
+        post -> 'chat' {
+            try {
+                # get the user message from the request body
+                my $prompt;
+                request-body -> %fields {
+                    $prompt = %fields<message>;
+                }
+                $APP_LOGGER.debug("Received user message: '$prompt'");
+                $chat-request-supplier.emit($prompt);
+
+                # get the bot reply
+                my $bot-response = $chat-response-channel.receive;
+                $APP_LOGGER.debug("Received bot reply: '$bot-response'");
+
+                # return the response as an htmx fragment
+                my $htmx-fragment = get_response($prompt, $bot-response);
+                content 'text/html', $htmx-fragment;
+            }
+            CATCH {
+                default {
+                    $APP_LOGGER.error("Error processing /chat route: $_");
+                    content 'text/html', q:to/END/;
+                    <h1>Error Processing Route: A Haiku</h1>
+                    Typing, then silence,<p>
+                    Echoes of thoughts left unread,<p>
+                    Chats lost in the void. <p>
+                    END
+                }
+            }
+        }
+
+        # serve the chat UI
+        get -> {
+            try {
+                static 'www/chat_ui.html';
+            }
+            CATCH {
+                default {
+                    $APP_LOGGER.error("Error serving chat UI: $_");
+                    content 'text/html', q:to/END/;
+                    <h1>Error Serving Chat UI: A Haiku</h1>
+                    Still the server hums, <p>
+                    Yet the page you seek is gone, <p>
+                    A void answers back. <p>
+                    END
+                }
+            }
+        }
+        after {
+            if .status == 404 && !.has-body {
+                content 'text/html',  q:to/END/;
+                <h1>Not Found: A Haiku</h1>
+                Lost in the vast web,<p>
+                A home that no longer speaks,<p>
+                404 remains.<p>
+                END
+            }
+            if .status != 200 && !.has-body {
+                content 'text/html', q:to/END/;
+                <h1>Phantom Request: A Haiku</h1>
+                Broken web echoes,<p>
+                Unknown paths lead to shadows,<p>
+                Browsers pause, confused.<p>
+                END
+            }
+        }
+    }
+}
+
+
 sub get_response(Str $prompt, Str $bot-response --> Str){
+    # Return the response as an htmx fragment
     my Str $response =  qq:to/END/;
         <div class="message-container user-message-container">
         <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
@@ -68,18 +155,19 @@ sub get_response(Str $prompt, Str $bot-response --> Str){
 }
 
 sub check-api-key {
-    # Check for OPENAI_API_KEY environment variable
-    my $api-key = %*ENV<OPENAI_API_KEY>;
-    if not $api-key.defined {
-        my $msg = "OPENAI_API_KEY environment variable not found";
-        $APP_LOGGER.debug($msg);
-        die $msg;
+    # Check for OPENAI_API_KEY environment variable if using OpenAI
+    if Util::Config.get_config('llm', 'default_llm_provider') ~ "openai" {
+        my $api-key = %*ENV<OPENAI_API_KEY>;
+        if not $api-key.defined {
+            my $msg = "OPENAI_API_KEY environment variable not found";
+            $APP_LOGGER.debug($msg);
+            die $msg;
+        }
     }
 }
 
-sub MAIN() {
-    check-api-key;
-
+sub init-cro-service (--> Cro::Service) {
+    # Start the chat ui server
     my $host = Util::Config.get_config('chat_ui', 'chat_ui_server');
     my $port = Util::Config.get_config('chat_ui', 'chat_ui_port');
     my Cro::Service $http = Cro::HTTP::Server.new(
@@ -88,15 +176,32 @@ sub MAIN() {
             port => $port,
             application => routes(),
             after => [
-                Cro::HTTP::Log::File.new(logs => $*OUT, errors => $*ERR)
+                TallMountainHTTPLogger.new(logs => $*OUT, errors => $*ERR)
             ]
-            );
+    );
+    return $http;
+}
 
+sub MAIN() {
+
+    # log the start of the app
+    $APP_LOGGER.debug("Starting TallMountain App... please wait");
+
+    # make sure we have an API key
+    check-api-key;
+
+    # start the web server for the chat ui
+    $APP_LOGGER.debug("Starting the web server for the chat UI...");
+    my Cro::Service $http = init-cro-service;
     $http.start;
 
+    # get a cognitive cycle instance
+    $APP_LOGGER.debug("Getting a cognitive cycle instance...");
     my $cycle = Cycle::Cognitive.new;
 
-    # Start the chat ui server in the background
+    $APP_LOGGER.debug("TallMountain App started successfully and waiting for user requests...");
+
+    # Start the cognitive cycle
     start {
         react {
             # Whenever a chat request is received, process it
@@ -116,7 +221,9 @@ sub MAIN() {
 
     react {
         whenever signal(SIGINT) {
+            $APP_LOGGER.debug("Received SIGINT signal... shutting down...");
             say "Shutting down...";
+            $APP_LOGGER.debug("Stopping the web server for the chat UI...");
             $http.stop;
             done;
         }
