@@ -9,7 +9,8 @@
   "auth": "Write me!",
   "depends": [
     "JSON::Fast",
-    "Cro::HTTP"
+    "Cro::HTTP",
+    "Config::Clever"
   ],
   "build-depends": [],
   "test-depends": [],
