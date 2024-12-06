@@ -1,34 +1,22 @@
 {
-  "name": "TallMountain",
-  "description": "An AI agent platform",
+  "name": "Normative::SelfDiagnostic",
+  "description": "Write me!",
   "version": "0.1",
-  "auth": "Seamus Brady <seamus@corvideon.ie>",
-  "depends": [
-    "App::Prove6",
-    "Env::Dotenv",
-    "HTTP::Tinyish",
-    "JSON::Fast",
-    "Logger",
-    "Config::Clever",
-    "Cro::HTTP::Router",
-    "Cro::HTTP::Server",
-    "UUID::V4",
-    "Array::Circular"
-    "LibXML"
+  "perl": "6.*",
+  "authors": [
+    "Write me!"
   ],
+  "auth": "Write me!",
+  "depends": [
+    "JSON::Fast",
+    "Cro::HTTP"
+  ],
+  "build-depends": [],
+  "test-depends": [],
   "provides": {
-    "Cycle::Buffer::Chat": "lib/Cycle/Buffer/Chat.rakumod",
-    "Cycle::Payload::OkString": "lib/Cycle/Payload/OkString.rakumod",
-    "Cycle::Payload::TaintedString": "lib/Cycle/Payload/TaintedString.rakumod",
-    "LLM::AdaptiveRequestMode": "lib/LLM/AdaptiveRequestMode.rakumod",
-    "LLM::Client::OpenAI": "lib/LLM/Client/OpenAI.rakumod",
-    "LLM::Facade": "lib/LLM/Facade.rakumod",
-    "LLM::Messages": "lib/LLM/Messages.rakumod",
-    "LLM::Util::Instructor": "lib/LLM/Util/Instructor.rakumod",
-    "Memory::ConversationBuffer": "lib/Memory/ConversationBuffer.rakumod",
-    "Util::DotEnv": "lib/Util/DotEnv.rakumod"
+    "Normative::SelfDiagnostic": "lib/Normative/SelfDiagnostic.rakumod"
   },
-  "license": "Proprietary",
-  "source-url": "http://www.tallmountain.io",
-  "raku": "6.*"
+  "resources": [],
+  "license": "Write me!",
+  "source-url": "Write me!"
 }

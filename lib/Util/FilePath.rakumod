@@ -1,8 +1,18 @@
 use v6.d;
+use Util::Logger;
+
+# exception class for file path exceptions
+class Util::FilePath::Exception is Exception {
+    has Str $.message;
+}
 
 class Util::FilePath {
 
+    has $.LOGGER = Util::Logger.new(namespace => "<Util::FilePath>");
+
     my constant $CONFIG_DIR = '/config';
+    my constant $NC_PROMPT = '/simplified_nc.prompt';
+
 
     method app-root(-->Str){
         # get the root dir of the app
@@ -11,5 +21,18 @@ class Util::FilePath {
 
     method config-path(-->Str){
         return self.app-root ~ $CONFIG_DIR;
+    }
+
+    method get-nc-prompt(-->Str){
+        # get the prompt for the normative calculus
+        try {
+            my Str $nc = slurp Util::FilePath.new.config-path ~ $NC_PROMPT;
+            return $nc;
+            CATCH {
+                my Str $message = "Error loading configuration prompt for Normative Calculus: $_";
+                Util::FilePath.new.LOGGER.error($message);
+                Util::FilePath::Exception.new(message => $message).throw;
+            }
+        }
     }
 }

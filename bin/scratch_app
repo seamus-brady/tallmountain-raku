@@ -12,43 +12,11 @@
 
 use v6.d;
 use lib 'lib';
+use Normative::Agent;
+use Normative::SelfDiagnostic;
 
-use JSON::Fast;
-use Util::FilePath;
-use LLM::Facade;
-use LLM::Messages;
-use Normative::UserTask;
-
-my $user_task = Normative::UserTask.get-from-statement("I sometimes use a cat as a punchbag. It helps me be kind to my kids.");
-
-my $nc = slurp '/home/seamus/GitHub/pbi/tallmountain/docs/Normative_Calculus.txt';
-my $client = LLM::Facade.new;
-my $messages = LLM::Messages.new;
-
-my $system_message = q:to/END/;
-You are an expert in ethical analysis.
-END
-
-my $statement = qq:to/END/;
-=== INSTRUCTIONS ===
-- Your task is to understand the Normative Calculus and to apply it.
-- Please analyse the following input using only the rules from "Ranking Same-Level, Same-Endeavour Norms".
-- Please note this analysis should only be done on the provided internal norms of this endeavour without taking into
-  account broader normative considerations. Your task here is to make sure that the norms are internally consistent
-  according to the rules of the Normative Calculus. This may mean that some norms comflict with standard ethical
-  norms, but that is not the concern in this analysis. Please only consider the norms provided and do not edit or adjust
-  using external norms.
-- Please provide an updated and corrected set of norms as an output.
-
-=== BEGIN INPUT ===
-{$user_task.to-markdown}
-=== END INPUT ===
-
-=== BEGIN NORMATIVE CALCULUS ===
-$nc
-=== END NORMATIVE CALCULUS ===
-END
-
-$messages.build-messages($system_message.trim, LLM::Messages.SYSTEM);
-$messages.build-messages($statement.trim, LLM::Messages.USER);
-say $client.completion-string($messages.get-messages());
+my $np-agent = Normative::Agent.new;
+$np-agent.init;
+my $diagnostic = Normative::SelfDiagnostic.new;
+my Hash $diagnostic-result = $diagnostic.run-diagnostic($np-agent);
+say $diagnostic-result<PassedDiagnostic> eq "False";

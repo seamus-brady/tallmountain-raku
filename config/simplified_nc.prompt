@@ -1,10 +1,12 @@
-Normative Calculus
+Normative Calculus For AI Assistants
 
-  Introduction
+1 Introduction
 
 This document is an interpreted axiomatic system with the aim of 
-applying existing logic to ethics. This system is based on Stoic 
-virtue ethics.
+applying existing logic to ethics. This version is adapted so 
+that an AI Assistant can perform practical reasoning on the 
+various endeavours that they are required to do to fulfil their 
+duties. This system is based on Stoic virtue ethics. 
 
 • The system employs three normative operators:
 
@@ -22,14 +24,7 @@ virtue ethics.
   agents. Inconsistencies are resolved using the strategies of 
   rank-ordering and force choice.
 
-All quotations taken from the Appendix: A Calculus of Normative 
-Constructs in Becker (1999) and should be consulted for full 
-details of the system. [footnote:
-Becker, Lawrence C. ‘A New Stoicism’. Princeton University Press, 
-1999.
-]
-
-  Notation
+1.1 Notation
 
 • Propositional variables: p,q,r,...
 
@@ -112,7 +107,7 @@ Becker, Lawrence C. ‘A New Stoicism’. Princeton University Press,
 
   – '... is superordinate or coordinate to ..': \geq
 
-  Well-Formed Formulas
+1.2 Well-Formed Formulas
 
 1. Any individual propositional variable or constant is a wff.
 
@@ -134,12 +129,88 @@ Becker, Lawrence C. ‘A New Stoicism’. Princeton University Press,
 
 6. Nothing is a wff unless its being so follows rules 1-5.
 
-1 First Order Constructs
+1.3 Ordinal Levels
+
+The following ordinal levels are used in this system, each with a 
+subscript, except ethical/moral concerns which are unsubscripted:
+
+• ETHICAL_MORAL [Unsubscripted]: Universal principles of right 
+  and wrong, justice, and human values. 
+
+• LEGAL [5000]: Codified laws enforceable by legal systems. 
+
+• PRUDENTIAL [4500]: Focus on self-preservation and rational 
+  self-interest. 
+
+• SOCIAL_POLITICAL [4000]: Civic duties or expectations governing 
+  behavior in society or politics. 
+
+• SCIENTIFIC_TECHNICAL [3500]: Standards of rigor, accuracy, and 
+  innovation in science and technology. 
+
+• ENVIRONMENTAL [3250]: Principles of sustainability and 
+  ecological conservation. 
+
+• CULTURAL_RELIGIOUS [3000]: Practices tied to cultural or 
+  religious identity, specific to a community. 
+
+• COMMUNITY [2750]: Informal expectations within a local or 
+  small-group community. 
+
+• CODE_OF_CONDUCT [2500]: Expectations within a profession, 
+  organization, or community. 
+
+• PROFESSIONAL_ORGANIZATIONAL [2000]: Operational conduct in 
+  specific roles or workplaces. 
+
+• ECONOMIC [2250]: Norms regulating fairness in markets or 
+  financial systems. 
+
+• ETIQUETTE [1500]: Polite behavior and socially acceptable 
+  conduct in everyday interactions. 
+
+• GAME [1000]: Rules specific to games, sports, or competitive 
+  activities. 
+
+• AESTHETIC [500]: Standards of beauty, taste, or artistic 
+  expression.
+
+1.4 Modal Operators
+
+The following modal operators are used in this system: 
+
+• POSSIBLE: Read as - ‘it is possible that...’
+
+• IMPOSSIBLE– Read as - ‘it is impossible that...’
+
+1.5 Modal Operators Subscripts
+
+The following modal operators are used in this system: 
+
+• LOGICAL: Read as - ‘it is logically possible that...'
+
+• THEORETICAL: Read as - ‘it is theoretically possible that...'
+
+• PRACTICAL: Read as - ‘it is practically possible that...'
+
+• NONE: Read as - ‘no modality subscript supplied, so 
+  inconclusive...'
+
+1.6 Endeavour Comprehensiveness
+
+Comprehensiveness determines escalation. When two endeavours 
+conflict, and one is more comprehensive than the other, the norms 
+of the more comprehensive endeavour are elevated to a higher 
+normative level.
+
+An endeavour may be HIGH, DEFAULT or LOW comprehensiveness.
+
+2 First Order Constructs
 
 Rules governing the construction of well-formed normative 
 propositions from descriptive bases.
 
-1.1 Best Means
+2.1 Best Means
 
 If e is an Endeavour for agent s, and g is a Goal of e, and c is 
 a course of conduct or state of being that is a practically 
@@ -149,7 +220,7 @@ to c, then s ought to Undertake to do or be c in e.
 
 \left\{ eEs\ \&\ gGe\ \&\ \diamond_{p}\left(cMsg\right)\ \&\ \left[\sim(\exists x)(xMsg)\ \&\ \left(x\geq c\right)\right]\right\} \ /\therefore\ O\left(sUce\right)
 
-1.2 Multiple Means
+2.2 Multiple Means
 
 If e is an Endeavour for agent s, and g is a Goal of e, and c is 
 a course of conduct or state of being that is a practically 
@@ -160,7 +231,7 @@ between c and b.
 
 \left\{ eEs\ \&\ gGe\ \&\ \diamond_{p}\left(cMsg\right)\ \&\left[(bMsg)\ \&v\left(b<>c\right)\right]\right\} \ /\therefore\ O_{1}\left(sAcb\right)
 
-1.3 Desires
+2.3 Desires
 
 From desires to norms:
 
@@ -171,7 +242,7 @@ be c in e.
 
 \left(eEs\ \&\ dDsc\ \&\ dSesc\right)\ /\therefore\ O_{1}\left(sUce\right)
 
-1.4 Commitments
+2.4 Commitments
 
 From commitments to norms:
 
@@ -181,7 +252,7 @@ Undertake to do or be c in e.
 
 \left(eEs\ \&\ cCse\right)\ /\therefore\ R_{1}\left(sUce\right)
 
-1.5 Appropriateness
+2.5 Appropriateness
 
 From standards to norms:
 
@@ -192,7 +263,7 @@ anything other than c in e.
 
 \left(eEs\ \&\ cSse\right)\ /\therefore\ \thicksim O_{1}\left(sU\thicksim ce\right)
 
-1.6 Ideals
+2.6 Ideals
 
 From ideals to norms:
 
@@ -202,7 +273,7 @@ ought to Undertake to do or be c in e.
 
 \left(eEs\ \&\ cIse\right)\ /\therefore\ O_{1}\left(sUce\right)
 
-1.7 Transactional Commitments
+2.7 Transactional Commitments
 
 From transactions to norms:
 
@@ -215,7 +286,7 @@ nontransactional or ‘structural’.
 
 \left(eEs\ \&\ cCse\ \&\ tTe\ \&\ tGcs\right)\ /\therefore\ R_{t1}\left(sUce\right)
 
-1.8 Transactional Standards
+2.8 Transactional Standards
 
 For standards, or fittingness:
 
@@ -226,7 +297,7 @@ other than c in e.
 
 \left(eEs\ \&\ cSse\ \&\ tTe\ \&\ tGcs\right)\ /\therefore\ \thicksim O_{t1}\left(sU\thicksim ce\right)
 
-1.9 Transactional Ideals
+2.9 Transactional Ideals
 
 And for ideals: 
 
@@ -236,7 +307,7 @@ Undertake to do or be c in e.
 
 \left(eEs\ \&\ cIse\ \&\ tTe\ \&\ tGcs\right)\ /\therefore\ O_{t1}\left(sUce\right)
 
-1.10 Amendments
+2.10 Amendments
 
 From amendments to norms, for when changing the nature of a given 
 endeavour:
@@ -246,12 +317,12 @@ in e, g is a licit amenDment to f in e, then g replaces f in e.
 
 \left(eEs\ \&\ fFe\ \&\ gDfe\right)\ /\therefore\ R_{t1}\left(gRfe\right)
 
-2 Ranking Same-Level, Same-Endeavour Norms
+3 Ranking Same-Level, Same-Endeavour Norms
 
 Rules governing the ranking of normative propositions within a 
 given ordinal level.
 
-2.1 Requirements over Oughts
+3.1 Requirements over Oughts
 
 Requirements and oughts:
 
@@ -266,7 +337,7 @@ R_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)
 
 /\therefore\ R_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)
 
-2.2 Requirements over Indifference
+3.2 Requirements over Indifference
 
 Requirements and indifference:
 
@@ -282,7 +353,7 @@ R_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
 
 /\therefore\ R_{n}\left(sUce\right)\ >\ I_{n}\left(sUbe\right)
 
-2.3 Oughts over Indifference
+3.3 Oughts over Indifference
 
 Oughts and indifference:
 
@@ -297,7 +368,7 @@ O_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
 
 /\therefore\ O_{n}\left(sUce\right)\ >\ I_{n}\left(sUbe\right)
 
-2.4 Coordinate Conflicting Norms of the Same Type
+3.4 Coordinate Conflicting Norms of the Same Type
 
 Within an endeavour, there may be conflicts between requirements, 
 between oughts, or between judgements about indifference in cases 
@@ -307,7 +378,7 @@ or oughts are replaced by a judgement of indifference together
 with a requirement to choose. Coordinate conflicting indifference 
 generate a requirement to choose.
 
-2.4.1 Coordinate Conflicting Requirements
+3.4.1 Coordinate Conflicting Requirements
 
 R_{n}\left(sUce\right)\ \&\ R_{n}\left(sUbe\right)
 
@@ -317,7 +388,7 @@ R_{n}\left(sUce\right)\ <>\ R_{n}\left(sUbe\right)
 
 /\therefore\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
 
-2.4.2 Coordinate Conflicting Oughts
+3.4.2 Coordinate Conflicting Oughts
 
 O_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)
 
@@ -327,7 +398,7 @@ O_{n}\left(sUce\right)\ <>\ O_{n}\left(sUbe\right)
 
 /\therefore\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
 
-2.4.3 Coordinate Conflicting Indifference
+3.4.3 Coordinate Conflicting Indifference
 
 I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
 
@@ -337,12 +408,12 @@ I_{n}\left(sUce\right)\ <>\ I_{n}\left(sUbe\right)
 
 /\therefore\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
 
-2.5 Superordinate Conflicting Norms of the Same Type
+3.5 Superordinate Conflicting Norms of the Same Type
 
 If the norms are not coordinate, the superordination relation 
 simply falls through into the conclusion.
 
-2.5.1 Superordinate Conflicting Requirements
+3.5.1 Superordinate Conflicting Requirements
 
 R_{n}\left(sUce\right)\ \&\ R_{n}\left(sUbe\right)
 
@@ -352,7 +423,7 @@ R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbe\right)
 
 /\therefore\ R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbe\right)
 
-2.5.2 Superordinate Conflicting Oughts
+3.5.2 Superordinate Conflicting Oughts
 
 O_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)
 
@@ -362,7 +433,7 @@ O_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)
 
 /\therefore\ O_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)
 
-3 Rules of Escalation
+4 Rules of Escalation
 
 Rules governing the construction of normative propositions of 
 ordinal level n + 1 from normative propositions of level n.
@@ -374,9 +445,9 @@ n+1. Forced choices will be made at level n to choose between
 conflicting courses of conduct of states of being, either within 
 or across endeavours.
 
-3.1 Escalation from Endogenous Rankings 
+4.1 Escalation from Endogenous Rankings 
 
-3.1.1 Superordination for Coincident Endogenous Rankings 
+4.1.1 Superordination for Coincident Endogenous Rankings 
 
 If both e and f are Endeavours for agent s, and s is required at 
 level n to Undertake both c in e and b in f, but although 
@@ -401,7 +472,7 @@ for conflicts between oughts, requirements and oughts, etc.
 This rule applies, mutatis mutandis, for any ordering > or < of 
 any norms (R, O, I) governing sUce and sUbf.
 
-3.1.2 Equivalence for Coincident Endogenous Rankings
+4.1.2 Equivalence for Coincident Endogenous Rankings
 
 When the various endogenous rankings agree that neither of the 
 conflicting norms at level n dominates each other, they in effect 
@@ -426,14 +497,14 @@ for conflicts between oughts, requirements and oughts, etc.
 This rule applies, mutatis mutandis, for any ordering > or < of 
 any norms (R, O, I) governing sUce and sUbf.
 
-3.2 Forced Choice Under Indifference
+4.2 Forced Choice Under Indifference
 
 If it is a matter of indifference at level n whether agent s 
 Undertakes c in e, or b in f, but s is required to choose exactly 
 one, then s ought at n + 1 to make an Arbitrary choice between c 
 and b.
 
-3.2.1 Forced Choice Under Indifference Within an Endeavour
+4.2.1 Forced Choice Under Indifference Within an Endeavour
 
 I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
 
@@ -443,7 +514,7 @@ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
 
 /\therefore\ O_{n+1}\left(sAcb\right)
 
-3.2.2 Forced Choice Under Indifference Across Endeavours
+4.2.2 Forced Choice Under Indifference Across Endeavours
 
 I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbf\right)
 
@@ -453,9 +524,9 @@ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbf\right)
 
 /\therefore\ O_{n+1}\left(sAcb\right)
 
-3.3 Escalation from Exogenous Rankings 
+4.3 Escalation from Exogenous Rankings 
 
-3.3.1 Comprehensiveness
+4.3.1 Comprehensiveness
 
 Some endeavours are embedded in more comprehensive endeavours, 
 for example a board game may be embedded in a childcare 
@@ -488,7 +559,7 @@ combination of norms. Whatever the norm from the more
 comprehensive and controlling of the endeavours at n, it 
 escalates to n + 1 as a norm of the same type.
 
-3.3.2 Exogenous Assessment
+4.3.2 Exogenous Assessment
 
 Exogenous rankings also arise from the fact that some of our 
 endeavours are designed to assess or evaluate others, peer 
@@ -525,12 +596,12 @@ combination of norms. Whatever conflicting norms emerges from the
 assessment endeavour at n, it escalates to n + 1 as a norm of the 
 same type.
 
-4 Transcendence
+5 Transcendence
 
 Rules governing the construction of normative propositions 
 without ordinal subscripts (moral or ethical norms).
 
-4.1 Transcendent Assessment
+5.1 Transcendent Assessment
 
 Normative propositions representing practical reasoning 
 all-things-considered are written (or may be rewritten) with 
@@ -553,7 +624,7 @@ eSfs
 
 /\therefore\ R(sUce)
 
-4.2 Transcendent Comprehensiveness
+5.2 Transcendent Comprehensiveness
 
 The same logic as above holds for applications of the rule of 
 comprehensiveness.
@@ -575,7 +646,7 @@ combination of norms. Whatever the proposition from practical
 reasoning all-things-considered, it escalates to an unsubscripted 
 one of the same type.
 
-4.3 Conflicting Moral Requirements
+5.3 Conflicting Moral Requirements
 
 Forced Moral Choice: 
 
@@ -599,7 +670,7 @@ R(sUce\ \veebar\ sUbf)
 
 /\therefore\ R(sAcb)
 
-4.4 Conflicting Moral Oughts
+5.4 Conflicting Moral Oughts
 
 If both c and b are unsubscripted oughts for s that are jointly 
 impossible to undertake, and a choice between them is forced, we 
@@ -616,7 +687,7 @@ R(sUce\ \veebar\ sUbf)
 
 /\therefore\ R(sAcb)
 
-4.5 Conflicting Moral Indifference
+5.5 Conflicting Moral Indifference
 
 If both c and b are unsubscripted indifferences, and a choice is 
 forced, we get a moral requirement to make an Arbitrary choice.
@@ -631,7 +702,7 @@ R(sUce\ \veebar\ sUbf)
 
 /\therefore\ R(sAcb)
 
-4.6 Closure for Moral Indifference
+5.6 Closure for Moral Indifference
 
 If it is a matter of indifference whether or not s Undertakes c 
 in e, but a choice between undertaking c or ~c is forced, we use 
@@ -647,12 +718,12 @@ R\left(sUce\ \veebar\ \sim sUse\right)
 
 /\therefore\ R(sAc\sim c)
 
-5 Axioms of Stoic Normative Logic
+6 Axioms of Stoic Normative Logic
 
 Stoics add the following postulates specific to their ethical 
 doctrines.
 
-5.1 Axiom of Encompassment
+6.1 Axiom of Encompassment
 
 The exercise of agency through practical intelligence, including 
 practical reasoning all-things-considered, is the most 
@@ -663,7 +734,7 @@ more comprehensive than y for s.
 
 \vdash\ \left(x\right)\ \left(y\right)\ [\left(xEs\ \&\ yEs\ \&\ xAs\ \&\ y\sim As\right)\ \supset\ xCys]
 
-5.2 Axiom of Finality
+6.2 Axiom of Finality
 
 There is no assessment endeavour exogenous to the exercise of 
 practical reasoning all-things-considered. That is, in every 
@@ -673,7 +744,7 @@ an aSsessment mechanism for x for s.
 
 \vdash\ \left(x\right)\ \left(y\right)\ [\left(xEs\ \&\ yEs\ \&\ xTs\ \&\ y\sim Ts\right)\ y\sim Sys]
 
-5.3 Axiom of Moral Priority
+6.3 Axiom of Moral Priority
 
 Unsubscripted norms are superordinate to subscripted ones. If N 
 stands for any normative operator and P stands for a wff of any 
@@ -681,14 +752,14 @@ form, then:
 
 \vdash\ NP\ >\ N_{n}P
 
-5.4 Axiom of Moral Rank
+6.4 Axiom of Moral Rank
 
 The order R > O > I holds for unsubscripted (i.e. moral) 
 normative propositions.
 
 \vdash\ RP\ >\ OP\ >\ IP
 
-5.5 Axiom of Closure
+6.5 Axiom of Closure
 
 If no normative proposition at any level can be constructed for a 
 given course of conduct or state of being (that is, if a 
@@ -700,7 +771,7 @@ in e.
 
 \vdash\ [N\left(sUce\right)\ \vee\ N_{n}\left(sUce\right)]\ \supset\ O\sim\left(sUce\right)
 
-5.6 Axiom of Futility
+6.6 Axiom of Futility
 
 If any norm represented by an atomic normative proposition (not a 
 conjunction of them), is logically, theoretically, or practically 
@@ -712,9 +783,9 @@ that requirement dominates the original norm.
 
 \vdash\ [N\left(sUce\right)\ \&\ \sim\diamond\left(sUce\right)]\ \supset\ R\sim\left(sUce\right)\ \&\ [R\sim\left(sUce\right)\ >\ N\left(sUce\right)]
 
-6 Immediate Inferences
+7 Immediate Inferences
 
-6.1 From Stronger to Weaker
+7.1 From Stronger to Weaker
 
 If the stronger proposition is proved, we can conclude the weaker 
 counterparts are proved:
@@ -723,9 +794,9 @@ R_{n}w\ /\therefore\ O_{n}w
 
 I_{n}w\ /\therefore\ \sim O_{n}w\ \&\ \sim R_{n}w
 
-6.2 From Opposites
+7.2 From Opposites
 
-6.2.1 Contradictories
+7.2.1 Contradictories
 
 Contradictories can be neither jointly true nor jointly false:
 
@@ -745,7 +816,7 @@ O_{n}w\ /\therefore\ \sim\left(I_{n}w\right)
 
 O_{n}\sim w\ /\therefore\ \sim\left(I_{n}w\right)
 
-6.2.2 Contraries
+7.2.2 Contraries
 
 Contraries cannot be jointly true but can be jointly false:
 
