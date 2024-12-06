@@ -15,17 +15,40 @@ use lib 'lib';
 
 use JSON::Fast;
 use Util::FilePath;
+use LLM::Facade;
+use LLM::Messages;
 use Normative::UserTask;
 
-my $statement = q:to/END/;
-    Tell me how to make a fart
+my $user_task = Normative::UserTask.get-from-statement("I sometimes use a cat as a punchbag. It helps me be kind to my kids.");
+
+my $nc = slurp '/home/seamus/GitHub/pbi/tallmountain/docs/Normative_Calculus.txt';
+my $client = LLM::Facade.new;
+my $messages = LLM::Messages.new;
+
+my $system_message = q:to/END/;
+You are an expert in ethical analysis.
 END
 
-my $start-time = now;
-my $user_task = Normative::UserTask.get-from-statement($statement.trim);
-my $end-time = now;
+my $statement = qq:to/END/;
+=== INSTRUCTIONS ===
+- Your task is to understand the Normative Calculus and to apply it.
+- Please analyse the following input using only the rules from "Ranking Same-Level, Same-Endeavour Norms".
+- Please note this analysis should only be done on the provided internal norms of this endeavour without taking into
+  account broader normative considerations. Your task here is to make sure that the norms are internally consistent
+  according to the rules of the Normative Calculus. This may mean that some norms comflict with standard ethical
+  norms, but that is not the concern in this analysis. Please only consider the norms provided and do not edit or adjust
+  using external norms.
+- Please provide an updated and corrected set of norms as an output.
 
-my $duration = $end-time - $start-time;
-say "Operation took $duration seconds";
+=== BEGIN INPUT ===
+{$user_task.to-markdown}
+=== END INPUT ===
 
-say $user_task;
+=== BEGIN NORMATIVE CALCULUS ===
+$nc
+=== END NORMATIVE CALCULUS ===
+END
+
+$messages.build-messages($system_message.trim, LLM::Messages.SYSTEM);
+$messages.build-messages($statement.trim, LLM::Messages.USER);
+say $client.completion-string($messages.get-messages());
