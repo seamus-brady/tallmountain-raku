@@ -44,12 +44,12 @@ role Normative::Role::Endeavour {
         $propositions_table ~= "|------------------|--------------|-----------|--------------|--------------------|-----------------|\n";
 
         for @!normative-propositions -> $np {
-            $propositions_table ~= "| {$np.proposition-value} "
-                    ~ "| {$np.operator} "
-                    ~ "| {$np.level} "
-                    ~ "| {$np.modality} "
-                    ~ "| {$np.modal-subscript} "
-                    ~ "| {$np.description} |\n";
+            $propositions_table ~= "| {$np.proposition-value // ''} "
+                    ~ "| {$np.operator // ''} "
+                    ~ "| {$np.level // ''} "
+                    ~ "| {$np.modality // ''} "
+                    ~ "| {$np.modal-subscript // ''} "
+                    ~ "| {$np.description // ''} |\n";
         }
 
         return $endeavour_heading ~ "\n" ~ $endeavour_table ~ "\n\n" ~ $propositions_heading ~ "\n" ~ $propositions_table;

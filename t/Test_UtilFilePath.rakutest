@@ -1,0 +1,19 @@
+use v6.d;
+use Test;
+use lib 'lib';
+use Util::FilePath;
+
+plan 2;
+
+subtest 'Util::FilePath loaded' => {
+    my $file_util = Util::FilePath.new;
+    isa-ok $file_util, Util::FilePath;
+}
+
+subtest 'Util::FilePath normative calc prompt loaded' => {
+    my $file_util = Util::FilePath.new;
+    my Str $nc = $file_util.get-nc-prompt;
+    ok $nc.defined, "normative calc prompt is defined";
+}
+
+done-testing;

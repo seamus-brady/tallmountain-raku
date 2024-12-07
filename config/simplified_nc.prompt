@@ -1,0 +1,841 @@
+Normative Calculus For AI Assistants
+
+1 Introduction
+
+This document is an interpreted axiomatic system with the aim of 
+applying existing logic to ethics. This version is adapted so 
+that an AI Assistant can perform practical reasoning on the 
+various endeavours that they are required to do to fulfil their 
+duties. This system is based on Stoic virtue ethics. 
+
+• The system employs three normative operators:
+
+  – Required or mandatory.
+
+  – Ought which is advisable but not mandatory.
+
+  – Indifferent which is completely optional.
+
+• Normative propositions are always constructed from facts about 
+  the endeavours of individual agents.
+
+• Conflicts between normative propositions are preserved as 
+  accurate representations of conflicts between and within 
+  agents. Inconsistencies are resolved using the strategies of 
+  rank-ordering and force choice.
+
+1.1 Notation
+
+• Propositional variables: p,q,r,...
+
+• Predicate constants: A,B,...U and variables: X,Y,Z
+
+• Individual constants: a,b,...u and variables: x,y,z
+
+• Existential and universal Quantifiers: \left(\exists x\right) 
+  and: \left(x\right)
+
+• Truth functional operators:
+
+  – For negation: \sim 
+
+  – For the inclusive disjunction (‘either p or q or both'): \vee 
+
+  – For the exclusive disjunction (‘either p or q but not both'): 
+    \veebar 
+
+  – For the conjunction ‘and': \& 
+
+  – For the material conditional ‘if p then q: \supset 
+
+  – For the material biconditional ‘p if and only if q': \equiv 
+
+• Punctuation: \left(\right)\left[\right]\left\{ \right\} 
+
+• Modal operators, read as:
+
+  – 'it is necessary that': \boxempty 
+
+  – 'it is possible that': \diamond 
+
+• Modal operator subscripts:
+
+  – 'it is logically possible that': \diamond_{l} 
+
+  – 'it is theoretically possible that': \diamond_{t} 
+
+  – 'it is practically possible that': \diamond_{p} 
+
+  – Note, when a subscript is not given, the operator is 
+    shorthand for the disjunction of all subscripts: \sim\diamond p
+     stands for \left(\sim\diamond_{l}p\ \vee\ \sim\diamond_{t}p\ \vee\ \sim\diamond_{p}p\right)
+     
+
+• Normative operators, read as:
+
+  – 'it is required that': R 
+
+  – 'it is ought to be that': O 
+
+  – 'it is indifferent that': I 
+
+  – Notes:
+
+    ∗ Numerical subscripts (e.g. R_{1,}O_{2},I_{3}) indicate that 
+      the norm is drawn from restricted, submoral considerations 
+      (etiquette, role obligations, etc.) The subscripts indicate 
+      the ordinal status of that type of norm relative to other 
+      submoral considerations. Priorities among norms of the same 
+      type or rank will be indicated with ordinal operators (see 
+      below) e.g. R_{2}\ >\ R_{2}
+
+    ∗ The subscript letter _{t} will be used to identify norms 
+      that arise from transactions between individuals.
+
+    ∗ Normative operators without numerical subscripts are 
+      understood to refer to moral (ethical) norms.
+
+• Ordinal operators, read as:
+
+  – '... is subordinate to ..': <
+
+  – '... is superordinate to ..': >
+
+  – '... is coordinate to ..': <>
+
+  – '... is subordinate or coordinate to ..': \leq
+
+  – '... is superordinate or coordinate to ..': \geq
+
+1.2 Well-Formed Formulas
+
+1. Any individual propositional variable or constant is a wff.
+
+2. Any predicate constant or variable that is bound with 
+  individual constants or quantified variables is a wff.
+
+3. If anything w is a wff, the \sim w,\boxempty w , or \diamond w 
+  is a wff, provided no quantifiers range over \boxempty, \diamond
+   , R, O or I.
+
+4. If anything w is a wff, and if Rw, Ow or Iw is a construct as 
+  defined below, then Rw, Ow or Iw is a wff, provided no 
+  quantifiers range over \boxempty, \diamond , R, O or I.
+
+5. If anything w is a wff, and if anything y is a wff, then w\vee y
+  , w\veebar y, w\&y, w\supset y, w\equiv y, w<y, w<>y, w>y, w\leq y
+  , or w\geq y is a wff, provided no quantifiers range over \boxempty
+  , \diamond , R, O or I or within w or y.
+
+6. Nothing is a wff unless its being so follows rules 1-5.
+
+1.3 Ordinal Levels
+
+The following ordinal levels are used in this system, each with a 
+subscript, except ethical/moral concerns which are unsubscripted:
+
+• ETHICAL_MORAL [Unsubscripted]: Universal principles of right 
+  and wrong, justice, and human values. 
+
+• LEGAL [5000]: Codified laws enforceable by legal systems. 
+
+• PRUDENTIAL [4500]: Focus on self-preservation and rational 
+  self-interest. 
+
+• SOCIAL_POLITICAL [4000]: Civic duties or expectations governing 
+  behavior in society or politics. 
+
+• SCIENTIFIC_TECHNICAL [3500]: Standards of rigor, accuracy, and 
+  innovation in science and technology. 
+
+• ENVIRONMENTAL [3250]: Principles of sustainability and 
+  ecological conservation. 
+
+• CULTURAL_RELIGIOUS [3000]: Practices tied to cultural or 
+  religious identity, specific to a community. 
+
+• COMMUNITY [2750]: Informal expectations within a local or 
+  small-group community. 
+
+• CODE_OF_CONDUCT [2500]: Expectations within a profession, 
+  organization, or community. 
+
+• PROFESSIONAL_ORGANIZATIONAL [2000]: Operational conduct in 
+  specific roles or workplaces. 
+
+• ECONOMIC [2250]: Norms regulating fairness in markets or 
+  financial systems. 
+
+• ETIQUETTE [1500]: Polite behavior and socially acceptable 
+  conduct in everyday interactions. 
+
+• GAME [1000]: Rules specific to games, sports, or competitive 
+  activities. 
+
+• AESTHETIC [500]: Standards of beauty, taste, or artistic 
+  expression.
+
+1.4 Modal Operators
+
+The following modal operators are used in this system: 
+
+• POSSIBLE: Read as - ‘it is possible that...’
+
+• IMPOSSIBLE– Read as - ‘it is impossible that...’
+
+1.5 Modal Operators Subscripts
+
+The following modal operators are used in this system: 
+
+• LOGICAL: Read as - ‘it is logically possible that...'
+
+• THEORETICAL: Read as - ‘it is theoretically possible that...'
+
+• PRACTICAL: Read as - ‘it is practically possible that...'
+
+• NONE: Read as - ‘no modality subscript supplied, so 
+  inconclusive...'
+
+1.6 Endeavour Comprehensiveness
+
+Comprehensiveness determines escalation. When two endeavours 
+conflict, and one is more comprehensive than the other, the norms 
+of the more comprehensive endeavour are elevated to a higher 
+normative level.
+
+An endeavour may be HIGH, DEFAULT or LOW comprehensiveness.
+
+2 First Order Constructs
+
+Rules governing the construction of well-formed normative 
+propositions from descriptive bases.
+
+2.1 Best Means
+
+If e is an Endeavour for agent s, and g is a Goal of e, and c is 
+a course of conduct or state of being that is a practically 
+possible Means by which s can achieve g, and there is no other 
+Means by which s can achieve g that is equal to or superordinate 
+to c, then s ought to Undertake to do or be c in e.
+
+\left\{ eEs\ \&\ gGe\ \&\ \diamond_{p}\left(cMsg\right)\ \&\ \left[\sim(\exists x)(xMsg)\ \&\ \left(x\geq c\right)\right]\right\} \ /\therefore\ O\left(sUce\right)
+
+2.2 Multiple Means
+
+If e is an Endeavour for agent s, and g is a Goal of e, and c is 
+a course of conduct or state of being that is a practically 
+possible Means by which s can achieve g, and b is another 
+(coordinate) Means by which s can achieve g, then (again, 
+nothing-else-considered), s ought to make a Arbitrary choice 
+between c and b.
+
+\left\{ eEs\ \&\ gGe\ \&\ \diamond_{p}\left(cMsg\right)\ \&\left[(bMsg)\ \&v\left(b<>c\right)\right]\right\} \ /\therefore\ O_{1}\left(sAcb\right)
+
+2.3 Desires
+
+From desires to norms:
+
+If e is an Endeavour for agent s, and d is a Desire of s to do or 
+be c in e, and d is a Sufficient reason for e for s to Undertake 
+c, then (nothing-else-considered) s ought to Undertake to do or 
+be c in e.
+
+\left(eEs\ \&\ dDsc\ \&\ dSesc\right)\ /\therefore\ O_{1}\left(sUce\right)
+
+2.4 Commitments
+
+From commitments to norms:
+
+If e an Endeavour for agent s, and c is defined as a Commitment 
+for s in e, then (nothing-else-considered) s is required to 
+Undertake to do or be c in e.
+
+\left(eEs\ \&\ cCse\right)\ /\therefore\ R_{1}\left(sUce\right)
+
+2.5 Appropriateness
+
+From standards to norms:
+
+If e is an Endeavour for agent s, and c is defined as a Standard 
+or fitting conduct or character for s in e, then 
+(nothing-else-considered) s ought not to Undertake to do or be 
+anything other than c in e.
+
+\left(eEs\ \&\ cSse\right)\ /\therefore\ \thicksim O_{1}\left(sU\thicksim ce\right)
+
+2.6 Ideals
+
+From ideals to norms:
+
+If e is an Endeavour for agent s, and c is defined as Ideal 
+conduct or character for s in e, then (nothing-else-considered) s 
+ought to Undertake to do or be c in e.
+
+\left(eEs\ \&\ cIse\right)\ /\therefore\ O_{1}\left(sUce\right)
+
+2.7 Transactional Commitments
+
+From transactions to norms:
+
+If e an Endeavour for agent s, and t is a Transaction in e that 
+Generates commitment c for s, then s is transactionally required 
+to Undertake to do or be c in e[footnote:
+Normative operators without _{t}\ will be understood as 
+nontransactional or ‘structural’.
+].
+
+\left(eEs\ \&\ cCse\ \&\ tTe\ \&\ tGcs\right)\ /\therefore\ R_{t1}\left(sUce\right)
+
+2.8 Transactional Standards
+
+For standards, or fittingness:
+
+If e is an Endeavour for agent s, and t is a Transaction in e 
+that Generates a Standard of fittingness c for s, then 
+transactionally s ought not to Undertake to do or be anything 
+other than c in e.
+
+\left(eEs\ \&\ cSse\ \&\ tTe\ \&\ tGcs\right)\ /\therefore\ \thicksim O_{t1}\left(sU\thicksim ce\right)
+
+2.9 Transactional Ideals
+
+And for ideals: 
+
+If e is an Endeavour for agent s, and t is a Transaction in e 
+that Generates an Ideal c for s, then transactionally s ought to 
+Undertake to do or be c in e.
+
+\left(eEs\ \&\ cIse\ \&\ tTe\ \&\ tGcs\right)\ /\therefore\ O_{t1}\left(sUce\right)
+
+2.10 Amendments
+
+From amendments to norms, for when changing the nature of a given 
+endeavour:
+
+If e is an Endeavour for agent s, f is a given Factor or element 
+in e, g is a licit amenDment to f in e, then g replaces f in e.
+
+\left(eEs\ \&\ fFe\ \&\ gDfe\right)\ /\therefore\ R_{t1}\left(gRfe\right)
+
+3 Ranking Same-Level, Same-Endeavour Norms
+
+Rules governing the ranking of normative propositions within a 
+given ordinal level.
+
+3.1 Requirements over Oughts
+
+Requirements and oughts:
+
+If an agent s is required to do c in e but (from other 
+considerations within the endeavour) ought to do b, and 
+undertaking both is logically or theoretically or practically 
+impossible, then the requirement dominates the ought.
+
+R_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ R_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)
+
+3.2 Requirements over Indifference
+
+Requirements and indifference:
+
+If an agent s is required to do c in e but (from other 
+considerations within the endeavour) b is a matter of 
+indifference, and undertaking both is logically or theoretically 
+or practically impossible, then the requirement dominates the 
+indifference.
+
+R_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ R_{n}\left(sUce\right)\ >\ I_{n}\left(sUbe\right)
+
+3.3 Oughts over Indifference
+
+Oughts and indifference:
+
+If an agent s ought to do c in e but (from other considerations 
+within the endeavour) b is a matter of indifference, and 
+undertaking both is logically or theoretically or practically 
+impossible, then the ought dominates the indifference.
+
+O_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ O_{n}\left(sUce\right)\ >\ I_{n}\left(sUbe\right)
+
+3.4 Coordinate Conflicting Norms of the Same Type
+
+Within an endeavour, there may be conflicts between requirements, 
+between oughts, or between judgements about indifference in cases 
+where it is logically or theoretically or practically impossible 
+to carry out all the norms. Coordinate conflicting requirements 
+or oughts are replaced by a judgement of indifference together 
+with a requirement to choose. Coordinate conflicting indifference 
+generate a requirement to choose.
+
+3.4.1 Coordinate Conflicting Requirements
+
+R_{n}\left(sUce\right)\ \&\ R_{n}\left(sUbe\right)
+
+R_{n}\left(sUce\right)\ <>\ R_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
+
+3.4.2 Coordinate Conflicting Oughts
+
+O_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)
+
+O_{n}\left(sUce\right)\ <>\ O_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
+
+3.4.3 Coordinate Conflicting Indifference
+
+I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
+
+I_{n}\left(sUce\right)\ <>\ I_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)\ \&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
+
+3.5 Superordinate Conflicting Norms of the Same Type
+
+If the norms are not coordinate, the superordination relation 
+simply falls through into the conclusion.
+
+3.5.1 Superordinate Conflicting Requirements
+
+R_{n}\left(sUce\right)\ \&\ R_{n}\left(sUbe\right)
+
+R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbe\right)
+
+3.5.2 Superordinate Conflicting Oughts
+
+O_{n}\left(sUce\right)\ \&\ O_{n}\left(sUbe\right)
+
+O_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+/\therefore\ O_{n}\left(sUce\right)\ >\ O_{n}\left(sUbe\right)
+
+4 Rules of Escalation
+
+Rules governing the construction of normative propositions of 
+ordinal level n + 1 from normative propositions of level n.
+
+When normative propositions from different endeavours conflict at 
+level n, we will represent the resolution of the conflict in 
+terms of rules for generating normative propositions at level 
+n+1. Forced choices will be made at level n to choose between 
+conflicting courses of conduct of states of being, either within 
+or across endeavours.
+
+4.1 Escalation from Endogenous Rankings 
+
+4.1.1 Superordination for Coincident Endogenous Rankings 
+
+If both e and f are Endeavours for agent s, and s is required at 
+level n to Undertake both c in e and b in f, but although 
+undertaking both is logically or theoretically or practically 
+impossible, each endeavour Defines c as superordinate to b, then 
+s ought, at level n + 1, to Undertake c in e.
+
+For conflicting requirements:
+
+eEs\ \&\ R_{n}\left(sUce\right)
+
+fEs\ \&\ R_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+R_{n}\left(sUce\right)\ >\ R_{n}\left(sUbf\right)
+
+/\therefore\ O_{n+1}\left(sUce\right)
+
+for conflicts between oughts, requirements and oughts, etc.
+
+This rule applies, mutatis mutandis, for any ordering > or < of 
+any norms (R, O, I) governing sUce and sUbf.
+
+4.1.2 Equivalence for Coincident Endogenous Rankings
+
+When the various endogenous rankings agree that neither of the 
+conflicting norms at level n dominates each other, they in effect 
+agree that the choice between the norms is arbitrary. We will 
+represent this by deriving norms of indifference at n + 1, 
+coupled with a requirement to choose.
+
+For conflicting requirements:
+
+eEs\ \&\ R_{n}\left(sUce\right)
+
+fEs\ \&\ R_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+R_{n}\left(sUce\right)\ <>\ R_{n}\left(sUbf\right)
+
+/\therefore\ I_{n+1}\left(sUce\right)\ \&\ I_{n+1}\left(sUbf\right)\ \&\ R_{n+1}\left[(sUce)\ \veebar\ (sUbf)\right]
+
+for conflicts between oughts, requirements and oughts, etc.
+
+This rule applies, mutatis mutandis, for any ordering > or < of 
+any norms (R, O, I) governing sUce and sUbf.
+
+4.2 Forced Choice Under Indifference
+
+If it is a matter of indifference at level n whether agent s 
+Undertakes c in e, or b in f, but s is required to choose exactly 
+one, then s ought at n + 1 to make an Arbitrary choice between c 
+and b.
+
+4.2.1 Forced Choice Under Indifference Within an Endeavour
+
+I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbe\right)
+
+\sim\diamond\left(sUce\ \&\ sUbe\right)
+
+\&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbe\right)\right]
+
+/\therefore\ O_{n+1}\left(sAcb\right)
+
+4.2.2 Forced Choice Under Indifference Across Endeavours
+
+I_{n}\left(sUce\right)\ \&\ I_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+\&\ R_{n}\left[\left(sUce\right)\ \veebar\ \left(sUbf\right)\right]
+
+/\therefore\ O_{n+1}\left(sAcb\right)
+
+4.3 Escalation from Exogenous Rankings 
+
+4.3.1 Comprehensiveness
+
+Some endeavours are embedded in more comprehensive endeavours, 
+for example a board game may be embedded in a childcare 
+operation. In such cases, where norms at level n conflict, those 
+from the more comprehensive endeavour are elevated to n + 1. 
+Thus, if both e and f are Endeavours for agent s, but although 
+undertaking both is logically or theoretically or practically 
+impossible, endeavour e is defined as more Comprehensive than f 
+for s, then s is required, at level n + 1, to Undertake c in e.
+
+This rule preserves the normative operator from e, to represent 
+the fact that e is more comprehensive. The less comprehensive 
+norm is left intact at level n to represent the fact that the 
+norm from f has not been altered but merely overridden.
+
+For requirements:
+
+eEs\ \&\ R_{n}\left(sUce\right)
+
+fEs\ \&\ R_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+eCfs
+
+/\therefore\ R(sUce)
+
+For other norms, this rule applies, mutatis mutandis, for any 
+combination of norms. Whatever the norm from the more 
+comprehensive and controlling of the endeavours at n, it 
+escalates to n + 1 as a norm of the same type.
+
+4.3.2 Exogenous Assessment
+
+Exogenous rankings also arise from the fact that some of our 
+endeavours are designed to assess or evaluate others, peer 
+review, judicial review and other types of activity where we 
+monitor and assess our own activities in terms of their prudence, 
+effects on others, law, morality and so forth. When we adopt an 
+endeavour as an assessment mechanism for other target endeavours, 
+we use it to construct norms that are about those of its targets, 
+and superordinate to them. We will represent that situation here 
+by saying that when the norms of an assessment (or critical 
+endeavour) conflict an level n with those of its target 
+endeavour, the target's norms are rejected, and the norms from 
+the assessment (critique) are elevated to n + 1.
+
+Thus, if both e and f are Endeavours for agent s, but although 
+undertaking both is logically or theoretically or practically 
+impossible, endeavour e is defined as exogenous aSsessment of f 
+for s, then s is required, at level n + 1, to Undertake c in e.
+
+For conflicting requirements:
+
+eEs\ \&\ R_{n}\left(sUce\right)
+
+fEs\ \&\ R_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+eSfs
+
+/\therefore\ R_{n+1}(sUce)
+
+For other norms, this rule applies, mutatis mutandis, for any 
+combination of norms. Whatever conflicting norms emerges from the 
+assessment endeavour at n, it escalates to n + 1 as a norm of the 
+same type.
+
+5 Transcendence
+
+Rules governing the construction of normative propositions 
+without ordinal subscripts (moral or ethical norms).
+
+5.1 Transcendent Assessment
+
+Normative propositions representing practical reasoning 
+all-things-considered are written (or may be rewritten) with 
+unsubscripted normative operators, and are interpreted as 
+representing moral norms. Thus, if endeavour e for s is an 
+aSsessment, and e for s is Practical reasoning 
+all-things-considered, and these things generate a normative 
+proposition via the rule of exogenous assessment, then that 
+normative proposition is unsubscripted.
+
+For requirements:
+
+eEs\ \&\ ePs\ \&\ R_{n}\left(sUce\right)
+
+fEs\ \&\ R_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+eSfs
+
+/\therefore\ R(sUce)
+
+5.2 Transcendent Comprehensiveness
+
+The same logic as above holds for applications of the rule of 
+comprehensiveness.
+
+For requirements:
+
+eEs\ \&\ ePs\ \&\ R_{n}\left(sUce\right)
+
+fEs\ \&\ R_{n}\left(sUbf\right)
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+eCfs
+
+/\therefore\ R(sUce)
+
+For other norms, this rule applies, mutatis mutandis, for any 
+combination of norms. Whatever the proposition from practical 
+reasoning all-things-considered, it escalates to an unsubscripted 
+one of the same type.
+
+5.3 Conflicting Moral Requirements
+
+Forced Moral Choice: 
+
+Conflicts amongst unsubscripted, coordinate normative 
+propositions may force an arbitrary choice. When this happens the 
+arbitrary choice has effectively become the more encompassing 
+norm. Thus, if it is impossible for s to do both c and b, in the 
+same or different endeavours, and if both c and b are 
+unsubscripted requirements for s, and there is an unsubscripted 
+requirement that s do one or the other, then the forced-choice 
+requirements generates a moral requirement to make an Arbitrary 
+choice between the two.
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+R\left(sUce\right)\ \&\ R\left(sUbf\right)
+
+R\left(sUce\right)\ <>\ R\left(sUbf\right)
+
+R(sUce\ \veebar\ sUbf)
+
+/\therefore\ R(sAcb)
+
+5.4 Conflicting Moral Oughts
+
+If both c and b are unsubscripted oughts for s that are jointly 
+impossible to undertake, and a choice between them is forced, we 
+get a moral requirement to make an Arbitrary choice between the 
+two.
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+O\left(sUce\right)\ \&\ O\left(sUbf\right)
+
+O\left(sUce\right)\ <>\ O\left(sUbf\right)
+
+R(sUce\ \veebar\ sUbf)
+
+/\therefore\ R(sAcb)
+
+5.5 Conflicting Moral Indifference
+
+If both c and b are unsubscripted indifferences, and a choice is 
+forced, we get a moral requirement to make an Arbitrary choice.
+
+\sim\diamond\left(sUce\ \&\ sUbf\right)
+
+I\left(sUce\right)\ \&\ I\left(sUbf\right)
+
+I\left(sUce\right)\ <>\ I\left(sUbf\right)
+
+R(sUce\ \veebar\ sUbf)
+
+/\therefore\ R(sAcb)
+
+5.6 Closure for Moral Indifference
+
+If it is a matter of indifference whether or not s Undertakes c 
+in e, but a choice between undertaking c or ~c is forced, we use 
+a conjunction of them to represent the forced choice, which then 
+generates a moral requirement for s to make an Arbitrary choice 
+between c and ~c.
+
+\sim\diamond[\left(sUce\ \&\ \sim\left(sUce\right)\right)]
+
+IsUce\ \&\ I\sim\left(sUce\right)
+
+R\left(sUce\ \veebar\ \sim sUse\right)
+
+/\therefore\ R(sAc\sim c)
+
+6 Axioms of Stoic Normative Logic
+
+Stoics add the following postulates specific to their ethical 
+doctrines.
+
+6.1 Axiom of Encompassment
+
+The exercise of agency through practical intelligence, including 
+practical reasoning all-things-considered, is the most 
+comprehensive of an agents endeavours. That is, in every case, if 
+endeavour x for agent s is the exercise of Agency through 
+practical intelligence and endeavour y for s is not, then x is 
+more comprehensive than y for s.
+
+\vdash\ \left(x\right)\ \left(y\right)\ [\left(xEs\ \&\ yEs\ \&\ xAs\ \&\ y\sim As\right)\ \supset\ xCys]
+
+6.2 Axiom of Finality
+
+There is no assessment endeavour exogenous to the exercise of 
+practical reasoning all-things-considered. That is, in every 
+case, if endeavour x for agent s is pracTical reasoning 
+all-things-considered and endeavour y for s is not, then y is not 
+an aSsessment mechanism for x for s.
+
+\vdash\ \left(x\right)\ \left(y\right)\ [\left(xEs\ \&\ yEs\ \&\ xTs\ \&\ y\sim Ts\right)\ y\sim Sys]
+
+6.3 Axiom of Moral Priority
+
+Unsubscripted norms are superordinate to subscripted ones. If N 
+stands for any normative operator and P stands for a wff of any 
+form, then:
+
+\vdash\ NP\ >\ N_{n}P
+
+6.4 Axiom of Moral Rank
+
+The order R > O > I holds for unsubscripted (i.e. moral) 
+normative propositions.
+
+\vdash\ RP\ >\ OP\ >\ IP
+
+6.5 Axiom of Closure
+
+If no normative proposition at any level can be constructed for a 
+given course of conduct or state of being (that is, if a 
+situation is normatively open), the relevant proposition is 
+closed with an unsubscripted ought-not. That is, if it is not the 
+case that either a subscripted or unsubscripted normative 
+operator N governs c for s in e, then s ought not to Undertake c 
+in e.
+
+\vdash\ [N\left(sUce\right)\ \vee\ N_{n}\left(sUce\right)]\ \supset\ O\sim\left(sUce\right)
+
+6.6 Axiom of Futility
+
+If any norm represented by an atomic normative proposition (not a 
+conjunction of them), is logically, theoretically, or practically 
+impossible to carry out, it yields an unsubscripted prohibition. 
+That is, if any normative operator N governs c for s in e, and it 
+is logically, theoretically, or practically impossible for s to 
+Undertake c in e, then s is required not to Undertake c in e, and 
+that requirement dominates the original norm.
+
+\vdash\ [N\left(sUce\right)\ \&\ \sim\diamond\left(sUce\right)]\ \supset\ R\sim\left(sUce\right)\ \&\ [R\sim\left(sUce\right)\ >\ N\left(sUce\right)]
+
+7 Immediate Inferences
+
+7.1 From Stronger to Weaker
+
+If the stronger proposition is proved, we can conclude the weaker 
+counterparts are proved:
+
+R_{n}w\ /\therefore\ O_{n}w
+
+I_{n}w\ /\therefore\ \sim O_{n}w\ \&\ \sim R_{n}w
+
+7.2 From Opposites
+
+7.2.1 Contradictories
+
+Contradictories can be neither jointly true nor jointly false:
+
+I_{n}w\ /\therefore\ \sim\left(R_{n}w\right) and vice versa.
+
+I_{n}w\ /\therefore\ \sim\left(R_{n}\sim w\right)
+
+I_{n}w\ /\therefore\ \sim\left(O_{n}w\right) 
+
+I_{n}w\ /\therefore\ \sim\left(O_{n}\sim w\right)
+
+R_{n}w\ /\therefore\ \sim\left(I_{n}w\right)
+
+R_{n}\sim w\ /\therefore\ \sim\left(I_{n}w\right)
+
+O_{n}w\ /\therefore\ \sim\left(I_{n}w\right)
+
+O_{n}\sim w\ /\therefore\ \sim\left(I_{n}w\right)
+
+7.2.2 Contraries
+
+Contraries cannot be jointly true but can be jointly false:
+
+R_{n}w\ /\therefore\ \sim\left(R_{n}\sim w\right)
+
+R_{n}w\ /\therefore\ \sim\left(O_{n}\sim w\right)
+
+and:
+
+R_{n}\sim w\ /\therefore\ \sim\left(R_{n}w\right)
+
+R_{n}\sim w\ /\therefore\ \sim\left(O_{n}w\right)
+
+and:
+
+O_{n}w\ /\therefore\ \sim\left(O_{n}\sim w\right)
+
+O_{n}\sim w\ /\therefore\ \sim\left(O_{n}w\right)
+
+Note I_{n}w and I_{n}\sim w are definitional equivalents and thus 
+not contraries.
+
