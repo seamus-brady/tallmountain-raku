@@ -13,6 +13,9 @@
     "openai_chat_completion_model": "gpt-4o-mini",
     "openai_structured_output_attempts": 4
   },
+  "content_filter": {
+    "exclude_categories": "Economic Harm"
+  },
   "for_testing": {
     "test_string_value": "Hello world!",
     "test_numeric_value": "42"

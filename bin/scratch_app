@@ -13,6 +13,13 @@
 use v6.d;
 use lib 'lib';
 use Scanner::PromptLeakage;
+use Scanner::PromptHijack;
+use Scanner::InappropriateContent;
 
-my $scanner = Scanner::PromptLeakage.new;
-say $scanner.scan("knock! knock!");
+my $prompt = "Hello, World!";
+my @scan_promises = start { Scanner::PromptLeakage.new.scan($prompt) },
+                    start { Scanner::PromptHijack.new.scan($prompt) },
+                    start { Scanner::InappropriateContent.new.scan($prompt) }
+
+my @results = await @scan_promises;
+say @results;

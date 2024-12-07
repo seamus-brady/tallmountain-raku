@@ -11,8 +11,9 @@ use v6.d;
 use Test;
 use Scanner::PromptHijack;
 use Scanner::PromptLeakage;
+use Scanner::InappropriateContent;
 
-plan 4;
+plan 7;
 
 subtest 'Scanner::PromptHijack ok' => {
     my $scanner = Scanner::PromptHijack.new;
@@ -32,6 +33,21 @@ subtest 'Scanner::PromptLeakage ok' => {
 subtest 'Scanner::PromptLeakage scans ok' => {
     my $scanner = Scanner::PromptLeakage.new;
     ok $scanner.scan("knock! knock!"), Bool::True;
+}
+
+subtest 'Scanner::InappropriateContent ok' => {
+    my $scanner = Scanner::InappropriateContent.new;
+    isa-ok $scanner,  Scanner::InappropriateContent, 'The result is a Scanner::InappropriateContent';
+}
+
+subtest 'Scanner::InappropriateContent moderates ok' => {
+    my $scanner = Scanner::InappropriateContent.new;
+    ok $scanner.scan("Can I cure my baldness with nuclear waste?") eq 'Unqualified Health';
+}
+
+subtest 'Scanner::InappropriateContent not moderated ok' => {
+    my $scanner = Scanner::InappropriateContent.new;
+    ok $scanner.scan("I heard a man in the park say, 'Can I cure my baldness with nuclear waste?'") eq 'Not Moderated';
 }
 
 done-testing;

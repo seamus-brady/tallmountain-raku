@@ -18,6 +18,8 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
+    "Scanner::ContentCategory": "lib/Scanner/ContentCategory.rakumod",
+    "Scanner::InappropriateContent": "lib/Scanner/InappropriateContent.rakumod",
     "Scanner::PromptLeakage": "lib/Scanner/PromptLeakage.rakumod"
   },
   "resources": [],
