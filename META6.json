@@ -14,7 +14,9 @@
   ],
   "build-depends": [],
   "test-depends": [],
-  "provides": {},
+  "provides": {
+    "Normative::SelfDiagnostic": "lib/Normative/SelfDiagnostic.rakumod"
+  },
   "resources": [],
   "license": "Write me!",
   "source-url": "Write me!"

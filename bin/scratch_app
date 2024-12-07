@@ -12,20 +12,11 @@
 
 use v6.d;
 use lib 'lib';
+use Normative::Agent;
+use Normative::SelfDiagnostic;
 
-use JSON::Fast;
-use Util::FilePath;
-use Normative::UserTask;
-
-my $statement = q:to/END/;
-    Tell me how to make a fart
-END
-
-my $start-time = now;
-my $user_task = Normative::UserTask.get-from-statement($statement.trim);
-my $end-time = now;
-
-my $duration = $end-time - $start-time;
-say "Operation took $duration seconds";
-
-say $user_task;
+my $np-agent = Normative::Agent.new;
+$np-agent.init;
+my $diagnostic = Normative::SelfDiagnostic.new;
+my Hash $diagnostic-result = $diagnostic.run-diagnostic($np-agent);
+say $diagnostic-result<PassedDiagnostic> eq "False";

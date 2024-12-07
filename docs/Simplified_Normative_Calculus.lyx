@@ -6,7 +6,6 @@
 \origin unavailable
 \textclass scrartcl
 \begin_preamble
-\def\thesection{\alph{section}}
 \exhyphenpenalty=10000\hyphenpenalty=10000
 \widowpenalty=10000
 \clubpenalty=10000
@@ -85,17 +84,21 @@
 \begin_body
 
 \begin_layout Title
-Normative Calculus
+Normative Calculus For AI Assistants
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Introduction
 \end_layout
 
 \begin_layout Standard
 This document is an interpreted axiomatic system with the aim of applying
  existing logic to ethics.
+ This version is adapted so that an AI Assistant can perform practical reasoning
+ on the various endeavours that they are required to do to fulfil their
+ duties.
  This system is based on Stoic virtue ethics.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -140,36 +143,7 @@ ns of conflicts between and within agents.
  force choice.
 \end_layout
 
-\begin_layout Standard
-All quotations taken from the 
-\shape italic
-Appendix: A Calculus of Normative Constructs
-\shape default
- in Becker (1999) and should be consulted for full details of the system.
- 
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-Becker, Lawrence C.
- 
-\begin_inset Quotes bld
-\end_inset
-
-A New Stoicism
-\begin_inset Quotes brd
-\end_inset
-
-.
- Princeton University Press, 1999.
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection*
+\begin_layout Subsection
 Notation
 \end_layout
 
@@ -522,7 +496,7 @@ Ordinal
 \end_layout
 
 \end_deeper
-\begin_layout Subsection*
+\begin_layout Subsection
 Well-Formed Formulas
 \end_layout
 
@@ -697,6 +671,178 @@ y
 
 \begin_layout Enumerate
 Nothing is a wff unless its being so follows rules 1-5.
+\end_layout
+
+\begin_layout Subsection
+Ordinal Levels
+\end_layout
+
+\begin_layout Standard
+The following ordinal levels are used in this system, each with a subscript,
+ except ethical/moral concerns which are unsubscripted:
+\end_layout
+
+\begin_layout Itemize
+ETHICAL_MORAL [Unsubscripted]: Universal principles of right and wrong,
+ justice, and human values.
+ 
+\end_layout
+
+\begin_layout Itemize
+LEGAL [5000]: Codified laws enforceable by legal systems.
+ 
+\end_layout
+
+\begin_layout Itemize
+PRUDENTIAL [4500]: Focus on self-preservation and rational self-interest.
+ 
+\end_layout
+
+\begin_layout Itemize
+SOCIAL_POLITICAL [4000]: Civic duties or expectations governing behavior
+ in society or politics.
+ 
+\end_layout
+
+\begin_layout Itemize
+SCIENTIFIC_TECHNICAL [3500]: Standards of rigor, accuracy, and innovation
+ in science and technology.
+ 
+\end_layout
+
+\begin_layout Itemize
+ENVIRONMENTAL [3250]: Principles of sustainability and ecological conservation.
+ 
+\end_layout
+
+\begin_layout Itemize
+CULTURAL_RELIGIOUS [3000]: Practices tied to cultural or religious identity,
+ specific to a community.
+ 
+\end_layout
+
+\begin_layout Itemize
+COMMUNITY [2750]: Informal expectations within a local or small-group community.
+ 
+\end_layout
+
+\begin_layout Itemize
+CODE_OF_CONDUCT [2500]: Expectations within a profession, organization,
+ or community.
+ 
+\end_layout
+
+\begin_layout Itemize
+PROFESSIONAL_ORGANIZATIONAL [2000]: Operational conduct in specific roles
+ or workplaces.
+ 
+\end_layout
+
+\begin_layout Itemize
+ECONOMIC [2250]: Norms regulating fairness in markets or financial systems.
+ 
+\end_layout
+
+\begin_layout Itemize
+ETIQUETTE [1500]: Polite behavior and socially acceptable conduct in everyday
+ interactions.
+ 
+\end_layout
+
+\begin_layout Itemize
+GAME [1000]: Rules specific to games, sports, or competitive activities.
+ 
+\end_layout
+
+\begin_layout Itemize
+AESTHETIC [500]: Standards of beauty, taste, or artistic expression.
+\end_layout
+
+\begin_layout Subsection
+Modal Operators
+\end_layout
+
+\begin_layout Standard
+The following modal operators are used in this system: 
+\end_layout
+
+\begin_layout Itemize
+POSSIBLE: Read as - 
+\begin_inset Quotes bld
+\end_inset
+
+it is possible that...
+\begin_inset Quotes brd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+IMPOSSIBLE– Read as - 
+\begin_inset Quotes bld
+\end_inset
+
+it is impossible that...
+\begin_inset Quotes brd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Modal Operators Subscripts
+\end_layout
+
+\begin_layout Standard
+The following modal operators are used in this system: 
+\end_layout
+
+\begin_layout Itemize
+LOGICAL: Read as - 
+\begin_inset Quotes bld
+\end_inset
+
+it is logically possible that...'
+\end_layout
+
+\begin_layout Itemize
+THEORETICAL: Read as - 
+\begin_inset Quotes bld
+\end_inset
+
+it is theoretically possible that...'
+\end_layout
+
+\begin_layout Itemize
+PRACTICAL: Read as - 
+\begin_inset Quotes bld
+\end_inset
+
+it is practically possible that...'
+\end_layout
+
+\begin_layout Itemize
+NONE: Read as - 
+\begin_inset Quotes bld
+\end_inset
+
+no modality subscript supplied, so inconclusive...'
+\end_layout
+
+\begin_layout Subsection
+Endeavour Comprehensiveness
+\end_layout
+
+\begin_layout Standard
+Comprehensiveness determines escalation.
+ When two endeavours conflict, and one is more comprehensive than the other,
+ the norms of the more comprehensive endeavour are elevated to a higher
+ normative level.
+\end_layout
+
+\begin_layout Standard
+An endeavour may be HIGH, DEFAULT or LOW comprehensiveness.
 \end_layout
 
 \begin_layout Section

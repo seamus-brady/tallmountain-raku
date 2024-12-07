@@ -81,10 +81,11 @@ class Normative::Agent {
         try {
             my $config-dir = Util::FilePath.new.config-path;
             my $json-file = "$config-dir/highest-endeavour.json";
+            say $json-file;
             my $json = slurp $json-file;
             return from-json($json);
             CATCH {
-                my Str $message = "Error loading configuration for highest endeavour!";
+                my Str $message = "Error loading configuration for highest endeavour: $_";
                 self.LOGGER.error($message);
                 Normative::Agent::Exception.new(message => $message).throw;
             }
@@ -99,11 +100,36 @@ class Normative::Agent {
             my $json = slurp $json-file;
             return from-json($json);
             CATCH {
-                my Str $message = "Error loading configuration for system endeavours!";
+                my Str $message = "Error loading configuration for system endeavours: $_";
                 self.LOGGER.error($message);
                 Normative::Agent::Exception.new(message => $message).throw;
             }
         }
+    }
+
+    method highest-endeavour-to-markdown() {
+        my $endeavour = $!highest-endeavour;
+        return "## Highest Endeavour\n\n" ~
+                "### Name\n" ~ $endeavour.name ~ "\n\n" ~
+                "### Description\n" ~ $endeavour.description ~ "\n\n" ~
+                "### Goal\n" ~ $endeavour.goal ~ "\n\n" ~
+                "### Normative Propositions\n" ~
+                $endeavour.normative-propositions.map({
+                    $_.to-markdown ~ "\n"
+                }).join;
+    }
+
+    method system-endeavours-to-markdown() {
+        return "## System Endeavours\n\n" ~
+                @!system-endeavours.map({
+                    "### Name\n" ~ $_.name ~ "\n\n" ~
+                            "### Description\n" ~ $_.description ~ "\n\n" ~
+                            "### Goal\n" ~ $_.goal ~ "\n\n" ~
+                            "### Normative Propositions\n" ~
+                            $_.normative-propositions.map({
+                                $_.to-markdown ~ "\n"
+                            }).join ~ "\n"
+                }).join("\n");
     }
 }
 
