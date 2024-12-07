@@ -10,12 +10,15 @@
   "depends": [
     "JSON::Fast",
     "Cro::HTTP",
-    "Config::Clever"
+    "Config::Clever",
+    "UUID::V4",
+    "LibXML",
+    "Array::Circular"
   ],
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Normative::SelfDiagnostic": "lib/Normative/SelfDiagnostic.rakumod"
+    "Scanner::PromptLeakage": "lib/Scanner/PromptLeakage.rakumod"
   },
   "resources": [],
   "license": "Write me!",

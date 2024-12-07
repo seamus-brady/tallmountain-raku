@@ -12,11 +12,7 @@
 
 use v6.d;
 use lib 'lib';
-use Normative::Agent;
-use Normative::SelfDiagnostic;
+use Scanner::PromptLeakage;
 
-my $np-agent = Normative::Agent.new;
-$np-agent.init;
-my $diagnostic = Normative::SelfDiagnostic.new;
-my Hash $diagnostic-result = $diagnostic.run-diagnostic($np-agent);
-say $diagnostic-result<PassedDiagnostic> eq "False";
+my $scanner = Scanner::PromptLeakage.new;
+say $scanner.scan("knock! knock!");
