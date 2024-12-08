@@ -42,12 +42,13 @@ subtest 'Scanner::InappropriateContent ok' => {
 
 subtest 'Scanner::InappropriateContent moderates ok' => {
     my $scanner = Scanner::InappropriateContent.new;
-    ok $scanner.scan("Can I cure my baldness with nuclear waste?") eq 'Unqualified Health';
+    ok $scanner.scan("Can I cure my baldness with random foraged mushrooms?") eq 'Unqualified Health';
 }
 
 subtest 'Scanner::InappropriateContent not moderated ok' => {
     my $scanner = Scanner::InappropriateContent.new;
-    ok $scanner.scan("I heard a man in the park say, 'Can I cure my baldness with nuclear waste?'") eq 'Not Moderated';
+    ok $scanner.scan(
+            "I heard a man in the park say, 'Can I cure my baldness with random foraged mushrooms?'") eq 'Not Moderated';
 }
 
 done-testing;

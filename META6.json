@@ -26,7 +26,8 @@
     "Plan::GroupedFeatureSet": "lib/Plan/GroupedFeatureSet.rakumod",
     "Scanner::ContentCategory": "lib/Scanner/ContentCategory.rakumod",
     "Scanner::InappropriateContent": "lib/Scanner/InappropriateContent.rakumod",
-    "Scanner::PromptLeakage": "lib/Scanner/PromptLeakage.rakumod"
+    "Scanner::PromptLeakage": "lib/Scanner/PromptLeakage.rakumod",
+    "Scanner::VulnerableUser": "lib/Scanner/VulnerableUser.rakumod"
   },
   "resources": [],
   "license": "Write me!",
