@@ -90,7 +90,6 @@ class Normative::Agent {
         try {
             my $config-dir = Util::FilePath.new.config-path;
             my $json-file = "$config-dir/highest-endeavour.json";
-            say $json-file;
             my $json = slurp $json-file;
             return from-json($json);
             CATCH {
