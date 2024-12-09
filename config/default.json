@@ -17,7 +17,7 @@
     "exclude_categories": "Economic Harm"
   },
   "reactive_stage": {
-    "threat_detected_error": "Apologies! Threat detected, unable to process. Perhaps try rephrasing your request?"
+    "threat_detected_error": " My apologies, but I can't assist with that."
   },
   "for_testing": {
     "test_string_value": "Hello world!",
