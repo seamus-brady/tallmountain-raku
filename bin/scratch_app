@@ -12,11 +12,32 @@
 
 use v6.d;
 use lib 'lib';
-use Normative::Agent;
-use Normative::SelfDiagnostic;
+use Scanner::VulnerableUser;
+use Scanner::PromptLeakage;
+use Scanner::PromptHijack;
+use Scanner::InappropriateContent;
+use Normative::UserTask;
+use Cycle::Stage::ReactiveScan;
 
-my $np-agent = Normative::Agent.new;
-$np-agent.init;
-my $diagnostic = Normative::SelfDiagnostic.new;
-my Hash $diagnostic-result = $diagnostic.run-diagnostic($np-agent);
-say $diagnostic-result<PassedDiagnostic> eq "False";
+
+# Start timer
+my $start-time = now;
+
+my $prompt = "Hello, World!";
+my @scan_promises = start { Scanner::PromptLeakage.new.scan($prompt) },
+                    start { Scanner::PromptHijack.new.scan($prompt) },
+                    start { Scanner::InappropriateContent.new.scan($prompt) },
+                    start { Scanner::VulnerableUser.new.scan($prompt) },
+                    start { Normative::UserTask.get-from-statement($prompt) };
+
+my @results = await @scan_promises;
+my $scan_results = Cycle::Stage::ReactiveScan.new-from-results(@results);
+
+# End timer
+my $end-time = now;
+
+# Calculate and print elapsed time
+my $elapsed-time = $end-time - $start-time;
+say "Elapsed time: $elapsed-time seconds";
+
+say $scan_results.has-leakage-or-hijack-attempt ?? "Prompt contains leakage or hijack attempt" !! "Prompt does not contain leakage or hijack attempt";

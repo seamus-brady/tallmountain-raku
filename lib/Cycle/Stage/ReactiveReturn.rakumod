@@ -8,21 +8,9 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
+use Cycle::Stage::ReactiveScan;
+use Cycle::Stage::EarlyExit;
 
-class StringBuffer {
-    has Str $!buffer;
-
-    method add(Str $text) {
-        $!buffer = '' unless $!buffer.defined;
-        $!buffer ~= $text;
-    }
-
-    method get() {
-        return $!buffer // '';
-    }
-
-    method clear() {
-        $!buffer = '';
-    }
-}
+# either return a scan result or an early exit
+subset Cycle::Stage::ReactiveReturn where Cycle::Stage::ReactiveScan | Cycle::Stage::EarlyExit;
 

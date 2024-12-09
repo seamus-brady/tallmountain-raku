@@ -7,22 +7,11 @@
 #  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 use v6.d;
 
-class StringBuffer {
-    has Str $!buffer;
-
-    method add(Str $text) {
-        $!buffer = '' unless $!buffer.defined;
-        $!buffer ~= $text;
-    }
-
-    method get() {
-        return $!buffer // '';
-    }
-
-    method clear() {
-        $!buffer = '';
-    }
+class Plan::FeatureSet {
+    has Int $.importance where 1..3;  # importance between 1 and 3
+    has Str $.name;
+    has Str $.description = "";      # Optional description
 }
-

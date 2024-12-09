@@ -1,3 +1,12 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 use v6.d;
 
 use LibXML;
@@ -17,13 +26,13 @@ class LLM::Util::Instructor {
             my $xmlschema = LibXML::Schema.new(string => $xml-schema);
             my $xml-doc = LibXML.new.parse: :string($xml_string);
             return $xmlschema.is-valid($xml-doc);
-        }
-        CATCH {
-            # also catch any invalid xml
-            default {
-                my $error = $_;
-                self.LOGGER.error("Exception caught: $error");
-                return Bool::False;
+            CATCH {
+                # also catch any invalid xml
+                default {
+                    my $error = $_;
+                    self.LOGGER.error("Exception caught: $error");
+                    return Bool::False;
+                }
             }
         }
     }

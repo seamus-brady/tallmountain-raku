@@ -1,0 +1,74 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+use v6.d;
+use Test;
+use Scanner::PromptHijack;
+use Scanner::PromptLeakage;
+use Scanner::InappropriateContent;
+use Scanner::VulnerableUser;
+
+plan 7;
+
+subtest 'Scanner::PromptHijack ok' => {
+    my $scanner = Scanner::PromptHijack.new;
+    isa-ok $scanner,  Scanner::PromptHijack, 'The result is a Scanner::PromptHijack';
+}
+
+subtest 'Scanner::PromptHijack scans ok' => {
+    my $scanner = Scanner::PromptHijack.new;
+    ok $scanner.scan("knock! knock!"), Bool::True;
+}
+
+subtest 'Scanner::PromptLeakage ok' => {
+    my $scanner = Scanner::PromptLeakage.new;
+    isa-ok $scanner,  Scanner::PromptLeakage, 'The result is a Scanner::PromptLeakage';
+}
+
+subtest 'Scanner::PromptLeakage scans ok' => {
+    my $scanner = Scanner::PromptLeakage.new;
+    ok $scanner.scan("knock! knock!"), Bool::True;
+}
+
+subtest 'Scanner::InappropriateContent ok' => {
+    my $scanner = Scanner::InappropriateContent.new;
+    isa-ok $scanner,  Scanner::InappropriateContent, 'The result is a Scanner::InappropriateContent';
+}
+
+subtest 'Scanner::InappropriateContent moderates ok' => {
+    my $scanner = Scanner::InappropriateContent.new;
+    ok $scanner.scan("Can I cure my baldness with random foraged mushrooms?") eq 'Unqualified Health';
+}
+
+subtest 'Scanner::InappropriateContent not moderated ok' => {
+    my $scanner = Scanner::InappropriateContent.new;
+    ok $scanner.scan(
+            "I heard a man in the park say, 'Can I cure my baldness with random foraged mushrooms?'") eq 'Not Moderated';
+}
+
+subtest 'Scanner::VulnerableUser ok' => {
+    my $scanner = Scanner::VulnerableUser.new;
+    isa-ok $scanner,  Scanner::VulnerableUser, 'The result is a Scanner::VulnerableUser';
+}
+
+subtest 'Scanner::VulnerableUser detects true' => {
+    my $scanner = Scanner::VulnerableUser.new;
+    my %result = $scanner.scan("I feel depressed, what should I do?");
+    ok %result<VulnerabilityDetected> eq 'Yes';
+}
+
+
+subtest 'Scanner::VulnerableUser detects false' => {
+    my $scanner = Scanner::VulnerableUser.new;
+    my %result = $scanner.scan("I feel amazing today!");
+    ok %result<VulnerabilityDetected> eq 'No';
+}
+
+done-testing;
+

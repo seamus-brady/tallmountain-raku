@@ -1,11 +1,27 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 use v6.d;
 use UUID::V4;
 use Util::Logger;
+use Util::Config;
 use Cycle::Payload::TaintedString;
 use Cycle::Buffer::Chat;
+use Cycle::Stage::Reactive;
+use Cycle::Stage::ReactiveScan;
+use Cycle::Stage::EarlyExit;
+use Cycle::Stage::ReactiveReturn;
 use LLM::Messages;
 use LLM::Facade;
+use LLM::AdaptiveRequestMode;
 use Normative::UserTask;
+
 
 class Cycle::Cognitive {
     # Represents a single cognitive cycle for handling a prompt input.
@@ -28,15 +44,34 @@ class Cycle::Cognitive {
         $!index = 0;
     }
 
-    method run-one-cycle(Cycle::TaintedString $tainted-string) {
+    method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
         self.increment-index();
         self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
+
+        # run the reactive stage
+        my Cycle::Stage::ReactiveReturn $reactive-return = Cycle::Stage::Reactive.new().run($tainted-string);
+
+        # scan finds a prompt based attack - handle it
+        if $reactive-return ~~ Cycle::Stage::EarlyExit {
+            return self.handle-reactive-early-exit($reactive-return);
+        }
+
+        # scan is OK
+        if $reactive-return ~~ Cycle::Stage::ReactiveScan {
+            self.LOGGER.debug("Reactive scan result: " ~ $reactive-return.gist);
+        }
         # build a response
         self.chat-buffer.add-user-message($tainted-string.payload);
-        my $user_task = Normative::UserTask.get-from-statement($tainted-string.payload);
-        # my $response = $.llm_client.completion-string(self.chat-buffer.messages);
-        self.chat-buffer.add-assistant-message($user_task.gist);
-        return $user_task.gist;
+        my $response = $.llm_client.completion-string(self.chat-buffer.messages);
+        return $response;
+    }
+
+    method handle-reactive-early-exit($reactive-return --> Str){
+        self.LOGGER.debug("Exiting early as prompt attack suspected!" ~ $reactive-return.gist);
+        my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
+        self.chat-buffer.add-user-message("<REDACTED USER MESSAGE - PROMPT ATTACK SUSPECTED>");
+        self.chat-buffer.add-assistant-message($response);
+        return $response;
     }
 
     method gist() {

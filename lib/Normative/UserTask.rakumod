@@ -1,3 +1,12 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
@@ -52,7 +61,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
         my $goal-description-promise = start { Normative::UserTask.new.get-goal-description($statement) };
 
         # Wait for both results
-        my ($extracted_norms, $goals-description) = await  $norm-extractor-promise, $goal-description-promise;
+        my ($extracted_norms, $goals-description) = await $norm-extractor-promise, $goal-description-promise;
 
         # get the extracted norms
         my $analysis_result = Normative::NormativeAnalysisResult.new-from-data($extracted_norms.Hash);
