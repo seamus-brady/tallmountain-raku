@@ -39,13 +39,13 @@ subtest 'Normative::Agent get endeavour by UUID' => {
 subtest 'Normative::Agent code of conduct' => {
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
-    isa-ok $np-agent.get-code-of-conduct-norms, Normative::Role::Endeavour;
+    isa-ok $np-agent.get-code-of-conduct-endeavour, Normative::Role::Endeavour;
 }
 
 subtest 'Normative::Agent system integrity' => {
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
-    isa-ok $np-agent.get-system-integrity-norms, Normative::Role::Endeavour;
+    isa-ok $np-agent.get-system-integrity-endeavour, Normative::Role::Endeavour;
 }
 
 done-testing;

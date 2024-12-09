@@ -12,32 +12,44 @@
 
 use v6.d;
 use lib 'lib';
-use Scanner::VulnerableUser;
-use Scanner::PromptLeakage;
-use Scanner::PromptHijack;
-use Scanner::InappropriateContent;
+use Util::FilePath;
+use Normative::Agent;
+use Normative::Role::Endeavour;
+use LLM::Facade;
+use LLM::Messages;
 use Normative::UserTask;
-use Cycle::Stage::ReactiveScan;
 
+my $agent = Normative::Agent.new;
+$agent.init;
 
-# Start timer
-my $start-time = now;
+my $nc = Util::FilePath.new.get-nc-prompt;
 
-my $prompt = "Hello, World!";
-my @scan_promises = start { Scanner::PromptLeakage.new.scan($prompt) },
-                    start { Scanner::PromptHijack.new.scan($prompt) },
-                    start { Scanner::InappropriateContent.new.scan($prompt) },
-                    start { Scanner::VulnerableUser.new.scan($prompt) },
-                    start { Normative::UserTask.get-from-statement($prompt) };
+my $client = LLM::Facade.new();
+my $messages = LLM::Messages.new;
 
-my @results = await @scan_promises;
-my $scan_results = Cycle::Stage::ReactiveScan.new-from-results(@results);
+my $statement = "I would like to create an apple pie - can you help?";
+my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 
-# End timer
-my $end-time = now;
+my $prompt = qq:to/END/;
+        === INSTRUCTIONS ===
+        - Your task is to understand the Normative Calculus and to apply it as below to see if an AI Assistant's norms
+          are going to be contradicted by a user task it has been requested to undertake.
+        - You will receive an internal endeavour from the AI assistant and the user task endeavour.
+        - Please treat the AI Assistant's endeavour as the more comprehensive endeavour under the Normative Calculus.
 
-# Calculate and print elapsed time
-my $elapsed-time = $end-time - $start-time;
-say "Elapsed time: $elapsed-time seconds";
+        === BEGIN AI ASSISTANT ENDEAVOUR ===
+        {$agent.get-system-integrity-endeavour.to-markdown}
+        === END AI ASSISTANT ENDEAVOUR ===
 
-say $scan_results.has-leakage-or-hijack-attempt ?? "Prompt contains leakage or hijack attempt" !! "Prompt does not contain leakage or hijack attempt";
+        === BEGIN USER TASK ENDEAVOUR ===
+        {$user_task.to-markdown}
+        === END USER TASK ENDEAVOUR ===
+
+        === BEGIN NORMATIVE CALCULUS ===
+        $nc
+        === END NORMATIVE CALCULUS ===
+        END
+
+$messages.build-messages($prompt.trim, LLM::Messages.USER);
+my %response = $client.completion-string($messages.get-messages);
+say %response;

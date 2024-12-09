@@ -66,7 +66,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
         # get the extracted norms
         my $analysis_result = Normative::NormativeAnalysisResult.new-from-data($extracted_norms.Hash);
 
-        self.bless(
+        return self.create(
             statement => $statement,
             name => $goals-description<name>,
             goal => $goals-description<goal>,

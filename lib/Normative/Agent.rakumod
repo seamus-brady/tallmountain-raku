@@ -152,13 +152,13 @@ class Normative::Agent {
         return Nil;
     }
 
-    method get-code-of-conduct-norms(--> Normative::Role::Endeavour) {
+    method get-code-of-conduct-endeavour(--> Normative::Role::Endeavour) {
         my $config = Util::Config.new;
         my $code_of_conduct_uuid =  $config.get_config('system_endeavours', 'code_of_conduct_uuid');
         return self.get-system-endeavour-by-uuid($code_of_conduct_uuid);
     }
 
-    method get-system-integrity-norms(--> Normative::Role::Endeavour) {
+    method get-system-integrity-endeavour(--> Normative::Role::Endeavour) {
         my $config = Util::Config.new;
         my $code_of_conduct_uuid =  $config.get_config('system_endeavours', 'system_integrity_uuid');
         return self.get-system-endeavour-by-uuid($code_of_conduct_uuid);

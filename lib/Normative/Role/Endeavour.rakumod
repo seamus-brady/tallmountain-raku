@@ -14,11 +14,11 @@ role Normative::Role::Endeavour {
     has Normative::Proposition @.normative-propositions;
 
     method create(:$name,
-               :$goal,
-               :$description,
-               :$uuid,
-               :$comprehensiveness,
-               :@normative-propositions) {
+                  :$goal,
+                  :$description,
+                  :$uuid,
+                  :$comprehensiveness,
+                  :@normative-propositions) {
         self.bless(
                 :name($name),
                 :goal($goal),
@@ -26,9 +26,8 @@ role Normative::Role::Endeavour {
                 :uuid($uuid // uuid-v4()),
                 :comprehensiveness($comprehensiveness // Normative::Comprehensiveness::DEFAULT),
                 :normative-propositions(@normative-propositions)
-       );
+                );
     }
-
 
     method gist {
         return qq:to/END_GIST/;
@@ -52,7 +51,7 @@ role Normative::Role::Endeavour {
         | Name                 | {$!name}   |
         | Goal                 | {$!goal}   |
         | Description          | {$!description} |
-        | UUID                 | {$!uuid}                         |
+        | UUID                 | {$!uuid // "Unknown UUID" }                         |
         | Comprehensiveness    | {$!comprehensiveness}            |
         END_ENDEAVOUR_TABLE
 
