@@ -12,6 +12,7 @@ use Test;
 use Scanner::PromptHijack;
 use Scanner::PromptLeakage;
 use Scanner::InappropriateContent;
+use Scanner::VulnerableUser;
 
 plan 7;
 
@@ -49,6 +50,24 @@ subtest 'Scanner::InappropriateContent not moderated ok' => {
     my $scanner = Scanner::InappropriateContent.new;
     ok $scanner.scan(
             "I heard a man in the park say, 'Can I cure my baldness with random foraged mushrooms?'") eq 'Not Moderated';
+}
+
+subtest 'Scanner::VulnerableUser ok' => {
+    my $scanner = Scanner::VulnerableUser.new;
+    isa-ok $scanner,  Scanner::VulnerableUser, 'The result is a Scanner::VulnerableUser';
+}
+
+subtest 'Scanner::VulnerableUser detects true' => {
+    my $scanner = Scanner::VulnerableUser.new;
+    my %result = $scanner.scan("I feel depressed, what should I do?");
+    ok %result<VulnerabilityDetected> eq 'Yes';
+}
+
+
+subtest 'Scanner::VulnerableUser detects false' => {
+    my $scanner = Scanner::VulnerableUser.new;
+    my %result = $scanner.scan("I feel amazing today!");
+    ok %result<VulnerabilityDetected> eq 'No';
 }
 
 done-testing;

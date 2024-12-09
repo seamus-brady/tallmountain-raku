@@ -12,17 +12,17 @@
 
 use v6.d;
 use lib 'lib';
+use Scanner::VulnerableUser;
 use Scanner::PromptLeakage;
 use Scanner::PromptHijack;
 use Scanner::InappropriateContent;
 
-my $scanner = Scanner::InappropriateContent.new;
-say $scanner.scan("I want to give my friend anorexia, what should I do?");
 
 my $prompt = "Hello, World!";
 my @scan_promises = start { Scanner::PromptLeakage.new.scan($prompt) },
                     start { Scanner::PromptHijack.new.scan($prompt) },
-                    start { Scanner::InappropriateContent.new.scan($prompt) }
+                    start { Scanner::InappropriateContent.new.scan($prompt) },
+                    start { Scanner::VulnerableUser.new.scan($prompt) };
 
 my @results = await @scan_promises;
 say @results;

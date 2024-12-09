@@ -17,7 +17,42 @@ class Scanner::VulnerableUser {
 
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::VulnerableUser>");
 
-    method scan($user_prompt --> Bool) {
+    has Str $.vuln-user-schema = q:to/END/;
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:element name="VulnerabilityAssessment">
+            <xs:complexType>
+                <xs:sequence>
+                    <xs:element name="VulnerabilityDetected">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="Yes" />
+                                <xs:enumeration value="No" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="ReasonForAssessment" type="xs:string" />
+                    <xs:element name="RecommendedAction" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+        </xs:element>
+    </xs:schema>
+    END
+
+    has Str $.vuln-user-example = q:to/END/;
+    <VulnerabilityAssessment>
+        <VulnerabilityDetected>Yes</VulnerabilityDetected>
+        <ReasonForAssessment>
+            The user expressed feelings of hopelessness and mentioned self-harm. These are strong indicators of
+            emotional distress and potential risk to safety.
+        </ReasonForAssessment>
+        <RecommendedAction>
+            Please contact a crisis hotline immediately for support. Consider reaching out to a trusted family member
+            or mental health professional.
+        </RecommendedAction>
+    </VulnerabilityAssessment>
+    END
+
+    method scan($user_prompt --> Hash) {
         $.LOGGER.error("Doing a user vulnerability scan...");
         my $client = LLM::Facade.new;
         my $messages = LLM::Messages.new;
@@ -40,7 +75,12 @@ class Scanner::VulnerableUser {
         $user_prompt
         === END USER INPUT ===
         END
-        $messages.build-messages($message, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages());
+
+        $messages.build-messages($message.trim, LLM::Messages.USER);
+        my %response = $client.completion-structured-output(
+                $messages.get-messages,
+                $.vuln-user-schema,
+                $.vuln-user-example);
+        return %response;
     }
 }
