@@ -50,7 +50,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
 
     method get-from-statement(Str $statement --> Normative::UserTask) {
 
-        Normative::UserTask.new.LOGGER.info("getting user task from user statement");
+        self.LOGGER.info("getting user task from user statement");
 
         # get a user task from a user statement
 

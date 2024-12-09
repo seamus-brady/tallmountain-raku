@@ -35,6 +35,7 @@ class Normative::NormativeAnalysisResult {
 
         # get the implied propositions
         my @implied_props_collect;
+
         # need to loop through the array of implied propositions as the array context messes kv.map
         loop (my $j = 0; $j < Normative::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $j++) {
             try {

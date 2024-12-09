@@ -9,9 +9,26 @@ role Normative::Role::Endeavour {
     has Str $.name;
     has Str $.goal;
     has Str $.description;
-    has Str $.uuid = uuid-v4();
-    has Normative::Comprehensiveness $.comprehensiveness = Normative::Comprehensiveness::DEFAULT;
+    has Str $.uuid;
+    has Normative::Comprehensiveness $.comprehensiveness;
     has Normative::Proposition @.normative-propositions;
+
+    method create(:$name,
+               :$goal,
+               :$description,
+               :$uuid,
+               :$comprehensiveness,
+               :@normative-propositions) {
+        self.bless(
+                :name($name),
+                :goal($goal),
+                :description($description),
+                :uuid($uuid // uuid-v4()),
+                :comprehensiveness($comprehensiveness // Normative::Comprehensiveness::DEFAULT),
+                :normative-propositions(@normative-propositions)
+       );
+    }
+
 
     method gist {
         return qq:to/END_GIST/;
@@ -53,6 +70,6 @@ role Normative::Role::Endeavour {
         }
 
         return $endeavour_heading ~ "\n" ~ $endeavour_table ~ "\n\n" ~ $propositions_heading ~ "\n" ~ $propositions_table;
-}
+    }
 
 }

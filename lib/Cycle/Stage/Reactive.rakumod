@@ -39,7 +39,7 @@ class Cycle::Stage::Reactive {
                             start { Scanner::PromptHijack.new.scan($prompt) },
                             start { Scanner::InappropriateContent.new.scan($prompt) },
                             start { Scanner::VulnerableUser.new.scan($prompt) },
-                            start { Normative::UserTask.get-from-statement($prompt) };
+                            start { Normative::UserTask.new.get-from-statement($prompt) };
         my @results = await @scan_promises;
 
         my $end-time = now;
