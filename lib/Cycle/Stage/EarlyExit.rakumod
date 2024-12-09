@@ -9,7 +9,7 @@
 
 use v6.d;
 
-class Cycle::Payload::TaintedString {
-    # A class that wraps incoming untrusted string based communications.
-    has Str $.payload;
+class Cycle::Stage::EarlyExit {
+    # used to flag that there was an issue with the cycle
+    has Str $.message;
 }

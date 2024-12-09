@@ -26,13 +26,13 @@ class LLM::Util::Instructor {
             my $xmlschema = LibXML::Schema.new(string => $xml-schema);
             my $xml-doc = LibXML.new.parse: :string($xml_string);
             return $xmlschema.is-valid($xml-doc);
-        }
-        CATCH {
-            # also catch any invalid xml
-            default {
-                my $error = $_;
-                self.LOGGER.error("Exception caught: $error");
-                return Bool::False;
+            CATCH {
+                # also catch any invalid xml
+                default {
+                    my $error = $_;
+                    self.LOGGER.error("Exception caught: $error");
+                    return Bool::False;
+                }
             }
         }
     }

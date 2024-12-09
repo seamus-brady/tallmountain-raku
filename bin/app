@@ -230,7 +230,7 @@ sub MAIN() {
                 $APP_LOGGER.debug("App received user request: '$request'");
 
                 # get a response but wrap in a tainted string
-                my $tainted-string = Cycle::TaintedString.new(payload => $request);
+                my $tainted-string = Cycle::Payload::TaintedString.new(payload => $request);
                 my $response = $cycle.run-one-cycle($tainted-string);
                 $APP_LOGGER.debug("App received bot response: '$response'");
 

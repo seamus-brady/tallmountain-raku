@@ -61,7 +61,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
         my $goal-description-promise = start { Normative::UserTask.new.get-goal-description($statement) };
 
         # Wait for both results
-        my ($extracted_norms, $goals-description) = await  $norm-extractor-promise, $goal-description-promise;
+        my ($extracted_norms, $goals-description) = await $norm-extractor-promise, $goal-description-promise;
 
         # get the extracted norms
         my $analysis_result = Normative::NormativeAnalysisResult.new-from-data($extracted_norms.Hash);

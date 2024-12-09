@@ -18,6 +18,10 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
+    "Cycle::Stage::EarlyExit": "lib/Cycle/Stage/EarlyExit.rakumod",
+    "Cycle::Stage::Reactive": "lib/Cycle/Stage/Reactive.rakumod",
+    "Cycle::Stage::ReactiveReturn": "lib/Cycle/Stage/ReactiveReturn.rakumod",
+    "Cycle::Stage::ReactiveScan": "lib/Cycle/Stage/ReactiveScan.rakumod",
     "Plan::Exception": "lib/Plan/Exception.rakumod",
     "Plan::Feature": "lib/Plan/Feature.rakumod",
     "Plan::FeatureSet": "lib/Plan/FeatureSet.rakumod",

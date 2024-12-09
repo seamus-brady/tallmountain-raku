@@ -8,8 +8,9 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
+use Cycle::Stage::ReactiveScan;
+use Cycle::Stage::EarlyExit;
 
-class Cycle::Payload::TaintedString {
-    # A class that wraps incoming untrusted string based communications.
-    has Str $.payload;
-}
+# either return a scan result or an early exit
+subset Cycle::Stage::ReactiveReturn where Cycle::Stage::ReactiveScan | Cycle::Stage::EarlyExit;
+
