@@ -14,7 +14,7 @@ use Scanner::PromptLeakage;
 use Scanner::InappropriateContent;
 use Scanner::VulnerableUser;
 
-plan 7;
+plan 10;
 
 subtest 'Scanner::PromptHijack ok' => {
     my $scanner = Scanner::PromptHijack.new;
