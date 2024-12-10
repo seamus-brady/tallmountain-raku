@@ -12,8 +12,8 @@ use LLM::Facade;
 use LLM::Messages;
 use Util::Config;
 use Normative::Role::Endeavour;
-use Normative::ImpliedNormExtractor;
-use Normative::NormativeAnalysisResult;
+use Normative::Analysis::ImpliedNormExtractor;
+use Normative::Analysis::NormativeAnalysisResult;
 
 
 class Normative::UserTask does Normative::Role::Endeavour {
@@ -54,7 +54,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
 
         # get a user task from a user statement
 
-        my $norm_extractor = Normative::ImpliedNormExtractor.new;
+        my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
 
         # start two promises to extract norms and get goal description
         my $norm-extractor-promise = start { $norm_extractor.extract-norm-props($statement) };
@@ -64,7 +64,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
         my ($extracted_norms, $goals-description) = await $norm-extractor-promise, $goal-description-promise;
 
         # get the extracted norms
-        my $analysis_result = Normative::NormativeAnalysisResult.new-from-data($extracted_norms.Hash);
+        my $analysis_result = Normative::Analysis::NormativeAnalysisResult.new-from-data($extracted_norms.Hash);
 
         return self.create(
             statement => $statement,

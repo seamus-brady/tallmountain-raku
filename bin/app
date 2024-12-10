@@ -17,7 +17,7 @@ use Cro::HTTP::Router;
 use Cro::HTTP::Log::File;
 use Cro::HTTP::Middleware;
 use Normative::Agent;
-use Normative::SelfDiagnostic;
+use Normative::Analysis::SelfDiagnostic;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
 
@@ -173,7 +173,7 @@ sub perform-self-diagnosis {
     $APP_LOGGER.debug("Running the normative calculus self-diagnostic...");
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
-    my $diagnostic = Normative::SelfDiagnostic.new;
+    my $diagnostic = Normative::Analysis::SelfDiagnostic.new;
     my %diagnostic-result = $diagnostic.run-diagnostic($np-agent);
     if %diagnostic-result<PassedDiagnostic> eq "False" {
         my Str $analysis = %diagnostic-result<Analysis>;

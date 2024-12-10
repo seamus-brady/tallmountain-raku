@@ -14,7 +14,7 @@ use LLM::Messages;
 use Util::Config;
 use Normative::Agent;
 
-class Normative::SelfDiagnostic {
+class Normative::Analysis::SelfDiagnostic {
     # runs self-diagnostic tests on the consistency of the agent's norms
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::SelfDiagnostic>");
