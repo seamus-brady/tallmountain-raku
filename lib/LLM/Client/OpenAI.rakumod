@@ -182,7 +182,13 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		- Your task is to extract the correct information from the conversation context below.
 		- You must provided the structured output in XML format using the xml-schema provided.
 		- You are also provided with an example of the expected output in xml.
-
+		- You must escape any strings embedded in the XML output as follows:
+				' is replaced with &apos;
+				" is replaced with &quot;
+				& is replaced with &amp;
+				< is replaced with &lt;
+				> is replaced with &gt;
+		- Your output must be valid XML.
 
 		=== START CONVERSATION CONTEXT ===
 		$conversation-context
