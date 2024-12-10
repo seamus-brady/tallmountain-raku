@@ -13,13 +13,14 @@ use LibXML;
 use LibXML::Document;
 use LibXML::Enums;
 use LibXML::Schema;
-
+use Util::Logger;
 
 class LLM::Util::Instructor {
 
     # based on the same idea as the Python Instructor library, this class provides utility functions to get
     # structured data from an LLM using an XML schema
 
+    has $.LOGGER = Util::Logger.new(namespace => "<LLM::Util::Instructor>");
 
     method is-valid-xml(Str $xml_string is copy, Str $xml-schema is copy --> Bool) {
         try {

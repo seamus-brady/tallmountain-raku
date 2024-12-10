@@ -144,7 +144,6 @@ class Normative::Agent {
 
     method get-system-endeavour-by-uuid(Str $uuid) {
         for @!system-endeavours -> $endeavour {
-            say $endeavour.uuid;
             if $endeavour.uuid eq $uuid {
                 return $endeavour;
             }
