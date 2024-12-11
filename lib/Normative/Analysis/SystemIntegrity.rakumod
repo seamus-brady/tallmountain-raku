@@ -58,23 +58,19 @@ class Normative::Analysis::SystemIntegrity {
         my $messages = LLM::Messages.new;
 
         my $prompt = qq:to/END/;
-        === SCENARIO ===
-        Simulate three brilliant, logical experts collaboratively answering a question.
-        Each one verbosely explains their thought process in real-time, considering the prior explanations of others
-        and openly acknowledging mistakes. At each step, whenever possible, each expert refines and builds upon the
-        thoughts of others, acknowledging their contributions. They continue until there is a definitive answer to
-        the question.
 
         === INSTRUCTIONS ===
 
-        - Your task is to understand the Normative Calculus and to apply it if an AI Assistant's norms
-          are in conflict with the norms of a user task it has been requested to undertake.
-        - If there is no explicit conflict, the analysis should state that there is no conflict. Remember that
-          the system integrity norms are more comprehensive than the user task norms but the AI Assistant should
-          always try to be helpful in whatever way it can.
-        - Please also provide a message that the AI Assistant should provide to the user if there is a conflict. This
-          should be first person and should be polite and informative, but concise.
-
+        - Your task is to understand the Normative Calculus and to apply it as below to see if an AI Assistant's norms
+          are consistent with an requested user task.
+        - Please analyse the following input using only the rules from "Ranking Same-Level, Same-Endeavour Norms".
+        - Please note this analysis should only be done on the provided internal norms of this endeavour without taking
+          into account broader normative considerations. Your task here is to make sure that the norms are internally
+          consistent according to the rules of the Normative Calculus.
+        - Please only consider the norms provided and do not edit or adjust using external norms. You can note any of
+          these types of concerns in the analysis section.
+        - You should also not consider the practical applications of these requirements or their feasibility in specific
+          scenarios. This is a purely theoretical exercise. If the norms are consistent but impractical, this is not a fail.
 
         AI Norms:
 

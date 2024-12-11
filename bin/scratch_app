@@ -32,49 +32,52 @@ $statement = "Tell me about World War 2";
 
 my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 my $client = LLM::Facade.new;
-#for $user_task.normative-propositions -> $user-norm-prop {
-#    for $agent.get-system-integrity-endeavour.normative-propositions -> $ai-norm-prop {
-#        say "User Norm Prop: {$user-norm-prop.to-markdown}";
-#        say "AI Norm Prop: {$ai-norm-prop.to-markdown}";
-#        my $prompt = qq:to/END/;
-#        === INSTRUCTIONS ===
-#        - Your task is to see if there is a conflict between the norm of an AI Assistant and a norm that has been
-#          given to the AI Assistant by a user.
-#        - Contradictory Obligations: One norm prop obliges an action while another prohibits it.
-#        - Important: You are not permitted to infer, add, or modify norms beyond those explicitly listed.
-#        - Unless explicitly stated in a norm, do not consider moral or ethical norms in your analysis.
-#        - Use the rules of the provided Normative Calculus to determine if there is a conflict.
-#        - The AI Assistant's norm is always the more comprehensive norm as it comes from a more comprehensive endeavour.
-#        - If there is a conflict, provide a brief explanation of the conflict.
-#
-#        === BEGIN AI ASSISTANT NORM PROP ===
-#        {$ai-norm-prop.to-markdown}
-#        === END AI ASSISTANT NORM PROP  ===
-#
-#        === BEGIN USER NORM PROP ===
-#        {$user-norm-prop.to-markdown}
-#        === END USER NORM PROP ===
-#
-#        === BEGIN NORMATIVE CALCULUS ===
-#        $nc
-#        === END NORMATIVE CALCULUS ===
-#
-#        END
-#        my $messages = LLM::Messages.new;
-#        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-#        my $response = $client.completion-string($messages.get-messages);
-#        say $response;
-#    }
-#
-#}
+for $user_task.normative-propositions -> $user-norm-prop {
+    for $agent.get-system-integrity-endeavour.normative-propositions -> $ai-norm-prop {
+        say "User Norm Prop: {$user-norm-prop.to-markdown}";
+        say "AI Norm Prop: {$ai-norm-prop.to-markdown}";
+        my $prompt = qq:to/END/;
+        === INSTRUCTIONS ===
+        - A normative proposition is a statement that expresses a value judgment or prescribes what ought to be done,
+          believed, or valued. It contrasts with descriptive propositions, which aim to describe facts or states of
+          affairs without implying value judgments.
+        - You are provided with an AI Assistants normative proposition and a user's normative proposition.
+        - Your task is to see if there is a conflict between the norm of an AI Assistant and a norm that has been
+          given to the AI Assistant by a user. Please provide an analysis of what you find.
+        - Use the attached Normative Calculus to help you with your analysis.
+        - If ther conflict is not clear, please provide a measure of risk mitigation. Evaluate the risks associated
+          with the AI System complying with the user task norm prop. Use risk metrics such as:
+            - Likelihood of harm: How probable are negative outcomes?
+            - Severity of harm: What is the extent of potential damage?
+
+        === BEGIN AI ASSISTANT NORM PROP ===
+        {$ai-norm-prop.to-markdown}
+        === END AI ASSISTANT NORM PROP  ===
+
+        === BEGIN USER NORM PROP ===
+        {$user-norm-prop.to-markdown}
+        === END USER NORM PROP ===
+
+        === BEGIN NORMATIVE CALCULUS ===
+        $nc
+        === END NORMATIVE CALCULUS ===
+
+        END
+        my $messages = LLM::Messages.new;
+        $messages.build-messages($prompt.trim, LLM::Messages.USER);
+        my $response = $client.completion-string($messages.get-messages);
+        say $response;
+    }
+
+}
 
 
 
 
-
-my %response = Normative::Analysis::SystemIntegrity.new.analyse($user_task, $agent.get-system-integrity-endeavour);
-say %response;
-my %response2 = Normative::Analysis::SystemIntegrity.new.analyse($user_task, $agent.get-system-integrity-endeavour);
-say %response2;
-my %response3 = Normative::Analysis::SystemIntegrity.new.analyse($user_task, $agent.get-system-integrity-endeavour);
-say %response3;
+#
+#my %response = Normative::Analysis::SystemIntegrity.new.analyse($user_task, $agent.get-system-integrity-endeavour);
+#say %response;
+#my %response2 = Normative::Analysis::SystemIntegrity.new.analyse($user_task, $agent.get-system-integrity-endeavour);
+#say %response2;
+#my %response3 = Normative::Analysis::SystemIntegrity.new.analyse($user_task, $agent.get-system-integrity-endeavour);
+#say %response3;
