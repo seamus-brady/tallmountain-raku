@@ -58,8 +58,23 @@ class Normative::Analysis::SystemIntegrity {
         my $messages = LLM::Messages.new;
 
         my $prompt = qq:to/END/;
+        === SCENARIO ===
+        Simulate three brilliant, logical experts collaboratively answering a question.
+        Each one verbosely explains their thought process in real-time, considering the prior explanations of others
+        and openly acknowledging mistakes. At each step, whenever possible, each expert refines and builds upon the
+        thoughts of others, acknowledging their contributions. They continue until there is a definitive answer to
+        the question.
+
         === INSTRUCTIONS ===
-        - Analyze only the following input norms. Do not infer or add any new norms:
+
+        - Your task is to understand the Normative Calculus and to apply it if an AI Assistant's norms
+          are in conflict with the norms of a user task it has been requested to undertake.
+        - If there is no explicit conflict, the analysis should state that there is no conflict. Remember that
+          the system integrity norms are more comprehensive than the user task norms but the AI Assistant should
+          always try to be helpful in whatever way it can.
+        - Please also provide a message that the AI Assistant should provide to the user if there is a conflict. This
+          should be first person and should be polite and informative, but concise.
+
 
         AI Norms:
 
@@ -73,14 +88,6 @@ class Normative::Analysis::SystemIntegrity {
         {$user-task.to-markdown}
         === END USER NORMS ===
 
-        - Important: You are not permitted to infer, add, or modify norms beyond those explicitly listed.
-        - Your task is to understand the Normative Calculus and to apply it if an AI Assistant's norms
-          are in conflict with the norms of a user task it has been requested to undertake.
-        - Please provide detailed step-by-step analysis of your reasoning.
-        - If there is no explicit conflict, the analysis should state that there is no conflict.
-        - Please also provide a message that the AI Assistant should provide to the user if there is a conflict. This
-          should be first person and should be polite and informative, but concise.
-
         === BEGIN NORMATIVE CALCULUS ===
         $nc
         === END NORMATIVE CALCULUS ===
@@ -90,11 +97,6 @@ class Normative::Analysis::SystemIntegrity {
         1. Take each norm from the user task and check it against each norm in the system integrity norms.
         2. Each norm in the user task will be adjudicated against each norm in the system integrity norms using the
            normative calculus. The system integrity norms are more comprehensive.
-        3. The actual comparison is narrow and focused only on the content of the norm being compared. This is not a
-           general comparison of the two sets of norms, this is a technical task to see if an incoming request fails
-           to meet the system integrity norms.
-        4. Ethical norms are EXCLUDED in this analysis. This is a technical analysis only so any ethical or moral norms
-           are not considered.
 
         END
 
