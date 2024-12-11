@@ -20,8 +20,8 @@ class Util::FilePath {
     has $.LOGGER = Util::Logger.new(namespace => "<Util::FilePath>");
 
     my constant $CONFIG_DIR = '/config';
-    my constant $NC_PROMPT = '/simplified_nc.prompt';
-
+    my constant $NC_PROMPT = '/prompts/simplified-nc.prompt';
+    my constant $SCORE_NP_PROMPT = '/prompts/norm-comparison-score.prompt';
 
     method app-root(-->Str){
         # get the root dir of the app
@@ -39,6 +39,19 @@ class Util::FilePath {
             return $nc;
             CATCH {
                 my Str $message = "Error loading configuration prompt for Normative Calculus: $_";
+                Util::FilePath.new.LOGGER.error($message);
+                Util::FilePath::Exception.new(message => $message).throw;
+            }
+        }
+    }
+
+    method get-norm-prop-score-prompt(-->Str){
+        # get the prompt for comparing normative propositions
+        try {
+            my Str $nc = slurp Util::FilePath.new.config-path ~ $SCORE_NP_PROMPT;
+            return $nc;
+            CATCH {
+                my Str $message = "Error loading configuration prompt for Norm Prop Scoring: $_";
                 Util::FilePath.new.LOGGER.error($message);
                 Util::FilePath::Exception.new(message => $message).throw;
             }

@@ -11,6 +11,7 @@ use v6.d;
 use JSON::Fast;
 use Util::FilePath;
 use Util::Logger;
+use Util::Config;
 use Normative::Proposition;
 use Normative::Role::Endeavour;
 use Normative::HighestEndeavour;
@@ -48,7 +49,8 @@ class Normative::Agent {
 
     method map-endeavours(%parsed-data --> Array){
         my @loaded_endeavours = %parsed-data<endeavours>.map({
-            Normative::Role::Endeavour.new(
+            Normative::Role::Endeavour.create(
+                    uuid => .<uuid>,
                     name => .<name>,
                     description => .<description>,
                     goal => .<goal>,
@@ -130,14 +132,35 @@ class Normative::Agent {
     method system-endeavours-to-markdown() {
         return "## System Endeavours\n\n" ~
                 @!system-endeavours.map({
-                    "### Name\n" ~ $_.name ~ "\n\n" ~
-                            "### Description\n" ~ $_.description ~ "\n\n" ~
-                            "### Goal\n" ~ $_.goal ~ "\n\n" ~
-                            "### Normative Propositions\n" ~
-                            $_.normative-propositions.map({
-                                $_.to-markdown ~ "\n"
-                            }).join ~ "\n"
+                         "### Name\n" ~ $_.name ~ "\n\n" ~
+                         "### Description\n" ~ $_.description ~ "\n\n" ~
+                         "### Goal\n" ~ $_.goal ~ "\n\n" ~
+                         "### Normative Propositions\n" ~
+                         $_.normative-propositions.map({
+                         $_.to-markdown ~ "\n"
+                         }).join ~ "\n"
                 }).join("\n");
+    }
+
+    method get-system-endeavour-by-uuid(Str $uuid) {
+        for @!system-endeavours -> $endeavour {
+            if $endeavour.uuid eq $uuid {
+                return $endeavour;
+            }
+        }
+        return Nil;
+    }
+
+    method get-code-of-conduct-endeavour(--> Normative::Role::Endeavour) {
+        my $config = Util::Config.new;
+        my $code_of_conduct_uuid =  $config.get_config('system_endeavours', 'code_of_conduct_uuid');
+        return self.get-system-endeavour-by-uuid($code_of_conduct_uuid);
+    }
+
+    method get-system-integrity-endeavour(--> Normative::Role::Endeavour) {
+        my $config = Util::Config.new;
+        my $code_of_conduct_uuid =  $config.get_config('system_endeavours', 'system_integrity_uuid');
+        return self.get-system-endeavour-by-uuid($code_of_conduct_uuid);
     }
 }
 

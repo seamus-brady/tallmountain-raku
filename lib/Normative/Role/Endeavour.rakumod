@@ -9,16 +9,29 @@ role Normative::Role::Endeavour {
     has Str $.name;
     has Str $.goal;
     has Str $.description;
-    has Str $.uuid = uuid-v4();
-    has Normative::Comprehensiveness $.comprehensiveness = Normative::Comprehensiveness::DEFAULT;
+    has Str $.uuid;
+    has Normative::Comprehensiveness $.comprehensiveness;
     has Normative::Proposition @.normative-propositions;
+
+    method create(:$name,
+                  :$description,
+                  :$uuid,
+                  :$comprehensiveness,
+                  :@normative-propositions) {
+        self.bless(
+                :name($name),
+                :description($description),
+                :uuid($uuid // uuid-v4()),
+                :comprehensiveness($comprehensiveness // Normative::Comprehensiveness::DEFAULT),
+                :normative-propositions(@normative-propositions)
+                );
+    }
 
     method gist {
         return qq:to/END_GIST/;
         ----
         Endeavour name: {$!name}
         description: {$!description}
-        goal: {$!goal}
         comprehensiveness: {$!comprehensiveness}
         normative_propositions: {@!normative-propositions.gist}
         ----
@@ -33,26 +46,24 @@ role Normative::Role::Endeavour {
         | **Property**         | **Value**                         |
         |-----------------------|-----------------------------------|
         | Name                 | {$!name}   |
-        | Goal                 | {$!goal}   |
         | Description          | {$!description} |
-        | UUID                 | {$!uuid}                         |
+        | UUID                 | {$!uuid // "Unknown UUID" }                         |
         | Comprehensiveness    | {$!comprehensiveness}            |
         END_ENDEAVOUR_TABLE
 
         my $propositions_heading = "## Normative Propositions for Endeavour: {$!name // "Unnamed Endeavour"}\n";
-        my $propositions_table = "| **Proposition** | **Operator** | **Level** | **Modality** | **Modal Subscript** | **Description** |\n";
-        $propositions_table ~= "|------------------|--------------|-----------|--------------|--------------------|-----------------|\n";
+        my $propositions_table = "| **Proposition** | **Operator** | **Level** | **Modality** | **Modal Subscript** |\n";
+        $propositions_table ~= "|------------------|--------------|-----------|--------------|--------------------|\n";
 
         for @!normative-propositions -> $np {
             $propositions_table ~= "| {$np.proposition-value // ''} "
                     ~ "| {$np.operator // ''} "
                     ~ "| {$np.level // ''} "
                     ~ "| {$np.modality // ''} "
-                    ~ "| {$np.modal-subscript // ''} "
-                    ~ "| {$np.description // ''} |\n";
+                    ~ "| {$np.modal-subscript // ''} |\n";
         }
 
         return $endeavour_heading ~ "\n" ~ $endeavour_table ~ "\n\n" ~ $propositions_heading ~ "\n" ~ $propositions_table;
-}
+    }
 
 }

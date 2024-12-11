@@ -13,7 +13,8 @@
     "Config::Clever",
     "UUID::V4",
     "LibXML",
-    "Array::Circular"
+    "Array::Circular",
+    "XML::Entity::HTML"
   ],
   "build-depends": [],
   "test-depends": [],
@@ -22,6 +23,9 @@
     "Cycle::Stage::Reactive": "lib/Cycle/Stage/Reactive.rakumod",
     "Cycle::Stage::ReactiveReturn": "lib/Cycle/Stage/ReactiveReturn.rakumod",
     "Cycle::Stage::ReactiveScan": "lib/Cycle/Stage/ReactiveScan.rakumod",
+    "Normative::Analysis::ImpliedNormExtractor": "lib/Normative/Analysis/ImpliedNormExtractor.rakumod",
+    "Normative::Analysis::NormativeAnalysisResult": "lib/Normative/Analysis/NormativeAnalysisResult.rakumod",
+    "Normative::Analysis::SelfDiagnostic": "lib/Normative/Analysis/SelfDiagnostic.rakumod",
     "Plan::Exception": "lib/Plan/Exception.rakumod",
     "Plan::Feature": "lib/Plan/Feature.rakumod",
     "Plan::FeatureSet": "lib/Plan/FeatureSet.rakumod",

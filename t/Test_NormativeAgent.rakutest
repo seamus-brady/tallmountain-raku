@@ -10,8 +10,9 @@
 use v6.d;
 use Test;
 use Normative::Agent;
+use Normative::Role::Endeavour;
 
-plan 3;
+plan 6;
 
 subtest 'Normative::Agent loads highest endeavour' => {
     my $np-agent = Normative::Agent.new;
@@ -27,6 +28,24 @@ subtest 'Normative::Agent init ok' => {
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
     isa-ok $np-agent, Normative::Agent;
+}
+
+subtest 'Normative::Agent get endeavour by UUID' => {
+    my $np-agent = Normative::Agent.new;
+    $np-agent.init;
+    isa-ok $np-agent.get-system-endeavour-by-uuid("1b64cf22-d4d4-4c80-a9b6-0bfcb0cfe32f"), Normative::Role::Endeavour;
+}
+
+subtest 'Normative::Agent code of conduct' => {
+    my $np-agent = Normative::Agent.new;
+    $np-agent.init;
+    isa-ok $np-agent.get-code-of-conduct-endeavour, Normative::Role::Endeavour;
+}
+
+subtest 'Normative::Agent system integrity' => {
+    my $np-agent = Normative::Agent.new;
+    $np-agent.init;
+    isa-ok $np-agent.get-system-integrity-endeavour, Normative::Role::Endeavour;
 }
 
 done-testing;

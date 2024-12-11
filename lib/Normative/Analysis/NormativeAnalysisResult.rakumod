@@ -12,7 +12,7 @@ use Util::Logger;
 use Util::Config;
 use Normative::Proposition;
 
-class Normative::NormativeAnalysisResult {
+class Normative::Analysis::NormativeAnalysisResult {
     # a class that collects extracted norm props
 
     method MAX_EXTRACTED_PROPS {
@@ -27,16 +27,17 @@ class Normative::NormativeAnalysisResult {
     has Str $.explanation;
 
 
-    method new-from-data(%norm-hash --> Normative::NormativeAnalysisResult) {
-        Normative::NormativeAnalysisResult.new.LOGGER.debug("new-from-data starting...");
+    method new-from-data(%norm-hash --> Normative::Analysis::NormativeAnalysisResult) {
+        Normative::Analysis::NormativeAnalysisResult.new.LOGGER.debug("new-from-data starting...");
 
         # get the input statement
         my Str $input_statement = %norm-hash<input_statement>;
 
         # get the implied propositions
         my @implied_props_collect;
+
         # need to loop through the array of implied propositions as the array context messes kv.map
-        loop (my $j = 0; $j < Normative::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $j++) {
+        loop (my $j = 0; $j < Normative::Analysis::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $j++) {
             try {
                 my $test_np = %norm-hash<implied_propositions>{'NormativeProposition'}[$j];
                 @implied_props_collect.push(

@@ -69,8 +69,6 @@ class Normative::Proposition {
 
     has Str $.uuid = uuid-v4();
     has Str $.proposition-value;
-    has Str $.description;
-
     has Operator $.operator;
     has Level $.level;
     has Modality $.modality;

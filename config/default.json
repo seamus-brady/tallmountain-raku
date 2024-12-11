@@ -5,6 +5,10 @@
   "norm_prop_extractor": {
     "max_extracted_norms": 4
   },
+  "system_endeavours": {
+    "code_of_conduct_uuid": "1b64cf22-d4d4-4c80-a9b6-0bfcb0cfe32f",
+    "system_integrity_uuid": "a73f98fd-b227-426b-ae65-bd564e3d9bb3"
+  },
   "chat_ui": {
     "chat_ui_server": "0.0.0.0",
     "chat_ui_port": 10000
