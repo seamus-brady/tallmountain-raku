@@ -7,7 +7,6 @@ role Normative::Role::Endeavour {
     #  An endeavour of an agent. Manages a set of NormProps.
 
     has Str $.name;
-    has Str $.goal;
     has Str $.description;
     has Str $.uuid;
     has Normative::Comprehensiveness $.comprehensiveness;

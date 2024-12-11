@@ -122,7 +122,6 @@ class Normative::Agent {
         return "## Highest Endeavour\n\n" ~
                 "### Name\n" ~ $endeavour.name ~ "\n\n" ~
                 "### Description\n" ~ $endeavour.description ~ "\n\n" ~
-                "### Goal\n" ~ $endeavour.goal ~ "\n\n" ~
                 "### Normative Propositions\n" ~
                 $endeavour.normative-propositions.map({
                     $_.to-markdown ~ "\n"
@@ -134,7 +133,6 @@ class Normative::Agent {
                 @!system-endeavours.map({
                          "### Name\n" ~ $_.name ~ "\n\n" ~
                          "### Description\n" ~ $_.description ~ "\n\n" ~
-                         "### Goal\n" ~ $_.goal ~ "\n\n" ~
                          "### Normative Propositions\n" ~
                          $_.normative-propositions.map({
                          $_.to-markdown ~ "\n"
