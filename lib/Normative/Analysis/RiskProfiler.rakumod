@@ -11,6 +11,8 @@ use v6.d;
 use Util::Logger;
 use Normative::Role::Endeavour;
 use Normative::Agent;
+use Normative::Analysis::RiskResults;
+use Normative::Analysis::NormConflict;
 
 class Normative::Analysis::RiskProfiler {
     # takes an endeavour and returns a profile for the normative risk

@@ -32,5 +32,5 @@ END
 
 my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 
-say Normative::Analysis::RiskProfiler.new($user_task, $agent);
+say Normative::Analysis::RiskProfiler.new.profile($user_task, $agent);
 
