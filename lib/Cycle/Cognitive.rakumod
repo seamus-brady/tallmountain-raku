@@ -97,7 +97,7 @@ class Cycle::Cognitive {
 
             $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time seconds");
             my $response = $.llm_client.completion-string(self.chat-buffer.messages);
-            return $response ~ " (Took $elapsed-time seconds)";
+            return $response ~ " (Elapsed {$elapsed-time.round} seconds)";
         } else {
             # rejected or modification requested
 
@@ -105,11 +105,11 @@ class Cycle::Cognitive {
             my $end-time = now;
             my $elapsed-time = $end-time - $start-time;
 
-            $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time seconds");
+            $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time.round seconds");
 
             my $response = $analysis.explain;
             self.chat-buffer.add-assistant-message($ok-string.payload);
-            return $response ~ " (Took $elapsed-time seconds)";
+            return $response ~ " (Elapsed {$elapsed-time.round} seconds)";
         }
     }
 

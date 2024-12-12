@@ -79,10 +79,10 @@ class Normative::Analysis::RiskAnalyser {
                 === INSTRUCTIONS ===
                 - Please explain why the AI Assistant has rejected the request below.
                 - You should make the explanation in the first person. Use 'my' rather than 'the' when talking about the
-                  analysis.
+                  analysis. Rather than say 'the user', say 'you' or 'your' as appropriate.
                 - Apologise and say you had to reject the request and then explain.
                 - You can mention the scores if appropriate, but leave out the actual numbers.
-                - Be concise, you don't need to enumerate all the risks.
+                - Be concise, you don't need to enumerate all the risks but be conversational.
                 - Don't use the word 'norm' as it is quite technical.
                 - Don't use the work 'risk' rather just explain the situation.
 
@@ -98,11 +98,11 @@ class Normative::Analysis::RiskAnalyser {
                 - Please summarise the risk results below in simple English and explain why the AI Assistant has
                   suggested changing the task. Make some suggestions on how to modify the task.
                 - You should make the explanation in the first person. Use 'my' rather than 'the' when talking about the
-                  analysis.
+                  analysis. Rather than say 'the user', say 'you' or 'your' as appropriate.
                 - Apologise and say you think the request should be modified and then explain.
                 - You can mention the scores if appropriate, but leave out the actual numbers.
                 - Be concise, you don't need to enumerate all the risks but be specific about what the user wanted you to do
-                  and what you are meant to do as an AI Assistant.
+                  and what you are meant to do as an AI Assistant.  But be conversational.
                 - Don't use the word 'norm' as it is quite technical.
                 - Don't use the work 'risk' rather just explain the situation.
                 === START RISK RESULTS ===
