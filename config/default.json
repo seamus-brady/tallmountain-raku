@@ -3,7 +3,7 @@
     "default_llm_provider": "openai"
   },
   "norm_prop_extractor": {
-    "max_extracted_norms": 4
+    "max_extracted_norms": 5
   },
   "system_endeavours": {
     "code_of_conduct_uuid": "1b64cf22-d4d4-4c80-a9b6-0bfcb0cfe32f",
@@ -22,6 +22,11 @@
   },
   "reactive_stage": {
     "threat_detected_error": " My apologies, but I can't assist with that."
+  },
+  "normative_analysis": {
+    "number_critical_risks_allowed": 0,
+    "number_high_risks_allowed": 0,
+    "number_moderate_risks_allowed": 2
   },
   "for_testing": {
     "test_string_value": "Hello world!",

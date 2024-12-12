@@ -20,7 +20,7 @@ use Normative::UserTask;
 class Normative::Analysis::NormConflict {
     # a class to find if an incoming norm conflicts with the system norms
 
-    has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::NormConflictk>");
+    has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::NormConflict>");
 
     has Str $.analysis-schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
@@ -71,6 +71,8 @@ class Normative::Analysis::NormConflict {
             --> Hash) {
         # a method that analyses a UserTask against the systems norms using the normative calculus
 
+        self.LOGGER.debug("Analyzing the User Norm Proposition against the AI Assistant's Norms...");
+
         # get the prompts for the technical parts of the analysis
         my $nc = Util::FilePath.new.get-nc-prompt;
         my $np-score = Util::FilePath.new.get-norm-prop-score-prompt;
@@ -113,6 +115,7 @@ class Normative::Analysis::NormConflict {
                 $messages.get-messages,
                 $.analysis-schema,
                 $.analysis-example);
+        self.LOGGER.debug("Got conflict results: %response");
         return %response;
     }
 }

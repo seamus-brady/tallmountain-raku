@@ -78,7 +78,7 @@ class Normative::Analysis::ImpliedNormExtractor {
     method extract-belief-statements(Str $statement -->  Str){
         # does some initial analysis on the user statement to extract beliefs, ethics and norms
 
-        self.LOGGER.info("Extracting belief statements from user input");
+        self.LOGGER.debug("Extracting belief statements from user input");
 
         my $client = LLM::Facade.new;
         my $messages = LLM::Messages.new;
@@ -101,7 +101,7 @@ class Normative::Analysis::ImpliedNormExtractor {
     method extract-norm-props(Str $statement -->  Hash){
         # extract normative propositions from a statement
 
-        self.LOGGER.info("Extracting normative propositions from user input");
+        self.LOGGER.debug("Extracting normative propositions from user input");
 
         # first get more details on what the user might believe
         my $belief_statement = self.extract-belief-statements($statement);
@@ -178,7 +178,7 @@ class Normative::Analysis::ImpliedNormExtractor {
                 $messages.get-messages,
                 $.norm-prop-schema,
                 $.norm-prop-example);
-        $!LOGGER.info("Got user norms: " ~ %response.gist);
+        $!LOGGER.debug("Got user norms: " ~ %response.gist);
         return %response;
     }
 }

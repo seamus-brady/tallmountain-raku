@@ -54,7 +54,7 @@ class Normative::Analysis::SelfDiagnostic {
     method run-diagnostic(Normative::Agent $np-agent -->  Hash){
         # runs a self-diagnostic test on the consistency of the agent's norms
 
-        $!LOGGER.info("Running self-diagnostic test on the agent's norms.");
+        $!LOGGER.debug("Running self-diagnostic test on the agent's norms...");
 
         # get the normative calculus prompt
         my $nc = Util::FilePath.new.get-nc-prompt;

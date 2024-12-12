@@ -12,8 +12,8 @@ use LLM::Facade;
 use LLM::Messages;
 use Normative::Analysis::RiskEntry;
 
-class Normative::Analysis::RiskResults {
-
+class Normative::Analysis::RiskProfile {
+    # a class to hold a list of RiskEntry objects
 
     # Declare an attribute to hold a list of RiskEntry objects
     has @.data;
@@ -55,30 +55,6 @@ class Normative::Analysis::RiskResults {
         return @!data;
     }
 
-    method explain(--> Str) {
-        # summarises and explains the risk results
-        my $client = LLM::Facade.new();
-        my $messages = LLM::Messages.new;
-
-        my $prompt = qq:to/END/;
-        === INSTRUCTIONS ===
-        - Please summarise the risk results below in simple English.
-        - You should make the explanation in the first person.
-        - You can mention the scores if appropriate, but leave out the actual numbers.
-        - Be concise, you don't need to enumerate all the risks but be specific about what the user wanted you to do
-          and what you are meant to do as an AI Assistant.
-        - Don't use the word 'norm' as it is quite technical.
-        - Don't use the work 'risk' rather just explain the situation.
-
-        === START RISK RESULTS ===
-        {self.to-markdown}
-        === END RISK RESULTS ===
-        END
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages,);
-        return $response;
-    }
-
     method to-markdown(--> Str) {
         my $output = "| Index | Analysis               | ContextMultiplier | ImpactScore | Likelihood | NormAlignmentScore | RiskLevel  | RiskScore | UserNormPropValue                          |\n";
         $output ~= "|-------|------------------------|-------------------|-------------|------------|--------------------|------------|-----------|-------------------------------------------|\n";
@@ -86,9 +62,5 @@ class Normative::Analysis::RiskResults {
             $output ~= "| $index  | {$entry.Analysis}             | {$entry.ContextMultiplier}            | {$entry.ImpactScore}       | {$entry.Likelihood}       | {$entry.NormAlignmentScore}             | {$entry.RiskLevel}       | {$entry.RiskScore}       | {$entry.UserNormPropValue}                           |\n";
         }
         return $output;
-    }
-
-    method gist() {
-        return "RiskResults: " ~ @!data.elems ~ " entries, " ~ self.get-all-risk-scores.sum ~ " total risk score.";
     }
 }

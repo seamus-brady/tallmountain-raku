@@ -50,7 +50,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
 
     method get-from-statement(Str $statement --> Normative::UserTask) {
 
-        self.LOGGER.info("getting user task from user statement");
+        self.LOGGER.debug("getting user task from user statement");
 
         # get a user task from a user statement
 
@@ -79,7 +79,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
     method get-goal-description(Str $statement -->  Hash){
         # does some initial analysis on the user statement to set a goal and description for the endeavour
 
-        $!LOGGER.info("getting goal and description for user task from LLM model");
+        $!LOGGER.debug("getting goal and description for user task from LLM model");
 
         my $client = LLM::Facade.new;
         my $messages = LLM::Messages.new;

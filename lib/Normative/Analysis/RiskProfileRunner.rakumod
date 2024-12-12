@@ -11,25 +11,26 @@ use v6.d;
 use Util::Logger;
 use Normative::Role::Endeavour;
 use Normative::Agent;
-use Normative::Analysis::RiskResults;
+use Normative::Analysis::RiskProfile;
 use Normative::Analysis::NormConflict;
 
-class Normative::Analysis::RiskProfiler {
+class Normative::Analysis::RiskProfileRunner {
     # takes an endeavour and returns a profile for the normative risk
 
-    has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::RiskProfiler>");
+    has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::RiskProfileRunner>");
 
-    has @.risk-levels;
-    has %.counts = ('Low' => 0, 'Moderate' => 0, 'High' => 0, 'Critical' => 0);
-
-
-    method profile(Normative::Role::Endeavour $endeavour, Normative::Agent $agent) {
+    method profile(
+            Normative::Role::Endeavour $endeavour,
+            Normative::Agent $agent
+            --> Normative::Analysis::RiskProfile) {
         # runs the analysis and returns the profile
+
+        $!LOGGER.debug("Profile analysis started on the endeavour: $endeavour");
 
         # Start timer
         my $start-time = now;
 
-        my Normative::Analysis::RiskResults $risks = Normative::Analysis::RiskResults.new;
+        my Normative::Analysis::RiskProfile $risks = Normative::Analysis::RiskProfile.new;
 
         # Collect promises for all asynchronous tasks
         my @promises = $endeavour.normative-propositions.map: -> $user-norm-prop {
@@ -50,42 +51,8 @@ class Normative::Analysis::RiskProfiler {
         my $end-time = now;
         my $elapsed-time = $end-time - $start-time;
 
-        say "Elapsed time: $elapsed-time seconds";
-
-        say $risks.to-markdown;
-
-        @.risk-levels = $risks.get-all-risk-levels;
-        self.classify-risks;
-        return self.analyze;
+        $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time seconds");
+        return $risks;
     }
 
-    method classify-risks {
-        # Classify the risks into levels
-        for @.risk-levels -> $level {
-            %.counts{$level}++ if %.counts{$level}:exists;
-        }
-        return %.counts;
-    }
-
-    method is-safe {
-        my %counts = self.classify-risks();
-        say %counts;
-        if %counts{'High'} > 0 || %counts{'Critical'} > 0 {
-            return Bool::False;
-        }
-        if %counts{'Moderate'} >= 2 {
-            return Bool::False;
-        }
-        return Bool::True;
-    }
-
-    method risk-profile {
-        my %counts = self.classify-risks();
-        return "Risk Profile: " ~ %counts.keys.sort.map({ "$_: %counts{$_}" }).join(", ");
-    }
-
-    method analyze {
-        say self.risk-profile();
-        say "Task Status: " ~ (self.is-safe() ?? "Safe" !! "Unsafe");
-    }
 }
