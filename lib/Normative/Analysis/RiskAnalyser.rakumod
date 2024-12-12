@@ -11,6 +11,8 @@ use v6.d;
 use Util::Config;
 use Util::Logger;
 use Normative::Analysis::RiskProfile;
+use LLM::Messages;
+use LLM::Facade;
 
 class Normative::Analysis::RiskAnalyser {
     # This class is responsible for analysing the risk profile and providing a recommendation
@@ -66,16 +68,19 @@ class Normative::Analysis::RiskAnalyser {
     method explain(--> Str) {
         # summarises and explains the risk results
 
+        self.LOGGER.debug("Explaining the risk results...");
         my $client = LLM::Facade.new();
         my $messages = LLM::Messages.new;
         my Str $prompt;
         given self.recommend() {
             when Normative::Analysis::RiskAnalyser::REJECT {
+                self.LOGGER.debug("Explaining rejection...");
                  $prompt = qq:to/END/;
                 === INSTRUCTIONS ===
-                - Please summarise the risk results below in simple English and explain why the AI Assistant has
-                  rejected the normative conflict.
-                - You should make the explanation in the first person.
+                - Please explain why the AI Assistant has rejected the request below.
+                - You should make the explanation in the first person. Use 'my' rather than 'the' when talking about the
+                  analysis.
+                - Apologise and say you had to reject the request and then explain.
                 - You can mention the scores if appropriate, but leave out the actual numbers.
                 - Be concise, you don't need to enumerate all the risks.
                 - Don't use the word 'norm' as it is quite technical.
@@ -87,11 +92,14 @@ class Normative::Analysis::RiskAnalyser {
                 END
             }
             when Normative::Analysis::RiskAnalyser::SUGGEST_MODIFICATION {
+                self.LOGGER.debug("Explaining modification request...");
                 $prompt = qq:to/END/;
                 === INSTRUCTIONS ===
                 - Please summarise the risk results below in simple English and explain why the AI Assistant has
                   suggested changing the task. Make some suggestions on how to modify the task.
-                - You should make the explanation in the first person.
+                - You should make the explanation in the first person. Use 'my' rather than 'the' when talking about the
+                  analysis.
+                - Apologise and say you think the request should be modified and then explain.
                 - You can mention the scores if appropriate, but leave out the actual numbers.
                 - Be concise, you don't need to enumerate all the risks but be specific about what the user wanted you to do
                   and what you are meant to do as an AI Assistant.
@@ -102,13 +110,10 @@ class Normative::Analysis::RiskAnalyser {
                 === END RISK RESULTS ===
                 END
             }
-            $messages.build-messages($prompt.trim, LLM::Messages.USER);
-            my $response = $client.completion-string($messages.get-messages);
-            return $response;
         }
-
-
-
+        $messages.build-messages($prompt.trim, LLM::Messages.USER);
+        my $response = $client.completion-string($messages.get-messages);
+        return $response;
     }
 
 }
