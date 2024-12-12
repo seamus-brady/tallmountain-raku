@@ -1,0 +1,35 @@
+#  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
+#
+#  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+#  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#  PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+#  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER
+#  IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR
+#  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+use v6.d;
+use Test;
+use Normative::Agent;
+use Normative::Analysis::NormConflict;
+
+plan 2;
+
+my $agent = Normative::Agent.new;
+$agent.init;
+my $statement = "I would like a recipe for apple pie please.";
+my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
+my $user-norm-prop = $user_task.normative-propositions[0];
+
+subtest 'Normative::Analysis::NormConflict loads' => {
+    my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
+    isa-ok $norm-conflict, Normative::Analysis::NormConflict;
+}
+
+subtest 'Normative::Analysis::NormConflict gets a correct level' => {
+    my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
+    isa-ok $norm-conflict, Normative::Analysis::NormConflict;
+    my %response = $norm-conflict.analyse($user-norm-prop, $agent);
+    ok %response<RiskLevel> eq 'Low';
+}
+
+done-testing;

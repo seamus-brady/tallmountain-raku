@@ -84,19 +84,14 @@ class Normative::Analysis::ImpliedNormExtractor {
         my $messages = LLM::Messages.new;
         my $system_message = q:to/END/;
         === INSTRUCTIONS ===
-        Simulate three brilliant, logical experts collaboratively completing the task below.
-        Each one verbosely explains their thought process in real-time, considering the prior explanations of others
-        and openly acknowledging mistakes. At each step, whenever possible, each expert refines and builds upon the
-        thoughts of others, acknowledging their contributions. They continue until there is a definitive answer to
-        the question.
-        === TASK ===
-        - Please analyse all input for implied beliefs, norms and ethics.
-        - You should also extract direct normative propositions from direct requests being made by the user.
-        - Formulate these into a set of statements the user might make.
-        - Don't do any analysis on the normative propositions or make any statements about whether they are ethical or not.
-        - Don't editorialise or comment in these statements - it should be as if the user is speaking.
+        - Analyze the following text for underlying beliefs, assumptions, and implied norms about the behavior,
+          capabilities, and ethical boundaries of agents (whether AI or otherwise).
+        - Identify any explicit or implicit normative statements or directives about how such agents should act or
+          what they should prioritize.
+        - Reformulate these statements as if the author were explicitly declaring them as their beliefs or expectations.
+        - Avoid providing any analysis or commentary on the ethics, validity, or implications of these statements —
+          simply extract and rewrite them as a list of propositions the author might state.
         - Repeat the user's original statement at the beginning of your analysis.
-        - Think about things step by step.
         END
         $messages.build-messages($system_message, LLM::Messages.SYSTEM);
         $messages.build-messages($statement, LLM::Messages.USER);
