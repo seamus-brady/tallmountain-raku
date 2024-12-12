@@ -142,7 +142,7 @@ sub routes() {
 
 
 sub get_response(Str $prompt, Str $bot-response --> Str){
-    # Return the response as an htmx fragment
+    # Return the response as an htmx fragment and parse markdown
     my Str $response =  qq:to/END/;
         <div class="message-container user-message-container">
         <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
@@ -150,7 +150,7 @@ sub get_response(Str $prompt, Str $bot-response --> Str){
         </div>
         <div class="message-container bot-message-container">
         <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
-        <span class="bot-message">{$bot-response}</span>
+        <span class="bot-message markdown">{$bot-response}</span>
         </div>
         END
     return $response.trim;

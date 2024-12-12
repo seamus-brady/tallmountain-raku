@@ -12,6 +12,7 @@ use UUID::V4;
 use Util::Logger;
 use Util::Config;
 use Cycle::Payload::TaintedString;
+use Cycle::Payload::OkString;
 use Cycle::Buffer::Chat;
 use Cycle::Stage::Reactive;
 use Cycle::Stage::ReactiveScan;
@@ -21,6 +22,11 @@ use LLM::Messages;
 use LLM::Facade;
 use LLM::AdaptiveRequestMode;
 use Normative::UserTask;
+use Normative::Agent;
+use Normative::Analysis::RiskProfile;
+use Normative::Analysis::RiskProfileRunner;
+use Normative::Analysis::RiskAnalyser;
+
 
 
 class Cycle::Cognitive {
@@ -33,6 +39,13 @@ class Cycle::Cognitive {
     has DateTime $.start-time = DateTime.now;
     has LLM::Facade $.llm_client = LLM::Facade.new();
     has Cycle::Buffer::Chat $.chat-buffer = Cycle::Buffer::Chat.new();
+    has Normative::Agent $.np-agent;
+
+    submethod TWEAK() {
+        # initialise the normative agent
+        $!np-agent = Normative::Agent.new;
+        $!np-agent.init;
+    }
 
     method increment-index() {
         self.LOGGER.debug("increment-index called");
@@ -46,6 +59,10 @@ class Cycle::Cognitive {
 
     method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
         self.increment-index();
+
+        # Start timer
+        my $start-time = now;
+
         self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
 
         # run the reactive stage
@@ -60,10 +77,40 @@ class Cycle::Cognitive {
         if $reactive-return ~~ Cycle::Stage::ReactiveScan {
             self.LOGGER.debug("Reactive scan result: " ~ $reactive-return.gist);
         }
-        # build a response
+
+        # add the user message to the chat buffer using an OKString
+        my Cycle::Payload::OkString $ok-string = Cycle::Payload::OkString.new(payload => $tainted-string.payload);
         self.chat-buffer.add-user-message($tainted-string.payload);
-        my $response = $.llm_client.completion-string(self.chat-buffer.messages);
-        return $response;
+
+        # run the normative risk check
+        my $user_task = Normative::UserTask.new.get-from-statement($ok-string.payload.trim);
+        my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
+        my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $.np-agent);
+        my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
+        my $recommendation = $analysis.recommend;
+        if $recommendation eq Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE {
+            # all good, accept and execute
+
+            # End timer
+            my $end-time = now;
+            my $elapsed-time = $end-time - $start-time;
+
+            $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time seconds");
+            my $response = $.llm_client.completion-string(self.chat-buffer.messages);
+            return $response ~ " (Took $elapsed-time seconds)";
+        } else {
+            # rejected or modification requested
+
+            # End timer
+            my $end-time = now;
+            my $elapsed-time = $end-time - $start-time;
+
+            $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time seconds");
+
+            my $response = $analysis.explain;
+            self.chat-buffer.add-assistant-message($ok-string.payload);
+            return $response ~ " (Took $elapsed-time seconds)";
+        }
     }
 
     method handle-reactive-early-exit($reactive-return --> Str){

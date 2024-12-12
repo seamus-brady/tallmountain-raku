@@ -9,7 +9,7 @@
 
 use v6.d;
 
-class Cycle::OkString {
+class Cycle::Payload::OkString {
     # A class that wraps incoming trusted string based communications.
     has Str $.payload;
 }
