@@ -15,6 +15,7 @@ use Normative::Proposition;
 class Normative::Analysis::NormativeAnalysisResult {
     # a class that collects extracted norm props
 
+    # run time "constant"
     method MAX_EXTRACTED_PROPS {
         once Util::Config.get_config('norm_prop_extractor', 'max_extracted_norms');
     }

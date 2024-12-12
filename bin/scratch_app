@@ -20,7 +20,7 @@ use LLM::Messages;
 use Normative::UserTask;
 use Normative::Analysis::NormConflict;
 use Normative::Analysis::RiskResults;
-
+use Normative::Analysis::RiskProfiler;
 
 my $agent = Normative::Agent.new;
 $agent.init;
@@ -32,88 +32,5 @@ END
 
 my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 
-my $client = LLM::Facade.new;
-my Normative::Analysis::RiskResults $risks = Normative::Analysis::RiskResults.new;
-
-# Start timer
-my $start-time = now;
-
-
-# Collect promises for all asynchronous tasks
-my @promises = $user_task.normative-propositions.map: -> $user-norm-prop {
-    start {
-
-        # Perform analysis
-        my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
-        my %response = $norm-conflict.analyse($user-norm-prop, $agent);
-
-        # Add response to risks and output the result
-        $risks.add-entry(%response);
-    }
-};
-
-# Wait for all tasks to complete
-await @promises;
-
-# End timer
-my $end-time = now;
-my $elapsed-time = $end-time - $start-time;
-say "Elapsed time: $elapsed-time seconds";
-
-
-say  $risks.to-markdown;
-
-# Define the risk scores and initialize the normalizer
-my @risk-levels = $risks.get-all-risk-levels;
-
-class RiskProfileAnalyzer {
-    has @.risk-levels;  # Array of risk level labels (e.g., 'Low', 'Moderate', 'High', 'Critical')
-
-    method classify-risks {
-        my %counts = ('Low' => 0, 'Moderate' => 0, 'High' => 0, 'Critical' => 0);
-
-        for @.risk-levels -> $level {
-            %counts{$level}++ if %counts{$level}:exists;
-        }
-
-        return %counts;
-    }
-
-    method is-safe {
-        my %counts = self.classify-risks();
-        say %counts;
-        if %counts{'High'} > 0 || %counts{'Critical'} > 0 {
-            return Bool::False;
-        }
-        if %counts{'Moderate'} >= 2 {
-            return Bool::False;
-        }
-        return Bool::True;
-    }
-
-    method risk-profile {
-        my %counts = self.classify-risks();
-        return "Risk Profile: " ~ %counts.keys.sort.map({ "$_: %counts{$_}" }).join(", ");
-    }
-
-    method analyze {
-        say self.risk-profile();
-        say "Task Status: " ~ (self.is-safe() ?? "Safe" !! "Unsafe");
-    }
-}
-
-
-my $analyzer = RiskProfileAnalyzer.new(:@risk-levels);
-
-$analyzer.analyze();
-
-say $risks.explain;
-
-
-
-
-
-
-
-
+say Normative::Analysis::RiskProfiler.new($user_task, $agent);
 

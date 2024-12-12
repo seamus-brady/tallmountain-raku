@@ -27,7 +27,6 @@ subtest 'Normative::Analysis::NormConflict loads' => {
 
 subtest 'Normative::Analysis::NormConflict gets a correct level' => {
     my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
-    isa-ok $norm-conflict, Normative::Analysis::NormConflict;
     my %response = $norm-conflict.analyse($user-norm-prop, $agent);
     ok %response<RiskLevel> eq 'Low';
 }
