@@ -14,7 +14,8 @@
     "UUID::V4",
     "LibXML",
     "Array::Circular",
-    "XML::Entity::HTML"
+    "Text::Markdown",
+    "HTTP::Tinyish"
   ],
   "build-depends": [],
   "test-depends": [],
