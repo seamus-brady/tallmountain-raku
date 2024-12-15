@@ -284,38 +284,54 @@
         &copy; 2024 Prediction By Invention. All rights reserved.
     </div>
 </div>
-
 <!-- Script to Reset Input and Scroll on Message Send -->
 <script>
 
-    htmx.on('htmx:beforeRequest', function(event) {
-        // Clear the input box
+       htmx.on('htmx:beforeRequest', function(event) {
+        var message = document.querySelector('input[name=message]').value;
+
+        // Append user message immediately
+        var chatbox = document.getElementById('chatbox');
+        var userMessage = document.createElement('div');
+        userMessage.className = 'message-container user-message-container fade-in';
+        userMessage.innerHTML = `
+            <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
+            <span>${message}</span>`;
+        chatbox.appendChild(userMessage);
+
+        // Clear input box
         document.querySelector('input[name=message]').value = '';
 
-        // Show the thinking indicator
+        // Show "thinking" indicator
         document.getElementById('thinking-indicator').classList.remove('hidden');
+
+        // Scroll chatbox to the bottom
+        chatbox.scrollTop = chatbox.scrollHeight;
     });
 
     htmx.on('htmx:afterRequest', function(event) {
-        // Hide the thinking indicator
+        // Hide "thinking" indicator
         document.getElementById('thinking-indicator').classList.add('hidden');
 
+        // Scroll chatbox to the bottom
         var chatbox = document.getElementById('chatbox');
         chatbox.scrollTop = chatbox.scrollHeight;
 
+        // Add fade-in animation for the bot's response
         var messages = chatbox.querySelectorAll('.message-container');
         if (messages.length > 0) {
             var lastMessage = messages[messages.length - 1];
             lastMessage.classList.add('fade-in');
         }
 
-         // Limit the number of message pairs to 50
+        // Limit the number of message pairs to 50
         var messagePairs = chatbox.querySelectorAll('.message-container');
-        if (messagePairs.length > 100) { // 50 pairs means 100 messages (bot + user)
+        if (messagePairs.length > 100) {
             for (var i = 0; i < messagePairs.length - 100; i++) {
                 chatbox.removeChild(messagePairs[i]);
+            }
         }
-    }});
+    });
 
      function processMarkdown() {
             document.querySelectorAll('.markdown').forEach(el => {

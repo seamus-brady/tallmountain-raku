@@ -17,7 +17,12 @@ class Scanner::PromptHijack {
     # this may indicate goal hijacking prompt injection
     # Based on https://vigil.deadbits.ai/overview/use-vigil/scanners/canary-tokens
 
+    # this also doubles as a refusal scanner - if the LLM returns a response that does not contain the canary
+    # it may also be a refusal to answer the prompt
+
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::PromptHijack>");
+
+    my $OPENAI_REFUSAL_STRING = "I'm sorry, but I can't assist with that.";
 
     method scan($user_prompt --> Bool) {
         $.LOGGER.error("Doing a prompt hijack scan...");
@@ -29,8 +34,13 @@ class Scanner::PromptHijack {
                 LLM::Messages.SYSTEM);
         $messages.build-messages($user_prompt, LLM::Messages.USER);
         my $response = $client.completion-string($messages.get-messages());
+        # log refusals
+        if $response.contains($OPENAI_REFUSAL_STRING) {
+            $.LOGGER.error("OpenAI did not answer the prompt. Logging and treating as a refusal.");
+            return Bool::False
+        }
         if $response.contains($CANARY_STRING) {
-            $.LOGGER.error("No prompt hijack attempt detected.");
+            $.LOGGER.debug("No prompt hijack attempt detected.");
             return Bool::True
         } else {
             $.LOGGER.error("Failed prompt hijack scan!");

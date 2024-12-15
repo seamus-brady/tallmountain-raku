@@ -86,7 +86,7 @@ sub routes() {
                 $APP_LOGGER.debug("Received bot reply: '$bot-response'");
 
                 # return the response as an htmx fragment
-                my $htmx-fragment = get_response($prompt, $bot-response);
+                my $htmx-fragment = get_response($bot-response);
                 content 'text/html', $htmx-fragment;
             }
             CATCH {
@@ -141,13 +141,9 @@ sub routes() {
 }
 
 
-sub get_response(Str $prompt, Str $bot-response --> Str){
+sub get_response(Str $bot-response --> Str){
     # Return the response as an htmx fragment and parse markdown
     my Str $response =  qq:to/END/;
-        <div class="message-container user-message-container">
-        <img src="https://img.icons8.com/color/48/000000/user.png" class="icon" alt="User Icon">
-        <span>{$prompt}</span>
-        </div>
         <div class="message-container bot-message-container">
         <img src="https://img.icons8.com/ios-filled/50/4a90e2/mountain.png" class="icon" alt="Bot Icon">
         <span class="bot-message markdown">{$bot-response}</span>

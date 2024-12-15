@@ -35,7 +35,7 @@ class Scanner::PromptLeakage {
             $.LOGGER.error("Failed prompt leakage scan!");
             return Bool::False
         } else {
-            $.LOGGER.error("No prompt hijack leakage detected.");
+            $.LOGGER.debug("No prompt hijack leakage detected.");
             return Bool::True
         }
     }

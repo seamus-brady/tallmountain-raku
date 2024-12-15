@@ -114,7 +114,7 @@ class Cycle::Cognitive {
     }
 
     method handle-reactive-early-exit($reactive-return --> Str){
-        self.LOGGER.debug("Exiting early as prompt attack suspected!" ~ $reactive-return.gist);
+        self.LOGGER.debug("Exiting early due to prompt attack or LLM refusal: " ~ $reactive-return.gist);
         my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
         self.chat-buffer.add-user-message("<REDACTED USER MESSAGE - PROMPT ATTACK SUSPECTED>");
         self.chat-buffer.add-assistant-message($response);

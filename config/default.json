@@ -21,7 +21,7 @@
     "exclude_categories": "Economic Harm"
   },
   "reactive_stage": {
-    "threat_detected_error": " My apologies, but I can't assist with that."
+    "threat_detected_error": "My apologies, but I can't assist with that."
   },
   "normative_analysis": {
     "number_critical_risks_allowed": 0,
