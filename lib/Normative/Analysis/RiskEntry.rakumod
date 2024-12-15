@@ -12,13 +12,13 @@ use v6.d;
 class Normative::Analysis::RiskEntry {
     # a class to represent individual norm risk score entries
 
-    has Str $.Analysis;
-    has Numeric $.ContextMultiplier;
-    has Numeric $.ImpactScore;
-    has Numeric $.Likelihood;
-    has Numeric $.NormAlignmentScore;
-    has Str $.RiskLevel;
-    has Numeric $.RiskScore;
-    has Str $.UserNormPropValue;
+    has $.Analysis;
+    has $.ContextMultiplier;
+    has $.ImpactScore;
+    has $.Likelihood;
+    has $.NormAlignmentScore;
+    has $.RiskLevel;
+    has $.RiskScore;
+    has $.UserNormPropValue;
 }
 

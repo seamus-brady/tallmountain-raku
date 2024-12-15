@@ -11,6 +11,7 @@ use v6.d;
 use UUID::V4;
 use Util::Logger;
 
+
 class Normative::Proposition {
     # A normative proposition
 
