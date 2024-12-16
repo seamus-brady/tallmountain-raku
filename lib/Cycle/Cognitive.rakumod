@@ -63,7 +63,7 @@ class Cycle::Cognitive {
     method uuid() {
         return $.context.uuid;
     }
-    
+
     method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
         try {
             self.increment-index();
@@ -114,7 +114,7 @@ class Cycle::Cognitive {
     }
 
     method gist() {
-        return "Cycle UUID: $.uuid, Current Index: $.index";
+        return "Cycle UUID: {self.uuid}, Current Index: {self.index}";
     }
 
 }
