@@ -115,7 +115,7 @@ class Normative::Analysis::NormConflict {
                 $messages.get-messages,
                 $.analysis-schema,
                 $.analysis-example);
-        self.LOGGER.debug("Got conflict results: %response");
+        self.LOGGER.debug("Got conflict results: {%response}");
         return %response;
     }
 }

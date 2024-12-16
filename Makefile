@@ -11,6 +11,10 @@ all: run-app
 run-app:
 	raku ./bin/app
 
+# Run the Raku repl
+run-repl:
+	raku ./bin/repl
+
 # Run the tests using prove6
 test:
 	prove6 --lib t/
