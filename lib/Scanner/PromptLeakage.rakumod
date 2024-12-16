@@ -18,8 +18,14 @@ class Scanner::PromptLeakage {
     # Based on https://vigil.deadbits.ai/overview/use-vigil/scanners/canary-tokens
 
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::PromptLeakage>");
+    has $.enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'PromptLeakage');
 
     method scan($user_prompt --> Bool) {
+        if $.enabled eq "OFF" {
+            $.LOGGER.info("Prompt leakage scanner is disabled.");
+            # just pass back OK
+            return Bool::True;
+        }
         $.LOGGER.error("Doing a prompt leakage scan...");
         my $CANARY_STRING = "ec0a4fc8d57ebbc1";
         my $client = LLM::Facade.new;

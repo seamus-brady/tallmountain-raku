@@ -10,6 +10,8 @@
 
 use v6.d;
 use Util::Logger;
+use Util::Config;
+use Normative::Agent;
 use Cycle::Stage::ReactiveScan;
 use Cycle::Stage::EarlyExit;
 use Cycle::Payload::TaintedString;
@@ -18,40 +20,58 @@ use Scanner::VulnerableUser;
 use Scanner::PromptLeakage;
 use Scanner::PromptHijack;
 use Scanner::InappropriateContent;
-use Normative::UserTask;
+use Scanner::NormativeRisk;
 
 
 
 class Cycle::Stage::Reactive {
     # reactive stage in the cognitive cycle - used for quick detection of threats and scanning
+    # based on Aaron Sloman's CogAff architecture
 
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Stage::Reactive>");
+    has Normative::Agent $.normative-agent;
 
     method run(Cycle::Payload::TaintedString $tainted --> Cycle::Stage::ReactiveReturn)  {
         # runs some scans on the prompt and returns the results
 
         self.LOGGER.debug("starting reactive stage of cognitive cycle...");
 
+        # get prompt from payload
         my Str $prompt = $tainted.payload;
 
+        # run scans
+        my @scans = self.handle-scans($prompt);
+
+        # check for leakage or hijack attempts
+        my $scan_results = Cycle::Stage::ReactiveScan.new-from-results(@scans);
+        if $scan_results.has-leakage-or-hijack-attempt {
+            return self.handle-early-exit-for-threat;
+        }
+        return $scan_results;
+    }
+
+    method handle-scans(Str $prompt --> Array) {
+        # handle the running of the scans
         my $start-time = now;
         my @scan_promises = start { Scanner::PromptLeakage.new.scan($prompt) },
                             start { Scanner::PromptHijack.new.scan($prompt) },
                             start { Scanner::InappropriateContent.new.scan($prompt) },
                             start { Scanner::VulnerableUser.new.scan($prompt) },
-                            start { Normative::UserTask.new.get-from-statement($prompt) };
+                            start { Scanner::NormativeRisk.new.scan($prompt, $.normative-agent) };
         my @results = await @scan_promises;
-
         my $end-time = now;
         my $elapsed-time = $end-time - $start-time;
         self.LOGGER.debug("scans took $elapsed-time seconds");
-        my $scan_results = Cycle::Stage::ReactiveScan.new-from-results(@results);
-        if $scan_results.has-leakage-or-hijack-attempt {
-            self.LOGGER.debug("Prompt contains a leakage or hijack attempt!");
-            return Cycle::Stage::EarlyExit.new(message => "Prompt contains a leakage or hijack attempt.");
-        } else {
-            self.LOGGER.debug("Prompt is clean. Returning scan results.");
-            return $scan_results;
-        }
+        return @results;
+    }
+
+    method handle-early-exit-for-threat() {
+        self.LOGGER.debug("Prompt contains a leakage or hijack attempt!");
+        my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
+        return Cycle::Stage::EarlyExit.new(
+                ai-message => $response,
+                user-message => "<REDACTED USER MESSAGE - PROMPT ATTACK SUSPECTED>",
+                exit-details => "Prompt contains a leakage or hijack attempt. Prompt will not be processed."
+        );
     }
 }

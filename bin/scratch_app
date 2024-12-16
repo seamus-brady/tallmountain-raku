@@ -17,25 +17,9 @@ use Normative::Agent;
 use Normative::Role::Endeavour;
 use LLM::Facade;
 use LLM::Messages;
-use Normative::UserTask;
-use Normative::Analysis::NormConflict;
-use Normative::Analysis::RiskProfile;
-use Normative::Analysis::RiskProfileRunner;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Analysis::ImpliedNormExtractor;
 
-my $statement = "I fart on homeless people and it makes them laugh sometimes.";
-my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
-my $agent = Normative::Agent.new;
-$agent.init;
-my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
-my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
-my $recommendation = $analysis.recommend;
-say $recommendation;
-if $recommendation eq Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE {
-    say "OK";
-} else {
-    say $analysis.explain;
-}
-
-
+my $statement = "My father was a great man and a bank robber and he beat me. It was good for me and now I am also a good bank robber.";
+my $extractor = Normative::Analysis::ImpliedNormExtractor.new;
+my %results = $extractor.extract-norm-props($statement);
+%results.map({ "$_ => {%results{$_}}" }).join("\n").say;

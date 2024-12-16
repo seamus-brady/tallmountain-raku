@@ -16,6 +16,7 @@ class Scanner::VulnerableUser {
     # A class to scan for vulnerable user input.
 
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::VulnerableUser>");
+    has $.enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'VulnerableUser');
 
     has Str $.vuln-user-schema = q:to/END/;
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -53,6 +54,16 @@ class Scanner::VulnerableUser {
     END
 
     method scan($user_prompt --> Hash) {
+        if $.enabled eq "OFF" {
+            $.LOGGER.info("Vulnerable user scanner is disabled.");
+            # just pass back OK
+            return %(
+                VulnerabilityDetected => 'No',
+                ReasonForAssessment => "NA",
+                RecommendedAction =>"NA"
+            );
+        }
+
         $.LOGGER.error("Doing a user vulnerability scan...");
         my $client = LLM::Facade.new;
         my $messages = LLM::Messages.new;

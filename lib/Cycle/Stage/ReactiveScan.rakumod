@@ -8,7 +8,7 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
-use Normative::UserTask;
+use Normative::Analysis::RiskAnalyser;
 
 class Cycle::Stage::ReactiveScan {
     # holds the results of a reactive scan
@@ -16,7 +16,7 @@ class Cycle::Stage::ReactiveScan {
     has Bool $.prompt-hijack;
     has Str $.inappropriate-content;
     has Hash $.vulnerable-user;
-    has Normative::UserTask $.user-task;
+    has Normative::Analysis::RiskAnalyser $.normative-scan;
 
     method new-from-results(@results) {
         self.bless(
@@ -24,7 +24,7 @@ class Cycle::Stage::ReactiveScan {
                 :prompt-hijack(@results[1]),
                 :inappropriate-content(@results[2]),
                 :vulnerable-user(@results[3]),
-                :user-task(@results[4])
+                :normative-scan(@results[4])
         );
     }
 

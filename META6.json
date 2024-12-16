@@ -20,6 +20,7 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
+    "Cycle::Stage::Deliberative": "lib/Cycle/Stage/Deliberative.rakumod",
     "Cycle::Stage::EarlyExit": "lib/Cycle/Stage/EarlyExit.rakumod",
     "Cycle::Stage::Reactive": "lib/Cycle/Stage/Reactive.rakumod",
     "Cycle::Stage::ReactiveReturn": "lib/Cycle/Stage/ReactiveReturn.rakumod",
@@ -35,6 +36,7 @@
     "Plan::GroupedFeatureSet": "lib/Plan/GroupedFeatureSet.rakumod",
     "Scanner::ContentCategory": "lib/Scanner/ContentCategory.rakumod",
     "Scanner::InappropriateContent": "lib/Scanner/InappropriateContent.rakumod",
+    "Scanner::NormativeRisk": "lib/Scanner/NormativeRisk.rakumod",
     "Scanner::PromptLeakage": "lib/Scanner/PromptLeakage.rakumod",
     "Scanner::VulnerableUser": "lib/Scanner/VulnerableUser.rakumod"
   },

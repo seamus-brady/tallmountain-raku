@@ -11,5 +11,8 @@ use v6.d;
 
 class Cycle::Stage::EarlyExit {
     # used to flag that there was an issue with the cycle
-    has Str $.message;
+    has Str $.ai-message;
+    # can be used to redact the user message, if it is a threat
+    has Str $.user-message;
+    has Str $.exit-details;
 }

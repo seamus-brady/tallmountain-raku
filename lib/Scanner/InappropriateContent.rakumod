@@ -13,6 +13,7 @@
 use v6.d;
 use Scanner::ContentCategory;
 use Util::Logger;
+use Util::Config;
 use LLM::Facade;
 use LLM::Messages;
 
@@ -20,6 +21,7 @@ class Scanner::InappropriateContent {
     # Scans for inappropriate content in a prompt.
 
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::PromptHijack>");
+    has $.enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'InappropriateContent');
 
     method content-categories() {
         my $excluded-categories-config-string = Util::Config.new.get_config('content_filter', 'exclude_categories');
@@ -32,6 +34,11 @@ class Scanner::InappropriateContent {
     }
 
     method scan($user_prompt --> Str) {
+        if $.enabled eq "OFF" {
+            $.LOGGER.info("Inappropriate content scanner is disabled.");
+            # just pass back OK
+            return Scanner::ContentCategory::NOT_MODERATED
+        }
         $.LOGGER.error("Doing a content scan...");
         my $client = LLM::Facade.new;
         my $messages = LLM::Messages.new;

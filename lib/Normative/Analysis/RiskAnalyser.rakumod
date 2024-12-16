@@ -10,6 +10,7 @@
 use v6.d;
 use Util::Config;
 use Util::Logger;
+use Normative::UserTask;
 use Normative::Analysis::RiskProfile;
 use LLM::Messages;
 use LLM::Facade;
@@ -24,6 +25,8 @@ class Normative::Analysis::RiskAnalyser {
     our constant REJECT = "Reject";
 
     has Normative::Analysis::RiskProfile $.risk-profile;
+    # store the user task so we can pass it to the next stage
+    has Normative::UserTask $.user-task;
     has %.counts = ('Low' => 0, 'Moderate' => 0, 'High' => 0, 'Critical' => 0);
 
 
@@ -34,7 +37,7 @@ class Normative::Analysis::RiskAnalyser {
         }
     }
 
-    method recommend() {
+    method recommend(--> Str) {
         # runs an analysis on the risk profile and returns a recommendation
 
         self.LOGGER.debug("Getting a recommendation based on the risk profile...");

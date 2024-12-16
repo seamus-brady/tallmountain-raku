@@ -21,10 +21,16 @@ class Scanner::PromptHijack {
     # it may also be a refusal to answer the prompt
 
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::PromptHijack>");
+    has $.enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'PromptHijack');
 
     my $OPENAI_REFUSAL_STRING = "I'm sorry, but I can't assist with that.";
 
     method scan($user_prompt --> Bool) {
+        if $.enabled eq "OFF" {
+            $.LOGGER.info("Prompt hijack scanner is disabled.");
+            # just pass back OK
+            return Bool::True;
+        }
         $.LOGGER.error("Doing a prompt hijack scan...");
         my $CANARY_STRING = "1cbbe75d8cf4a0ce";
         my $client = LLM::Facade.new;

@@ -17,6 +17,12 @@
     "openai_chat_completion_model": "gpt-4o-mini",
     "openai_structured_output_attempts": 4
   },
+  "reactive_scanner_toggles": {
+    "PromptLeakage": "OFF",
+    "PromptHijack": "OFF",
+    "InappropriateContent": "OFF",
+    "VulnerableUser": "OFF"
+  },
   "content_filter": {
     "exclude_categories": "Economic Harm"
   },
