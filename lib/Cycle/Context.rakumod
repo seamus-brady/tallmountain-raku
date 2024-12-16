@@ -31,7 +31,6 @@ class Cycle::Context {
     }
 
     method increment-index() {
-        say "hello 2";
         self.LOGGER.debug("increment-index called");
         $.index++;
     }

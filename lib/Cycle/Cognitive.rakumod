@@ -49,7 +49,6 @@ class Cycle::Cognitive {
     }
 
     method increment-index() {
-        say "hello 1";
         $.context.increment-index;
     }
 
@@ -57,11 +56,18 @@ class Cycle::Cognitive {
         $.context.reset-index;
     }
 
+    method index() {
+        return $.context.index;
+    }
+
+    method uuid() {
+        return $.context.uuid;
+    }
+    
     method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
         try {
-            say "hello!";
             self.increment-index();
-            say "hello 3";
+
             self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
 
             # run the reactive stage, it only looks at the incoming string from the user
