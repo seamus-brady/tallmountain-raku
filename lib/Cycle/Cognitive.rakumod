@@ -28,6 +28,7 @@ use Normative::Analysis::RiskProfile;
 use Normative::Analysis::RiskProfileRunner;
 use Normative::Analysis::RiskAnalyser;
 
+
 # exception class for cognitive cycle error
 class Cycle::CognitiveCycleException is Exception {
     has Str $.message;
@@ -38,6 +39,7 @@ class Cycle::Cognitive {
     # Represents a single cognitive cycle for handling a prompt input.
 
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Cognitive>");
+    has $.llm_client = LLM::Facade.new();
     has Cycle::Context $.context;
     has Cycle::Stage::Reactive $.reactive-stage;
 
@@ -64,10 +66,13 @@ class Cycle::Cognitive {
         return $.context.uuid;
     }
 
+    method chat-buffer() {
+        return $.context.chat-buffer;
+    }
+
     method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
         try {
             self.increment-index();
-
             self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
 
             # run the reactive stage, it only looks at the incoming string from the user

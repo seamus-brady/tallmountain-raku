@@ -18,7 +18,7 @@ class Cycle::Context {
 
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Context>");
 
-    has Int $.index = 0;
+    has Int $.index is rw = 0;
     has Str $.uuid = uuid-v4();
     has DateTime $.start-time = DateTime.now;
     has Normative::Agent $.normative-agent;
