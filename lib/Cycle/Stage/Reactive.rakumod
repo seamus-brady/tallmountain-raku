@@ -21,6 +21,7 @@ use Scanner::PromptLeakage;
 use Scanner::PromptHijack;
 use Scanner::InappropriateContent;
 use Scanner::NormativeRisk;
+use Normative::Analysis::RiskAnalyser;
 
 
 
@@ -47,7 +48,16 @@ class Cycle::Stage::Reactive {
         if $scan_results.has-leakage-or-hijack-attempt {
             return self.handle-early-exit-for-threat;
         }
-        return $scan_results;
+
+        # check the normative scan
+        my Normative::Analysis::RiskAnalyser $analysis = $scan_results.normative-scan;
+        my $recommendation = $analysis.recommend;
+        if $recommendation eq Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE {
+            # all good, accept and execute
+            return $scan_results;
+        } else {
+           return self.handle-early-exit-for-normative-risk($prompt, $analysis);
+        }
     }
 
     method handle-scans(Str $prompt --> Array) {
@@ -65,7 +75,20 @@ class Cycle::Stage::Reactive {
         return @results;
     }
 
-    method handle-early-exit-for-threat() {
+    method handle-early-exit-for-normative-risk(
+            Str $prompt,
+            Normative::Analysis::RiskAnalyser $analysis --> Cycle::Stage::EarlyExit) {
+        self.LOGGER.debug("Prompt contains a normative risk!");
+        # get the explanation from the analysis
+        my Str $ai-message = $analysis.explain;
+        return Cycle::Stage::EarlyExit.new(
+                ai-message => $ai-message,
+                user-message => $prompt,
+                exit-details => "Prompt contains a normative risk: $ai-message"
+        );
+    }
+
+    method handle-early-exit-for-threat(--> Cycle::Stage::EarlyExit) {
         self.LOGGER.debug("Prompt contains a leakage or hijack attempt!");
         my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
         return Cycle::Stage::EarlyExit.new(

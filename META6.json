@@ -15,11 +15,13 @@
     "LibXML",
     "Array::Circular",
     "Text::Markdown",
-    "HTTP::Tinyish"
+    "HTTP::Tinyish",
+    "Logger"
   ],
   "build-depends": [],
   "test-depends": [],
   "provides": {
+    "Cycle::Context": "lib/Cycle/Context.rakumod",
     "Cycle::Stage::Deliberative": "lib/Cycle/Stage/Deliberative.rakumod",
     "Cycle::Stage::EarlyExit": "lib/Cycle/Stage/EarlyExit.rakumod",
     "Cycle::Stage::Reactive": "lib/Cycle/Stage/Reactive.rakumod",

@@ -8,9 +8,9 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
-use UUID::V4;
 use Util::Logger;
 use Util::Config;
+use Cycle::Context;
 use Cycle::Payload::TaintedString;
 use Cycle::Payload::OkString;
 use Cycle::Buffer::Chat;
@@ -18,6 +18,7 @@ use Cycle::Stage::Reactive;
 use Cycle::Stage::ReactiveScan;
 use Cycle::Stage::EarlyExit;
 use Cycle::Stage::ReactiveReturn;
+use Cycle::Stage::Deliberative;
 use LLM::Messages;
 use LLM::Facade;
 use LLM::AdaptiveRequestMode;
@@ -27,67 +28,72 @@ use Normative::Analysis::RiskProfile;
 use Normative::Analysis::RiskProfileRunner;
 use Normative::Analysis::RiskAnalyser;
 
+# exception class for cognitive cycle error
+class Cycle::CognitiveCycleException is Exception {
+    has Str $.message;
+}
 
 
 class Cycle::Cognitive {
     # Represents a single cognitive cycle for handling a prompt input.
 
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Cognitive>");
-
-    has Int $.index = 0;
-    has Str $.uuid = uuid-v4();
-    has DateTime $.start-time = DateTime.now;
-    has LLM::Facade $.llm_client = LLM::Facade.new();
-    has Cycle::Buffer::Chat $.chat-buffer = Cycle::Buffer::Chat.new();
-    has Normative::Agent $.normative-agent;
+    has Cycle::Context $.context;
     has Cycle::Stage::Reactive $.reactive-stage;
 
     submethod TWEAK() {
-        # initialise the normative agent
-        $!normative-agent = Normative::Agent.new;
-        $!normative-agent.init;
+        # initialise the cycle context
+        $!context = Cycle::Context.new();
         # set up the stages
-        $!reactive-stage = Cycle::Stage::Reactive.new(normative-agent => $!normative-agent);
+        $!reactive-stage = Cycle::Stage::Reactive.new(normative-agent => $!context.normative-agent);
     }
 
     method increment-index() {
-        self.LOGGER.debug("increment-index called");
-        $!index++;
+        say "hello 1";
+        $.context.increment-index;
     }
 
     method reset-index() {
-        self.LOGGER.debug("reset-index called");
-        $!index = 0;
+        $.context.reset-index;
     }
 
     method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
         try {
+            say "hello!";
             self.increment-index();
+            say "hello 3";
             self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
 
-            # run the reactive stage
+            # run the reactive stage, it only looks at the incoming string from the user
             my Cycle::Stage::ReactiveReturn $reactive-return = $.reactive-stage.run($tainted-string);
 
-            # scan finds a prompt based attack - handle it
             if $reactive-return ~~ Cycle::Stage::EarlyExit {
+                # the reactive stage has decided to exit early, handle it
                 return self.handle-reactive-early-exit($reactive-return);
             }
 
-            # scan is OK
+            # reactive stage passed OK, now run the deliberative stage
             if $reactive-return ~~ Cycle::Stage::ReactiveScan {
                 self.LOGGER.debug("Reactive scan result: " ~ $reactive-return.gist);
+
+                # add the user message to the chat buffer using an OKString
+                my Cycle::Payload::OkString $ok-string = Cycle::Payload::OkString.new(
+                        payload => $tainted-string.payload
+                );
+                self.chat-buffer.add-user-message($ok-string.payload);
+                my $response = $.llm_client.completion-string(self.chat-buffer.messages);
+                self.chat-buffer.add-assistant-message($response);
+                return $response;
+            } else {
+                my Str $message = "Exiting cycle as unknown return from reactive stage: " ~ $reactive-return.gist;
+                self.LOGGER.error($message);
+                Cycle::CognitiveCycleException.new(message => $message).throw;
             }
 
-            # add the user message to the chat buffer using an OKString
-            my Cycle::Payload::OkString $ok-string = Cycle::Payload::OkString.new(payload => $tainted-string.payload);
-            self.chat-buffer.add-user-message($tainted-string.payload);
-            my $response = $.llm_client.completion-string(self.chat-buffer.messages);
-            self.chat-buffer.add-assistant-message($response);
-            return $response;
         }
         CATCH {
             my $error = $_;
-            self.LOGGER.error("Exception caught in cognitive cycle index {self.index}: $error");
+            self.LOGGER.error("Exception caught in cognitive cycle index {self.context.index}: $error");
             my Str $error_response = "Sorry there was an error processing your request. Please try again.";
             self.chat-buffer.add-assistant-message($error_response);
             return $error_response;
