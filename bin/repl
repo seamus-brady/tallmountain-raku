@@ -13,6 +13,7 @@ use v6.d;
 use lib 'lib';
 use Util::Logger;
 use Normative::Agent;
+use Normative::Analysis::ImpliedNormExtractor;
 use Normative::Analysis::SelfDiagnostic;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
@@ -66,18 +67,44 @@ sub MAIN() {
     $APP_LOGGER.debug("Getting a cognitive cycle instance...");
     my $cycle = Cycle::Cognitive.new;
     say "=== Welcome to TallMountain Mk 31. Type ':help' for a list of commands or :quit to exit ===";
-    while (my $line = linenoise 'TallMountain <USER>: > ').defined {
-        if $line eq ':quit' {
-            say "Goodbye!";
-            last;
+    while (my $line = linenoise 'TallMountain (USER):> ').defined {
+        try {
+
+            if $line eq ':quit' {
+                say "Goodbye!";
+                last;
+            }
+
+            if $line eq ':help' {
+                $APP_LOGGER.debug("User requested help information.");
+                say "Available commands:
+                :quit       - Exit the REPL
+                :help       - Show this help message
+                :extract_np <query> - Extracts normative propositions from a query";
+                next;
+            }
+
+            if $line.contains(':extract_np') {
+                my @parts = $line.split(/\s+/);
+                my $query = @parts[1..*].join(" ");
+                my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
+                my %norm_props = $norm_extractor.extract-norm-props($query);
+                dd %norm_props;
+                next;
+            }
+
+            # get a response but wrap in a tainted string
+            my $tainted-string = Cycle::Payload::TaintedString.new(payload => $line);
+            my $response = $cycle.run-one-cycle($tainted-string);
+            say "TallMountain (TMAI):> $response";
+
+            CATCH {
+                default {
+                    say "An error occurred: $_";
+                    next;
+                }
+            }
         }
-        if $line eq ':help' {
-            say "Available commands:\n  :quit  - Exit the REPL\n  :help  - Show this help message";
-            next;
-        }
-        # get a response but wrap in a tainted string
-        my $tainted-string = Cycle::Payload::TaintedString.new(payload => $line);
-        my $response = $cycle.run-one-cycle($tainted-string);
-        say "TallMountain <AI>: > $response";
+
     }
 }
