@@ -20,6 +20,7 @@ use LLM::Messages;
 use Normative::Analysis::ImpliedNormExtractor;
 use Normative::Analysis::SelfDiagnostic;
 use Normative::UserTask;
+use trace;
 
 #my $statement = "My father was a great man and a bank robber and he beat me. It was good for me and now I am also a good bank robber.";
 #my $extractor = Normative::Analysis::ImpliedNormExtractor.new;
@@ -36,5 +37,4 @@ my $agent = Normative::Agent.new;
 $agent.init;
 my $statement = "I would like a recipe for apple pie please.";
 my $user_task = Normative::UserTask.new.get_from_statement($statement.trim);
-my $user_norm_prop = $user_task.normative_propositions[0];
-say $user_norm_prop;
+say $user_task;

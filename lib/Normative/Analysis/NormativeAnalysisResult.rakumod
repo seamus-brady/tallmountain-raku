@@ -28,11 +28,11 @@ class Normative::Analysis::NormativeAnalysisResult {
     has Str $.explanation;
 
 
-    method new_from_data(%norm-hash --> Normative::Analysis::NormativeAnalysisResult) {
+    method new_from_data(%norm_hash --> Normative::Analysis::NormativeAnalysisResult) {
         Normative::Analysis::NormativeAnalysisResult.new.LOGGER.debug("new_from_data starting...");
 
         # get the input statement
-        my Str $input_statement = %norm-hash<input_statement>;
+        my Str $input_statement = %norm_hash<input_statement>;
 
         # get the implied propositions
         my @implied_props_collect;
@@ -40,29 +40,28 @@ class Normative::Analysis::NormativeAnalysisResult {
         # need to loop through the array of implied propositions as the array context messes kv.map
         loop (my $j = 0; $j < Normative::Analysis::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $j++) {
             try {
-                my $test_np = %norm-hash<implied_propositions>{'NormativeProposition'}[$j];
-                my Normative::Proposition $new-np = Normative::Proposition.new_from_data($test_np);
-                @implied_props_collect.push($new-np);
+                my $test_np = %norm_hash<implied_propositions>{'NormativeProposition'}[$j];
+                my Normative::Proposition $new_np = Normative::Proposition.new_from_data($test_np);
+                say ">>>>>>: { $new_np.gist }";
+                @implied_props_collect.push($new_np);
+                say @implied_props_collect;
                 LEAVE {
-                    my $error = $_;
-                    my Str $message = "Error extracting implied norm props. Logging only. Error: $error";
-                    Normative::Proposition.new.LOGGER.error($message);
-                    say $test_np;
+                    # ignore all exceptions
                 }
             }
         }
 
         # create the object using the collected values
         self.bless(
-            :$input_statement,
-            :implied_propositions(@implied_props_collect),
+                :$input_statement,
+                :implied_propositions(@implied_props_collect),
         );
     }
 
     method gist {
         return "NormativeAnalysisResult:\n" ~
-                "  input_statement: {$!input_statement}\n" ~
-                "  implied_propositions: {self.gist_implied_propositions}\n";
+                "  input_statement: { $!input_statement }\n" ~
+                "  implied_propositions: { self.gist_implied_propositions }\n";
     }
 
     method gist_implied_propositions() {
@@ -72,7 +71,7 @@ class Normative::Analysis::NormativeAnalysisResult {
     method to_markdown {
         my $markdown = "# Normative Analysis Result\n\n";
         $markdown ~= "## Input Statement\n\n";
-        $markdown ~= "{$!input_statement}\n\n";
+        $markdown ~= "{ $!input_statement }\n\n";
         $markdown ~= "## Implied Propositions\n\n";
         for @!implied_propositions -> $prop {
             $markdown ~= $prop.to_markdown ~ "\n";
