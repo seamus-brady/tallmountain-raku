@@ -29,7 +29,7 @@ class Normative::Analysis::NormativeAnalysisResult {
 
 
     method new_from_data(%norm-hash --> Normative::Analysis::NormativeAnalysisResult) {
-        Normative::Analysis::NormativeAnalysisResult.new.LOGGER.debug("new-from-data starting...");
+        Normative::Analysis::NormativeAnalysisResult.new.LOGGER.debug("new_from_data starting...");
 
         # get the input statement
         my Str $input_statement = %norm-hash<input_statement>;
@@ -41,12 +41,13 @@ class Normative::Analysis::NormativeAnalysisResult {
         loop (my $j = 0; $j < Normative::Analysis::NormativeAnalysisResult.MAX_EXTRACTED_PROPS; $j++) {
             try {
                 my $test_np = %norm-hash<implied_propositions>{'NormativeProposition'}[$j];
-                @implied_props_collect.push(
-                        Normative::Proposition.new_from_data($test_np)
-                );
+                my Normative::Proposition $new-np = Normative::Proposition.new_from_data($test_np);
+                @implied_props_collect.push($new-np);
                 LEAVE {
-                    my Str $message = "Error extracting implied norm props. Logging only.";
+                    my $error = $_;
+                    my Str $message = "Error extracting implied norm props. Logging only. Error: $error";
                     Normative::Proposition.new.LOGGER.error($message);
+                    say $test_np;
                 }
             }
         }

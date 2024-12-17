@@ -75,20 +75,21 @@ class Normative::Proposition {
     has Modality $.modality;
     has ModalitySubscript $.modal_subscript;
 
-    method new_from_data(%np-xml-hash --> Normative::Proposition) {
+    method new_from_data(%np_xml_hash --> Normative::Proposition) {
         # creates a new norm prop object from an xml hash - used in the norm prop extractor
         # if there is an error, the norm prop is filled with values that do nothing
         Normative::Proposition.new.LOGGER.debug("new-from-data starting...");
+        my $proposition_value = %np_xml_hash<proposition_value>;
+        my $operator = %np_xml_hash<operator>;
+        my $level = %np_xml_hash<level>;
+        my $modality = %np_xml_hash<modality>;
+        my $modal_subscript = %np_xml_hash<modal_subscript>;
         self.bless(
-                :proposition_value(%np-xml-hash<proposition_value> // "Unknown"),
-                :operator(Normative::Proposition::Operator::{%np-xml-hash<operator>}
-                        // Normative::Proposition::Operator::INDIFFERENT),
-                :level(Normative::Proposition::Level::{%np-xml-hash<level>}
-                        // Normative::Proposition::Level::ETIQUETTE),
-                :modality(Normative::Proposition::Modality::{%np-xml-hash<modality>}
-                        // Normative::Proposition::Modality::IMPOSSIBLE),
-                :modal_subscript(Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>}
-                        // Normative::Proposition::ModalitySubscript::NONE),
+                :proposition_value($proposition_value),
+                :operator(Normative::Proposition::Operator::{$operator} // Normative::Proposition::Operator::INDIFFERENT),
+                :level(Normative::Proposition::Level::{$level} // Normative::Proposition::Level::ETIQUETTE),
+                :modality(Normative::Proposition::Modality::{$modality} // Normative::Proposition::Modality::IMPOSSIBLE),
+                :modal_subscript(Normative::Proposition::ModalitySubscript::{$modal_subscript} // Normative::Proposition::ModalitySubscript::NONE),
         );
     }
 
