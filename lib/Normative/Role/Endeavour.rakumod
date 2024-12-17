@@ -10,19 +10,19 @@ role Normative::Role::Endeavour {
     has Str $.description;
     has Str $.uuid;
     has Normative::Comprehensiveness $.comprehensiveness;
-    has Normative::Proposition @.normative-propositions;
+    has Normative::Proposition @.normative_propositions;
 
     method create(:$name,
                   :$description,
                   :$uuid,
                   :$comprehensiveness,
-                  :@normative-propositions) {
+                  :@normative_propositions) {
         self.bless(
                 :name($name),
                 :description($description),
                 :uuid($uuid // uuid-v4()),
                 :comprehensiveness($comprehensiveness // Normative::Comprehensiveness::DEFAULT),
-                :normative-propositions(@normative-propositions)
+                :normative-propositions(@normative_propositions)
                 );
     }
 
@@ -32,14 +32,14 @@ role Normative::Role::Endeavour {
         Endeavour name: {$!name}
         description: {$!description}
         comprehensiveness: {$!comprehensiveness}
-        normative_propositions: {@!normative-propositions.gist}
+        normative_propositions: { @!normative_propositions.gist}
         ----
         END_GIST
     }
 
 
 
-    method to-markdown {
+    method to_markdown {
         my $endeavour_heading = "# Endeavour: {$!name // "Unnamed Endeavour"}\n";
         my $endeavour_table = qq:to/END_ENDEAVOUR_TABLE/;
         | **Property**         | **Value**                         |
@@ -54,12 +54,12 @@ role Normative::Role::Endeavour {
         my $propositions_table = "| **Proposition** | **Operator** | **Level** | **Modality** | **Modal Subscript** |\n";
         $propositions_table ~= "|------------------|--------------|-----------|--------------|--------------------|\n";
 
-        for @!normative-propositions -> $np {
-            $propositions_table ~= "| {$np.proposition-value // ''} "
+        for @!normative_propositions -> $np {
+            $propositions_table ~= "| {$np.proposition_value // ''} "
                     ~ "| {$np.operator // ''} "
                     ~ "| {$np.level // ''} "
                     ~ "| {$np.modality // ''} "
-                    ~ "| {$np.modal-subscript // ''} |\n";
+                    ~ "| {$np.modal_subscript // ''} |\n";
         }
 
         return $endeavour_heading ~ "\n" ~ $endeavour_table ~ "\n\n" ~ $propositions_heading ~ "\n" ~ $propositions_table;

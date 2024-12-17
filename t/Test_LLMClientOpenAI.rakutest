@@ -25,7 +25,7 @@ subtest 'LLM::Client::OpenAI Chat Completion' => {
         { role => "system", content => "You are a helpful assistant." },
         { role => "user", content => "Hello!" }
     );
-    my $response = $client.completion-string(@messages);
+    my $response = $client.completion_string(@messages);
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
 }
@@ -33,11 +33,11 @@ subtest 'LLM::Client::OpenAI Chat Completion' => {
 
 subtest 'LLM::Client::OpenAI use LLM::Messages' => {
     my $messages = LLM::Messages.new;
-    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-    $messages.build-messages('Knock knock.', LLM::Messages.USER);
-    $messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
-    $messages.build-messages('Orange.', LLM::Messages.USER);
-    my $response = $client.completion-string($messages.get-messages());
+    $messages.build_messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build_messages('Knock knock.', LLM::Messages.USER);
+    $messages.build_messages("Who's there?", LLM::Messages.ASSISTANT);
+    $messages.build_messages('Orange.', LLM::Messages.USER);
+    my $response = $client.completion_string($messages.get_messages());
     ok $response, 'Chat completion should return a response';
     ok $response.chars > 0, 'Chat completion should return a non-empty response';
 }
@@ -80,10 +80,10 @@ subtest 'LLM::Client::OpenAI structured output' => {
 
     my $client = LLM::Client::OpenAI.new();
     my $messages = LLM::Messages.new;
-    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-    $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
+    $messages.build_messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build_messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
-    my %family = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    my %family = $client.completion_structured_output($messages.get_messages, $xml-schema.trim, $xml-doc.trim);
     is %family<parent>, 'Mary', 'Test parent.';
     is %family<child>[0]<name>, 'Tom', 'Test child name.';
     is %family<child>[1]<name>, 'Laura', 'Test child name.';
@@ -123,7 +123,7 @@ subtest 'LLM::Client::OpenAI structured output extracts string' => {
 
     my $client = LLM::Client::OpenAI.new();
     my $messages = LLM::Messages.new;
-    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build_messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
     my $prompt = q:to/END/;
     The engine part has been ordered as follows:
     part-number: ENG65765876
@@ -133,8 +133,8 @@ subtest 'LLM::Client::OpenAI structured output extracts string' => {
     It weights 4kg.
     It is made from bright mild steel and vegan leather
     END
-    $messages.build-messages($prompt, LLM::Messages.USER);
-    my %response = $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim);
+    $messages.build_messages($prompt, LLM::Messages.USER);
+    my %response = $client.completion_structured_output($messages.get_messages, $xml-schema.trim, $xml-doc.trim);
     is %response<name>, 'Steering Wheel', 'Test string extracted.';
 }
 
@@ -167,11 +167,11 @@ subtest 'LLM::Client::OpenAI structured output invalid schema' => {
 
     my $client = LLM::Client::OpenAI.new();
     my $messages = LLM::Messages.new;
-    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-    $messages.build-messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
+    $messages.build_messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build_messages('Mary has two children, Tom and Laura, 10 and 2 respectively.', LLM::Messages.USER);
 
     dies-ok {
-        $client.completion-structured-output($messages.get-messages, $xml-schema.trim, $xml-doc.trim)
+        $client.completion_structured_output($messages.get_messages, $xml-schema.trim, $xml-doc.trim)
     }, 'Exception thrown for invalid xml';
 }
 

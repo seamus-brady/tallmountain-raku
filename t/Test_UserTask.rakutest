@@ -15,7 +15,7 @@ plan 1;
 
 subtest 'Normative::UserTask ok' => {
     my $statement = "I would like to create an apple pie - can you help?";
-    my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
+    my $user_task = Normative::UserTask.new.get_from_statement($statement.trim);
     isa-ok $user_task,  Normative::UserTask, 'The result is a Normative::UserTask';
 }
 

@@ -17,17 +17,17 @@ plan 2;
 my $agent = Normative::Agent.new;
 $agent.init;
 my $statement = "I would like a recipe for apple pie please.";
-my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
-my $user-norm-prop = $user_task.normative-propositions[0];
+my $user_task = Normative::UserTask.new.get_from_statement($statement.trim);
+my $user_norm_prop = $user_task.normative_propositions[0];
 
 subtest 'Normative::Analysis::NormConflict loads' => {
-    my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
-    isa-ok $norm-conflict, Normative::Analysis::NormConflict;
+    my Normative::Analysis::NormConflict $norm_conflict = Normative::Analysis::NormConflict.new;
+    isa-ok $norm_conflict, Normative::Analysis::NormConflict;
 }
 
 subtest 'Normative::Analysis::NormConflict gets a correct level' => {
-    my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
-    my %response = $norm-conflict.analyse($user-norm-prop, $agent);
+    my Normative::Analysis::NormConflict $norm_conflict = Normative::Analysis::NormConflict.new;
+    my %response = $norm_conflict.analyse($user_norm_prop, $agent);
     ok %response<RiskLevel> eq 'Low';
 }
 

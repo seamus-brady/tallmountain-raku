@@ -35,19 +35,19 @@ class LLM::Facade {
         }
     }
 
-    method completion-string(
+    method completion_string(
             @messages,
-            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced_mode
             --> Str) {
-            return $.client.completion-string(@messages, $mode);
+            return $.client.completion_string(@messages, $mode);
     }
 
-    method completion-structured-output(
+    method completion_structured_output(
             @messages is copy,
-            Str $xml-schema is copy,
-            Str $xml-example is copy,
-            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+            Str $xml_schema is copy,
+            Str $xml_example is copy,
+            LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced_mode
             --> Hash) {
-            return $.client.completion-structured-output(@messages, $xml-schema, $xml-example, $mode);
+            return $.client.completion_structured_output(@messages, $xml_schema, $xml_example, $mode);
     }
 }

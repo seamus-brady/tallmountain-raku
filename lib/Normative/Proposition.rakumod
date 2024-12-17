@@ -69,25 +69,25 @@ class Normative::Proposition {
 
 
     has Str $.uuid = uuid-v4();
-    has Str $.proposition-value;
+    has Str $.proposition_value;
     has Operator $.operator;
     has Level $.level;
     has Modality $.modality;
-    has ModalitySubscript $.modal-subscript;
+    has ModalitySubscript $.modal_subscript;
 
-    method new-from-data(%np-xml-hash --> Normative::Proposition) {
+    method new_from_data(%np-xml-hash --> Normative::Proposition) {
         # creates a new norm prop object from an xml hash - used in the norm prop extractor
         # if there is an error, the norm prop is filled with values that do nothing
         Normative::Proposition.new.LOGGER.debug("new-from-data starting...");
         self.bless(
-                :proposition-value(%np-xml-hash<proposition-value> // "Unknown"),
+                :proposition_value(%np-xml-hash<proposition_value> // "Unknown"),
                 :operator(Normative::Proposition::Operator::{%np-xml-hash<operator>}
                         // Normative::Proposition::Operator::INDIFFERENT),
                 :level(Normative::Proposition::Level::{%np-xml-hash<level>}
                         // Normative::Proposition::Level::ETIQUETTE),
                 :modality(Normative::Proposition::Modality::{%np-xml-hash<modality>}
                         // Normative::Proposition::Modality::IMPOSSIBLE),
-                :modal-subscript(Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>}
+                :modal_subscript(Normative::Proposition::ModalitySubscript::{%np-xml-hash<modal_subscript>}
                         // Normative::Proposition::ModalitySubscript::NONE),
         );
     }
@@ -95,20 +95,20 @@ class Normative::Proposition {
     method gist {
         return "\nNormativeProposition:\n" ~
                 "  uuid: {$!uuid}\n" ~
-                "  proposition-value: {$!proposition-value}\n" ~
+                "  proposition_value: { $!proposition_value }\n" ~
                 "  operator: {$!operator}\n" ~
                 "  level: {$!level}\n" ~
                 "  modality: {$!modality}\n" ~
-                "  modal-subscript: {$!modal-subscript}\n";
+                "  modal-subscript: { $!modal_subscript }\n";
     }
 
-    method to-markdown {
+    method to_markdown {
         return "### Normative Proposition\n\n" ~
                 "- **UUID**: {$!uuid}\n" ~
-                "- **Proposition Value**: {$!proposition-value}\n" ~
+                "- **Proposition Value**: { $!proposition_value }\n" ~
                 "- **Operator**: {$!operator}\n" ~
                 "- **Level**: {$!level}\n" ~
                 "- **Modality**: {$!modality}\n" ~
-                "- **Modal Subscript**: {$!modal-subscript}\n";
+                "- **Modal Subscript**: { $!modal_subscript }\n";
     }
 }

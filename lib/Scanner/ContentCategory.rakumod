@@ -124,8 +124,8 @@ class Scanner::ContentCategory {
     ];
 
     # Method to filter categories
-    method get-filtered-categories(:@exclude-categories = []) {
-        return ALL_CATEGORIES.grep({ !($_[0] ∈ @exclude-categories) });
+    method get_filtered_categories(:@exclude_categories = []) {
+        return ALL_CATEGORIES.grep({ !($_[0] ∈ @exclude_categories) });
     }
 }
 

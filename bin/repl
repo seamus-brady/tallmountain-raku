@@ -23,7 +23,7 @@ my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
 
 use Linenoise;
 
-sub check-api-key {
+sub check_api_key {
     # Check for OPENAI_API_KEY environment variable if using OpenAI
     if Util::Config.get_config('llm', 'default_llm_provider') ~ "openai" {
         my $api-key = %*ENV<OPENAI_API_KEY>;
@@ -35,13 +35,13 @@ sub check-api-key {
     }
 }
 
-sub perform-self-diagnosis {
+sub perform_self_diagnosis {
     # Perform a self-diagnosis to check all internal norms are consistent
     $APP_LOGGER.debug("Running the normative calculus self-diagnostic...");
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
     my $diagnostic = Normative::Analysis::SelfDiagnostic.new;
-    my %diagnostic-result = $diagnostic.run-diagnostic($np-agent);
+    my %diagnostic-result = $diagnostic.run_diagnostic($np-agent);
     if %diagnostic-result<PassedDiagnostic> eq "False" {
         my Str $analysis = %diagnostic-result<Analysis>;
         my $msg = "Sorry, the normative calculus self-diagnostic failed: $analysis";
@@ -52,16 +52,28 @@ sub perform-self-diagnosis {
     }
 }
 
+sub format_implied_propositions(%hash) {
+    say "implied_propositions:";
+    for %hash<implied_propositions><NormativeProposition>.list -> $prop {
+        say "    - level: {$prop<level>}";
+        say "      modal_subscript: {$prop<modal_subscript>}";
+        say "      modality: {$prop<modality>}";
+        say "      operator: {$prop<operator>}";
+        say "      proposition_value: {$prop<proposition_value>}\n";
+    }
+    say "input_statement:\n    {%hash<input_statement>}";
+}
+
 
 sub MAIN() {
     # log the start of the app
     $APP_LOGGER.debug("Starting TallMountain REPL... please wait");
 
     # make sure we have an API key
-    check-api-key;
+    check_api_key;
 
     # make sure the normative calculus is consistent
-    perform-self-diagnosis;
+    perform_self_diagnosis;
 
     # get a cognitive cycle instance
     $APP_LOGGER.debug("Getting a cognitive cycle instance...");
@@ -88,14 +100,14 @@ sub MAIN() {
                 my @parts = $line.split(/\s+/);
                 my $query = @parts[1..*].join(" ");
                 my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
-                my %norm_props = $norm_extractor.extract-norm-props($query);
-                dd %norm_props;
+                my %norm_props = $norm_extractor.extract_norm_props($query);
+                format_implied_propositions(%norm_props);
                 next;
             }
 
             # get a response but wrap in a tainted string
             my $tainted-string = Cycle::Payload::TaintedString.new(payload => $line);
-            my $response = $cycle.run-one-cycle($tainted-string);
+            my $response = $cycle.run-one_cycle($tainted-string);
             say "TallMountain (TMAI):> $response";
 
             CATCH {
@@ -105,6 +117,5 @@ sub MAIN() {
                 }
             }
         }
-
     }
 }

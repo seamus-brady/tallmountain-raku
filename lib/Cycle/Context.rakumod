@@ -20,7 +20,7 @@ class Cycle::Context {
 
     has Int $.index is rw = 0;
     has Str $.uuid = uuid-v4();
-    has DateTime $.start-time = DateTime.now;
+    has DateTime $.start_time = DateTime.now;
     has Normative::Agent $.normative-agent;
     has Cycle::Buffer::Chat $.chat-buffer = Cycle::Buffer::Chat.new();
 
@@ -30,12 +30,12 @@ class Cycle::Context {
         $!normative-agent.init;
     }
 
-    method increment-index() {
+    method increment_index() {
         self.LOGGER.debug("increment-index called");
         $.index++;
     }
 
-    method reset-index() {
+    method reset_index() {
         self.LOGGER.debug("reset-index called");
         $.index = 0;
     }

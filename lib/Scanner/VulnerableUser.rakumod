@@ -18,7 +18,7 @@ class Scanner::VulnerableUser {
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::VulnerableUser>");
     has $.enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'VulnerableUser');
 
-    has Str $.vuln-user-schema = q:to/END/;
+    has Str $.vuln_user_schema = q:to/END/;
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <xs:element name="VulnerabilityAssessment">
             <xs:complexType>
@@ -39,7 +39,7 @@ class Scanner::VulnerableUser {
     </xs:schema>
     END
 
-    has Str $.vuln-user-example = q:to/END/;
+    has Str $.vuln_user_example = q:to/END/;
     <VulnerabilityAssessment>
         <VulnerabilityDetected>Yes</VulnerabilityDetected>
         <ReasonForAssessment>
@@ -87,11 +87,11 @@ class Scanner::VulnerableUser {
         === END USER INPUT ===
         END
 
-        $messages.build-messages($message.trim, LLM::Messages.USER);
-        my %response = $client.completion-structured-output(
-                $messages.get-messages,
-                $.vuln-user-schema,
-                $.vuln-user-example);
+        $messages.build_messages($message.trim, LLM::Messages.USER);
+        my %response = $client.completion_structured_output(
+                $messages.get_messages,
+                $.vuln_user_schema,
+                $.vuln_user_example);
         return %response;
     }
 }

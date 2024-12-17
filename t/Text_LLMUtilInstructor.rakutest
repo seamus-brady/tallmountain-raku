@@ -43,7 +43,7 @@ subtest 'LLM::Util::Instructor strips xml code markers' => {
     END
 
     my $instructor = LLM::Util::Instructor.new;
-    is $instructor.remove-code-block-markers($xml-doc-marked.trim), $xml-doc.trim, 'Test remove xml code markers.';
+    is $instructor.remove_code_block_markers($xml-doc-marked.trim), $xml-doc.trim, 'Test remove xml code markers.';
 }
 
 subtest 'LLM::Util::Instructor strips xml declaration' => {
@@ -69,7 +69,7 @@ subtest 'LLM::Util::Instructor strips xml declaration' => {
     END
 
     my $instructor = LLM::Util::Instructor.new;
-    is $instructor.strip-xml-declaration($xml-doc-declared.trim), $xml-doc.trim, 'Test remove xml declaration.';
+    is $instructor.strip_xml_declaration($xml-doc-declared.trim), $xml-doc.trim, 'Test remove xml declaration.';
 }
 
 
@@ -110,7 +110,7 @@ subtest 'LLM::Util::Instructor xml is valid' => {
     END
 
     my $instructor = LLM::Util::Instructor.new;
-    is $instructor.is-valid-xml($xml-string.trim, $xml-schema.trim), Bool::True, 'Test xml is valid.';
+    is $instructor.is_valid_xml($xml-string.trim, $xml-schema.trim), Bool::True, 'Test xml is valid.';
 }
 
 subtest 'LLM::Util::Instructor xml is invalid' => {
@@ -150,7 +150,7 @@ subtest 'LLM::Util::Instructor xml is invalid' => {
     END
 
     my $instructor = LLM::Util::Instructor.new;
-    is $instructor.is-valid-xml($xml-string.trim, $xml-schema.trim), Bool::False, 'Test xml is invalid.';
+    is $instructor.is_valid_xml($xml-string.trim, $xml-schema.trim), Bool::False, 'Test xml is invalid.';
 }
 
 subtest 'LLM::Util::Instructor hash from xml' => {
@@ -165,7 +165,7 @@ subtest 'LLM::Util::Instructor hash from xml' => {
     END
 
     my $instructor = LLM::Util::Instructor.new;
-    my %family=  $instructor.hash-from-xml($xml-doc.trim);
+    my %family=  $instructor.hash_from_xml($xml-doc.trim);
     is %family<parent>, 'John Doe', 'Test parent.';
     is %family<child><name>, 'Alice', 'Test child name.';
     is %family<child>[0]<name>, 'Alice', 'Test child name.';

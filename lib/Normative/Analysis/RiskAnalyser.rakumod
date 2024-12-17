@@ -24,15 +24,15 @@ class Normative::Analysis::RiskAnalyser {
     our constant SUGGEST_MODIFICATION = "Suggest Modification";
     our constant REJECT = "Reject";
 
-    has Normative::Analysis::RiskProfile $.risk-profile;
+    has Normative::Analysis::RiskProfile $.risk_profile;
     # store the user task so we can pass it to the next stage
-    has Normative::UserTask $.user-task;
+    has Normative::UserTask $.user_task;
     has %.counts = ('Low' => 0, 'Moderate' => 0, 'High' => 0, 'Critical' => 0);
 
 
     submethod TWEAK {
         # simply count the risk levels for each normative conflict result
-        for $!risk-profile.get-all-risk-levels -> $level {
+        for $!risk_profile.get_all_risk_levels -> $level {
             %!counts{$level}++ if %!counts{$level}:exists;
         }
     }
@@ -90,7 +90,7 @@ class Normative::Analysis::RiskAnalyser {
                 - Don't use the work 'risk' rather just explain the situation.
 
                 === START RISK RESULTS ===
-                {$.risk-profile.to-markdown}
+                {$.risk_profile.to_markdown }
                 === END RISK RESULTS ===
                 END
             }
@@ -109,13 +109,13 @@ class Normative::Analysis::RiskAnalyser {
                 - Don't use the word 'norm' as it is quite technical.
                 - Don't use the work 'risk' rather just explain the situation.
                 === START RISK RESULTS ===
-                {$.risk-profile.to-markdown}
+                {$.risk_profile.to_markdown }
                 === END RISK RESULTS ===
                 END
             }
         }
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages);
+        $messages.build_messages($prompt.trim, LLM::Messages.USER);
+        my $response = $client.completion_string($messages.get_messages);
         return $response;
     }
 

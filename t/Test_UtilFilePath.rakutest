@@ -21,13 +21,13 @@ subtest 'Util::FilePath loaded' => {
 
 subtest 'Util::FilePath normative calc prompt loaded' => {
     my $file_util = Util::FilePath.new;
-    my Str $nc = $file_util.get-nc-prompt;
+    my Str $nc = $file_util.get_nc_prompt;
     ok $nc.defined, "normative calc prompt is defined";
 }
 
 subtest 'Util::FilePath normative np score prompt loaded' => {
     my $file_util = Util::FilePath.new;
-    my Str $score-np = $file_util.get-norm-prop-score-prompt;
+    my Str $score-np = $file_util.get_norm_prop_score_prompt;
     ok $score-np.defined, "normative calc score prompt is defined";
 }
 

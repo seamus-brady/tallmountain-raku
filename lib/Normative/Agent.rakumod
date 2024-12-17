@@ -27,27 +27,27 @@ class Normative::Agent {
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::Agent>");
 
     # the highest endeavour of the agent is the ethical endeavour
-    has Normative::Role::Endeavour $.highest-endeavour;
+    has Normative::Role::Endeavour $.highest_endeavour;
 
     # more mundane endeavours
-    has @.system-endeavours;
+    has @.system_endeavours;
 
-    method add-highest-endeavour(Normative::Role::Endeavour $highest-endeavour) {
-        $!highest-endeavour = $highest-endeavour;
+    method add_highest_endeavour(Normative::Role::Endeavour $highest-endeavour) {
+        $!highest_endeavour = $highest-endeavour;
     }
 
 
-    method add-system-endeavour(Normative::Role::Endeavour $endeavour) {
-        @!system-endeavours.push($endeavour);
+    method add_system_endeavour(Normative::Role::Endeavour $endeavour) {
+        @!system_endeavours.push($endeavour);
     }
 
     method init() {
          self.LOGGER.debug("initializing normative agent...");
-         self.load-highest-endeavour;
-         self.load-system-endeavours;
+         self.load_highest_endeavour;
+         self.load_system_endeavours;
     }
 
-    method map-endeavours(%parsed-data --> Array){
+    method map_endeavours(%parsed-data --> Array){
         my @loaded_endeavours = %parsed-data<endeavours>.map({
             Normative::Role::Endeavour.create(
                     uuid => .<uuid>,
@@ -59,35 +59,35 @@ class Normative::Agent {
                     normative-propositions => .<normative_propositions>.map({
                         Normative::Proposition.new(
                                 uuid => .<uuid>,
-                                proposition-value => .<proposition_value>,
+                                proposition_value => .<proposition_value>,
                                 goal => .<goal>,
                                 description => .<description>,
                                 operator => Normative::Proposition::Operator::{.<operator>},
                                 level => Normative::Proposition::Level::{.<level>},
                                 modality => Normative::Proposition::Modality::{.<modality>},
                                 modal-subscript => Normative::Proposition::ModalitySubscript::{.<modality-subscript>}
-                                )
+                        )
                     })
-                    )
+            )
         });
         return @loaded_endeavours;
     }
 
-    method load-highest-endeavour(){
+    method load_highest_endeavour(){
         self.LOGGER.debug("loading highest endeavour...");
-        my %parsed-data = self.load-highest-endeavour-config;
-        my @loaded_endeavours = self.map-endeavours(%parsed-data);
-        self.add-highest-endeavour(@loaded_endeavours[0]);
+        my %parsed-data = self.load_highest_endeavour_config;
+        my @loaded_endeavours = self.map_endeavours(%parsed-data);
+        self.add_highest_endeavour(@loaded_endeavours[0]);
     }
 
-    method load-system-endeavours(){
+    method load_system_endeavours(){
         self.LOGGER.debug("loading system endeavours...");
-        my %parsed-data =  self.load-system-endeavours-config;
-        my @loaded_endeavours =self.map-endeavours(%parsed-data);
-        @loaded_endeavours.map({self.add-system-endeavour($_)});
+        my %parsed-data =  self.load_system_endeavours_config;
+        my @loaded_endeavours =self.map_endeavours(%parsed-data);
+        @loaded_endeavours.map({self.add_system_endeavour($_)});
     }
 
-    method load-highest-endeavour-config(--> Hash) {
+    method load_highest_endeavour_config(--> Hash) {
         self.LOGGER.debug("loading configuration for highest endeavour...");
         try {
             my $config-dir = Util::FilePath.new.config-path;
@@ -102,7 +102,7 @@ class Normative::Agent {
         }
     }
 
-    method load-system-endeavours-config(--> Hash) {
+    method load_system_endeavours_config(--> Hash) {
         self.LOGGER.debug("loading configuration for system endeavours...");
         try {
             my $config-dir = Util::FilePath.new.config-path;
@@ -117,31 +117,31 @@ class Normative::Agent {
         }
     }
 
-    method highest-endeavour-to-markdown() {
-        my $endeavour = $!highest-endeavour;
+    method highest_endeavour_to_markdown() {
+        my $endeavour = $!highest_endeavour;
         return "## Highest Endeavour\n\n" ~
                 "### Name\n" ~ $endeavour.name ~ "\n\n" ~
                 "### Description\n" ~ $endeavour.description ~ "\n\n" ~
                 "### Normative Propositions\n" ~
-                $endeavour.normative-propositions.map({
-                    $_.to-markdown ~ "\n"
+                $endeavour.normative_propositions.map({
+                    $_.to_markdown ~ "\n"
                 }).join;
     }
 
-    method system-endeavours-to-markdown() {
+    method system_endeavours_to_markdown() {
         return "## System Endeavours\n\n" ~
-                @!system-endeavours.map({
+                @!system_endeavours.map({
                          "### Name\n" ~ $_.name ~ "\n\n" ~
                          "### Description\n" ~ $_.description ~ "\n\n" ~
                          "### Normative Propositions\n" ~
-                         $_.normative-propositions.map({
-                         $_.to-markdown ~ "\n"
+                         $_.normative_propositions.map({
+                         $_.to_markdown ~ "\n"
                          }).join ~ "\n"
                 }).join("\n");
     }
 
-    method get-system-endeavour-by-uuid(Str $uuid) {
-        for @!system-endeavours -> $endeavour {
+    method get_system_endeavour_by_uuid(Str $uuid) {
+        for @!system_endeavours -> $endeavour {
             if $endeavour.uuid eq $uuid {
                 return $endeavour;
             }
@@ -149,16 +149,16 @@ class Normative::Agent {
         return Nil;
     }
 
-    method get-code-of-conduct-endeavour(--> Normative::Role::Endeavour) {
+    method get_code_of_conduct_endeavour(--> Normative::Role::Endeavour) {
         my $config = Util::Config.new;
         my $code_of_conduct_uuid =  $config.get_config('system_endeavours', 'code_of_conduct_uuid');
-        return self.get-system-endeavour-by-uuid($code_of_conduct_uuid);
+        return self.get_system_endeavour_by_uuid($code_of_conduct_uuid);
     }
 
-    method get-system-integrity-endeavour(--> Normative::Role::Endeavour) {
+    method get_system_integrity_endeavour(--> Normative::Role::Endeavour) {
         my $config = Util::Config.new;
         my $code_of_conduct_uuid =  $config.get_config('system_endeavours', 'system_integrity_uuid');
-        return self.get-system-endeavour-by-uuid($code_of_conduct_uuid);
+        return self.get_system_endeavour_by_uuid($code_of_conduct_uuid);
     }
 }
 

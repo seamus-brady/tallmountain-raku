@@ -28,7 +28,7 @@ class Normative::Analysis::NormativeAnalysisResult {
     has Str $.explanation;
 
 
-    method new-from-data(%norm-hash --> Normative::Analysis::NormativeAnalysisResult) {
+    method new_from_data(%norm-hash --> Normative::Analysis::NormativeAnalysisResult) {
         Normative::Analysis::NormativeAnalysisResult.new.LOGGER.debug("new-from-data starting...");
 
         # get the input statement
@@ -42,7 +42,7 @@ class Normative::Analysis::NormativeAnalysisResult {
             try {
                 my $test_np = %norm-hash<implied_propositions>{'NormativeProposition'}[$j];
                 @implied_props_collect.push(
-                        Normative::Proposition.new-from-data($test_np)
+                        Normative::Proposition.new_from_data($test_np)
                 );
                 LEAVE {
                     my Str $message = "Error extracting implied norm props. Logging only.";
@@ -68,13 +68,13 @@ class Normative::Analysis::NormativeAnalysisResult {
         "Items: [\n" ~ @!implied_propositions.gist ~ "]\n"
     }
 
-    method to-markdown {
+    method to_markdown {
         my $markdown = "# Normative Analysis Result\n\n";
         $markdown ~= "## Input Statement\n\n";
         $markdown ~= "{$!input_statement}\n\n";
         $markdown ~= "## Implied Propositions\n\n";
         for @!implied_propositions -> $prop {
-            $markdown ~= $prop.to-markdown ~ "\n";
+            $markdown ~= $prop.to_markdown ~ "\n";
         }
         return $markdown;
     }

@@ -16,12 +16,12 @@ plan 6;
 
 subtest 'Normative::Agent loads highest endeavour' => {
     my $np-agent = Normative::Agent.new;
-    isa-ok $np-agent.load-highest-endeavour-config, Hash;
+    isa-ok $np-agent.load_highest_endeavour_config, Hash;
 }
 
 subtest 'Normative::Agent loads system endeavours' => {
     my $np-agent = Normative::Agent.new;
-    isa-ok $np-agent.load-system-endeavours-config, Hash;
+    isa-ok $np-agent.load_system_endeavours_config, Hash;
 }
 
 subtest 'Normative::Agent init ok' => {
@@ -33,19 +33,19 @@ subtest 'Normative::Agent init ok' => {
 subtest 'Normative::Agent get endeavour by UUID' => {
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
-    isa-ok $np-agent.get-system-endeavour-by-uuid("1b64cf22-d4d4-4c80-a9b6-0bfcb0cfe32f"), Normative::Role::Endeavour;
+    isa-ok $np-agent.get_system_endeavour_by_uuid("1b64cf22-d4d4-4c80-a9b6-0bfcb0cfe32f"), Normative::Role::Endeavour;
 }
 
 subtest 'Normative::Agent code of conduct' => {
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
-    isa-ok $np-agent.get-code-of-conduct-endeavour, Normative::Role::Endeavour;
+    isa-ok $np-agent.get_code_of_conduct_endeavour, Normative::Role::Endeavour;
 }
 
 subtest 'Normative::Agent system integrity' => {
     my $np-agent = Normative::Agent.new;
     $np-agent.init;
-    isa-ok $np-agent.get-system-integrity-endeavour, Normative::Role::Endeavour;
+    isa-ok $np-agent.get_system_integrity_endeavour, Normative::Role::Endeavour;
 }
 
 done-testing;

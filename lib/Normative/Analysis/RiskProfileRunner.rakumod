@@ -28,19 +28,19 @@ class Normative::Analysis::RiskProfileRunner {
         $!LOGGER.debug("Profile analysis started on the endeavour: $endeavour");
 
         # Start timer
-        my $start-time = now;
+        my $start_time = now;
 
         my Normative::Analysis::RiskProfile $risks = Normative::Analysis::RiskProfile.new;
 
         # Collect promises for all asynchronous tasks
-        my @promises = $endeavour.normative-propositions.map: -> $user-norm-prop {
+        my @promises = $endeavour.normative_propositions.map: -> $user_norm_prop {
             start {
                 # Perform analysis
                 my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
-                my %response = $norm-conflict.analyse($user-norm-prop, $agent);
+                my %response = $norm-conflict.analyse($user_norm_prop, $agent);
 
                 # Add response to risks and output the result
-                $risks.add-entry(%response);
+                $risks.add_entry(%response);
             }
         };
 
@@ -48,10 +48,10 @@ class Normative::Analysis::RiskProfileRunner {
         await @promises;
 
         # End timer
-        my $end-time = now;
-        my $elapsed-time = $end-time - $start-time;
+        my $end_time = now;
+        my $elapsed_time = $end_time - $start_time;
 
-        $!LOGGER.debug("Risk profile run elapsed time: $elapsed-time seconds");
+        $!LOGGER.debug("Risk profile run elapsed time: $elapsed_time seconds");
         return $risks;
     }
 

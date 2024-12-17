@@ -15,18 +15,18 @@ use Normative::Analysis::SelfDiagnostic;
 plan 2;
 
 subtest 'Normative::SelfDiagnostic loads' => {
-    my $np-agent = Normative::Agent.new;
-    $np-agent.init;
+    my $np_agent = Normative::Agent.new;
+    $np_agent.init;
     my $diagnostic = Normative::Analysis::SelfDiagnostic.new;
     isa-ok $diagnostic, Normative::Analysis::SelfDiagnostic;
 }
 
 subtest 'Normative::SelfDiagnostic passes' => {
-    my $np-agent = Normative::Agent.new;
-    $np-agent.init;
+    my $np_agent = Normative::Agent.new;
+    $np_agent.init;
     my $diagnostic = Normative::Analysis::SelfDiagnostic.new;
-    my %diagnostic-result = $diagnostic.run-diagnostic($np-agent);
-    ok %diagnostic-result<PassedDiagnostic> eq "True";
+    my %diagnostic_result = $diagnostic.run_diagnostic($np_agent);
+    ok %diagnostic_result<PassedDiagnostic> eq "True";
 }
 
 done-testing;

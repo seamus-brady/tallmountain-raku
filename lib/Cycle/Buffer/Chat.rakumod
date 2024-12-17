@@ -13,25 +13,25 @@ use Memory::ConversationBuffer;
 
 class Cycle::Buffer::Chat {
 
-    has Memory::ConversationBuffer $.message-buffer = Memory::ConversationBuffer.new();
+    has Memory::ConversationBuffer $.message_buffer = Memory::ConversationBuffer.new();
 
     method messages {
-        $.message-buffer.get-recent();
+        $.message_buffer.get_recent();
     }
 
-    method add-message($message) {
-        $.message-buffer.add-entry($message);
+    method add_message($message) {
+        $.message_buffer.add_entry($message);
     }
 
-    method add-user-message($user-request) {
+    method add_user_message($user-request) {
         my $llm-messages = LLM::Messages.new();
-        my %user-message = $llm-messages.build-user-prompt($user-request);
-        $.message-buffer.add-entry(%user-message);
+        my %user-message = $llm-messages.build_user_prompt($user-request);
+        $.message_buffer.add_entry(%user-message);
     }
 
-    method add-assistant-message($assistant-response) {
+    method add_assistant_message($assistant-response) {
         my $llm-messages = LLM::Messages.new();
-        my %assistant-message = $llm-messages.build-assistant-prompt($assistant-response);
-        $.message-buffer.add-entry(%assistant-message);
+        my %assistant-message = $llm-messages.build_assistant_prompt($assistant-response);
+        $.message_buffer.add_entry(%assistant-message);
     }
 }

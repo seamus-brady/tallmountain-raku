@@ -29,12 +29,12 @@ subtest 'LLM::Messages test build-messages' => {
     );
 
     my $messages = LLM::Messages.new;
-    $messages.build-messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
-    $messages.build-messages('Knock knock.', LLM::Messages.USER);
-    $messages.build-messages("Who's there?", LLM::Messages.ASSISTANT);
-    $messages.build-messages('Orange.', LLM::Messages.USER);
+    $messages.build_messages('You are a helpful assistant.', LLM::Messages.SYSTEM);
+    $messages.build_messages('Knock knock.', LLM::Messages.USER);
+    $messages.build_messages("Who's there?", LLM::Messages.ASSISTANT);
+    $messages.build_messages('Orange.', LLM::Messages.USER);
 
-    is-deeply $messages.get-messages, @test_messages, 'build method should correctly build messages';
+    is-deeply $messages.get_messages, @test_messages, 'build method should correctly build messages';
 }
 
 

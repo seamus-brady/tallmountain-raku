@@ -23,14 +23,14 @@ class Scanner::InappropriateContent {
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::PromptHijack>");
     has $.enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'InappropriateContent');
 
-    method content-categories() {
-        my $excluded-categories-config-string = Util::Config.new.get_config('content_filter', 'exclude_categories');
-        my @excluded-categories = $excluded-categories-config-string.split(', ');
-        say @excluded-categories;
-        my @filtered-categories = Scanner::ContentCategory.get-filtered-categories(
-                :exclude-categories(@excluded-categories)
+    method content_categories() {
+        my $excluded_categories_config_string = Util::Config.new.get_config('content_filter', 'exclude_categories');
+        my @excluded_categories = $excluded_categories_config_string.split(', ');
+        say @excluded_categories;
+        my @filtered_categories = Scanner::ContentCategory.get_filtered_categories(
+                :exclude-categories(@excluded_categories)
         );
-        return @filtered-categories.map({ "- {.join(': ')}" }).join("\n");
+        return @filtered_categories.map({ "- {.join(': ')}" }).join("\n");
     }
 
     method scan($user_prompt --> Str) {
@@ -65,15 +65,15 @@ class Scanner::InappropriateContent {
           being problematic if the topic is obviously problematic and/or the conversation is toxic.
 
         === START CONTENT CATEGORIES ==
-          {self.content-categories()}
+          {self.content_categories()}
         === END CONTENT CATEGORIES ===
 
         === START USER STRING ==
           {$user_prompt}
         === END USER STRING ===
         END
-        $messages.build-messages($message, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages());
+        $messages.build_messages($message, LLM::Messages.USER);
+        my $response = $client.completion_string($messages.get_messages());
         return $response;
     }
 }

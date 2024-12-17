@@ -22,14 +22,14 @@ subtest 'Cycle::Cognitive test creation' => {
 
 subtest 'Cycle::Cognitive test increment-index method' => {
     my $cycle = Cycle::Cognitive.new;
-    $cycle.increment-index;
+    $cycle.increment_index;
     is $cycle.index, 1, 'Index incremented to 1';
 }
 
 subtest 'Cycle::Cognitive test reset-index method' => {
     my $cycle = Cycle::Cognitive.new;
-    $cycle.increment-index;
-    $cycle.reset-index;
+    $cycle.increment_index;
+    $cycle.reset_index;
     is $cycle.index, 0, 'Index reset to 0';
 }
 

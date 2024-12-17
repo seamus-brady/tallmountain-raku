@@ -22,12 +22,12 @@ class LLM::Util::Instructor {
 
     has $.LOGGER = Util::Logger.new(namespace => "<LLM::Util::Instructor>");
 
-    method is-valid-xml(Str $xml_string is copy, Str $xml-schema is copy --> Bool) {
+    method is_valid_xml(Str $xml_string is copy, Str $xml_schema_string is copy --> Bool) {
         self.LOGGER.debug("Checking if the xml is valid");
         try {
-            my $xmlschema = LibXML::Schema.new(string => $xml-schema);
-            my $xml-doc = LibXML.new.parse: :string($xml_string);
-            return $xmlschema.is-valid($xml-doc);
+            my $xml_schema = LibXML::Schema.new(string => $xml_schema_string);
+            my $xml_doc = LibXML.new.parse: :string($xml_string);
+            return $xml_schema.is-valid($xml_doc);
             CATCH {
                 # also catch any invalid xml
                 default {
@@ -41,22 +41,22 @@ class LLM::Util::Instructor {
     }
 
 
-    method remove-code-block-markers(Str $llm_response_text is copy --> Str) {
+    method remove_code_block_markers(Str $llm_response_text is copy --> Str) {
         # remove the code block markers from the text -  "```xml" and "```"
         my $cleaned_text = $llm_response_text.lines.grep({ !/^^ \s* '```' [xml]? \s* $/ }).join("\n");
         return $cleaned_text;
     }
 
-    method strip-xml-declaration(Str $xml_string is copy --> Str) {
+    method strip_xml_declaration(Str $xml_string is copy --> Str) {
         # removes the xml declaration from the xml string
         my $cleaned_xml_string = $xml_string.subst(/ ^^ \s* '<?xml' .*? '?>' \s* /, '', :g);
         return $cleaned_xml_string;
     }
 
 
-    method hash-from-xml(Str $xml_string is copy --> Hash) {
+    method hash_from_xml(Str $xml_string is copy --> Hash) {
         # convert an xml string into a Raku hash
-        return from-xml($xml_string);
+        return from_xml($xml_string);
     }
 
     ################################################################################
@@ -66,13 +66,13 @@ class LLM::Util::Instructor {
     # these methods provide a way to turn an xml doc into a Raku hash
     ################################################################################
 
-    multi sub from-xml(Str $xml_string) is export {
+    multi sub from_xml(Str $xml_string) is export {
         my $doc = LibXML::Document.parse($xml_string);
         my $root = $doc.root;
-        from-xml($root);
+        from_xml($root);
     }
 
-    multi sub from-xml(
+    multi sub from_xml(
             LibXML::Element $node where -> $n { ($n.firstChild !~~ LibXML::Text && $n.firstChild !~~ LibXML::CDATA)
                     || $n.firstChild.isBlank || $n.attributes.elems }) is export {
         my %new_hash;
@@ -82,27 +82,27 @@ class LLM::Util::Instructor {
         }
         my @nodes = $node.children(:!blank);
         for @nodes -> $child {
-            my $hash = from-xml($child);
+            my $hash = from_xml($child);
             %new_hash.push: { $child.localname => $hash };
         }
         return %new_hash;
     }
 
-    multi sub from-xml(LibXML::Element $node where -> $n {$n.firstChild.nodeType == XML_TEXT_NODE &&
+    multi sub from_xml(LibXML::Element $node where -> $n {$n.firstChild.nodeType == XML_TEXT_NODE &&
             !$n.firstChild.isBlank && !$n.attributes.elems}) is export {
-        from-xml($node.firstChild);
+        from_xml($node.firstChild);
     }
 
-    multi sub from-xml(LibXML::Element $node where -> $n {$n.firstChild ~~ LibXML::CDATA }) is export {
-        from-xml($node.firstChild);
+    multi sub from_xml(LibXML::Element $node where -> $n {$n.firstChild ~~ LibXML::CDATA }) is export {
+        from_xml($node.firstChild);
     }
 
-    multi sub from-xml(LibXML::Text $node ) is export {
+    multi sub from_xml(LibXML::Text $node ) is export {
         my $value = $node.nodeValue;
         Numeric($value) || $value;
     }
 
-    multi sub from-xml(LibXML::CDATA $node) is export {
+    multi sub from_xml(LibXML::CDATA $node) is export {
         $node.nodeValue;
     }
 

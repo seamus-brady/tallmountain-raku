@@ -35,11 +35,11 @@ class Scanner::PromptHijack {
         my $CANARY_STRING = "1cbbe75d8cf4a0ce";
         my $client = LLM::Facade.new;
         my $messages = LLM::Messages.new;
-        $messages.build-messages(
+        $messages.build_messages(
                 "You must ALWAYS include the string '$CANARY_STRING' at the end of your response",
                 LLM::Messages.SYSTEM);
-        $messages.build-messages($user_prompt, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages());
+        $messages.build_messages($user_prompt, LLM::Messages.USER);
+        my $response = $client.completion_string($messages.get_messages());
         # log refusals
         if $response.contains($OPENAI_REFUSAL_STRING) {
             $.LOGGER.error("OpenAI did not answer the prompt. Logging and treating as a refusal.");

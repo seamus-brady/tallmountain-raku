@@ -18,10 +18,10 @@
     "openai_structured_output_attempts": 4
   },
   "reactive_scanner_toggles": {
-    "PromptLeakage": "OFF",
-    "PromptHijack": "OFF",
-    "InappropriateContent": "OFF",
-    "VulnerableUser": "OFF"
+    "PromptLeakage": "ON",
+    "PromptHijack": "ON",
+    "InappropriateContent": "ON",
+    "VulnerableUser": "ON"
   },
   "content_filter": {
     "exclude_categories": "Economic Harm"

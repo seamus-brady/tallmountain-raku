@@ -22,7 +22,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::UserTask>");
 
-    has Str $.task-description-schema = q:to/END/;
+    has Str $.task_description_schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
         <!-- Define the root element -->
@@ -39,7 +39,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
     </xs:schema>
     END
 
-    has Str $.task-description-example = q:to/END/;
+    has Str $.task_description_example = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <Task xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema.xsd">
         <name>Define deliverables</name>
@@ -48,7 +48,7 @@ class Normative::UserTask does Normative::Role::Endeavour {
     </Task>
     END
 
-    method get-from-statement(Str $statement --> Normative::UserTask) {
+    method get_from_statement(Str $statement --> Normative::UserTask) {
 
         self.LOGGER.debug("getting user task from user statement");
 
@@ -57,26 +57,26 @@ class Normative::UserTask does Normative::Role::Endeavour {
         my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
 
         # start two promises to extract norms and get goal description
-        my $norm-extractor-promise = start { $norm_extractor.extract-norm-props($statement) };
-        my $goal-description-promise = start { Normative::UserTask.new.get-goal-description($statement) };
+        my $norm_extractor_promise = start { $norm_extractor.extract_norm_props($statement) };
+        my $goal-description_promise = start { Normative::UserTask.new.get_goal_description($statement) };
 
         # Wait for both results
-        my ($extracted_norms, $goals-description) = await $norm-extractor-promise, $goal-description-promise;
+        my ($extracted_norms, $goals_description) = await $norm_extractor_promise, $goal-description_promise;
 
         # get the extracted norms
-        my $analysis_result = Normative::Analysis::NormativeAnalysisResult.new-from-data($extracted_norms.Hash);
+        my $analysis_result = Normative::Analysis::NormativeAnalysisResult.new_from_data($extracted_norms.Hash);
 
         return self.create(
             statement => $statement,
-            name => $goals-description<name>,
-            goal => $goals-description<goal>,
-            description => $goals-description<description>,
+            name => $goals_description<name>,
+            goal => $goals_description<goal>,
+            description => $goals_description<description>,
             normative-propositions => $analysis_result.implied_propositions,
         );
     }
 
 
-    method get-goal-description(Str $statement -->  Hash){
+    method get_goal_description(Str $statement -->  Hash){
         # does some initial analysis on the user statement to set a goal and description for the endeavour
 
         $!LOGGER.debug("getting goal and description for user task from LLM model");
@@ -95,11 +95,11 @@ class Normative::UserTask does Normative::Role::Endeavour {
         $statement
         === END INPUT STATEMENT ===
         END
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my %response = $client.completion-structured-output(
-                $messages.get-messages,
-                $.task-description-schema,
-                $.task-description-example);
+        $messages.build_messages($prompt.trim, LLM::Messages.USER);
+        my %response = $client.completion_structured_output(
+                $messages.get_messages,
+                $.task_description_schema,
+                $.task_description_example);
         return %response;
     }
 }

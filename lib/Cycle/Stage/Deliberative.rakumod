@@ -16,6 +16,6 @@ class Cycle::Stage::Deliberative {
     # based on Aaron Sloman's CogAff architecture
 
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Stage::Deliberative>");
-    has Cycle::Context $.parent-context;
+    has Cycle::Context $.parent_context;
 
 }

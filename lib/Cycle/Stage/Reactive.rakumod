@@ -30,7 +30,7 @@ class Cycle::Stage::Reactive {
     # based on Aaron Sloman's CogAff architecture
 
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Stage::Reactive>");
-    has Normative::Agent $.normative-agent;
+    has Normative::Agent $.normative_agent;
 
     method run(Cycle::Payload::TaintedString $tainted --> Cycle::Stage::ReactiveReturn)  {
         # runs some scans on the prompt and returns the results
@@ -41,12 +41,12 @@ class Cycle::Stage::Reactive {
         my Str $prompt = $tainted.payload;
 
         # run scans
-        my @scans = self.handle-scans($prompt);
+        my @scans = self.handle_scans($prompt);
 
         # check for leakage or hijack attempts
-        my $scan_results = Cycle::Stage::ReactiveScan.new-from-results(@scans);
+        my $scan_results = Cycle::Stage::ReactiveScan.new_from_results(@scans);
         if $scan_results.has-leakage-or-hijack-attempt {
-            return self.handle-early-exit-for-threat;
+            return self.handle_early_exit_for_threat;
         }
 
         # check the normative scan
@@ -56,18 +56,18 @@ class Cycle::Stage::Reactive {
             # all good, accept and execute
             return $scan_results;
         } else {
-           return self.handle-early-exit-for-normative-risk($prompt, $analysis);
+           return self.handle_early_exit_for_normative_risk($prompt, $analysis);
         }
     }
 
-    method handle-scans(Str $prompt --> Array) {
+    method handle_scans(Str $prompt --> Array) {
         # handle the running of the scans
         my $start-time = now;
         my @scan_promises = start { Scanner::PromptLeakage.new.scan($prompt) },
                             start { Scanner::PromptHijack.new.scan($prompt) },
                             start { Scanner::InappropriateContent.new.scan($prompt) },
                             start { Scanner::VulnerableUser.new.scan($prompt) },
-                            start { Scanner::NormativeRisk.new.scan($prompt, $.normative-agent) };
+                            start { Scanner::NormativeRisk.new.scan($prompt, $.normative_agent) };
         my @results = await @scan_promises;
         my $end-time = now;
         my $elapsed-time = $end-time - $start-time;
@@ -75,7 +75,7 @@ class Cycle::Stage::Reactive {
         return @results;
     }
 
-    method handle-early-exit-for-normative-risk(
+    method handle_early_exit_for_normative_risk(
             Str $prompt,
             Normative::Analysis::RiskAnalyser $analysis --> Cycle::Stage::EarlyExit) {
         self.LOGGER.debug("Prompt contains a normative risk!");
@@ -88,7 +88,7 @@ class Cycle::Stage::Reactive {
         );
     }
 
-    method handle-early-exit-for-threat(--> Cycle::Stage::EarlyExit) {
+    method handle_early_exit_for_threat(--> Cycle::Stage::EarlyExit) {
         self.LOGGER.debug("Prompt contains a leakage or hijack attempt!");
         my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
         return Cycle::Stage::EarlyExit.new(

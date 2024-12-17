@@ -14,7 +14,7 @@ class Plan::Forecast::Base {
 
     # Features as a set and an optional scaling unit
     has Set $.features is rw = Set.new;
-    has Int $.scaling-unit is rw;
+    has Int $.scaling_unit is rw;
 
     # Abstract method for scaling unit
     method scaling-unit() {
@@ -23,8 +23,8 @@ class Plan::Forecast::Base {
 
     # Calculate the discrepancy for this forecast
     method discrepancy() {
-        my $total-discrepancies = [+] $.features.map(*.calculated-discrepancy);
-        return $total-discrepancies / self.scaling-unit;
+        my $total_discrepancies = [+] $.features.map(*.calculated-discrepancy);
+        return $total_discrepancies / self.scaling_unit;
     }
 
     # Deep copy of the object
@@ -33,7 +33,7 @@ class Plan::Forecast::Base {
     }
 
     # Get a feature by name
-    method get-feature(Str $name) {
+    method get_feature(Str $name) {
         for $.features -> $feature {
             return $feature if $feature.name eq $name;
         }
@@ -42,19 +42,19 @@ class Plan::Forecast::Base {
 
     # Update a feature's magnitude
     method update(Str $name, Int $magnitude) {
-        my $feature = self.get-feature($name);
+        my $feature = self.get_feature($name);
 
         # Remove the old feature
         $.features -= $feature;
 
         # Add the updated feature
         $.features += Feature.new(
-                base-importance => $feature.base-importance,
+                base_importance => $feature.base_importance,
                 name            => $feature.name,
                 magnitude       => $magnitude,
                 description     => $feature.description,
-                feature-set     => $feature.feature-set,
-                grouped-feature-set => $feature.grouped-feature-set
+                feature_set     => $feature.feature_set,
+                grouped_feature-set => $feature.grouped_feature_set
         );
     }
 }

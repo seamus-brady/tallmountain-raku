@@ -27,14 +27,14 @@ class Util::Config {
                 :environment($CONFIG_FILE),
                 :config-dir(Util::FilePath.new.config-path));
         # attempt to return the configuration value
-        my $config-entry = %config{$section}{$key};
-        if !$config-entry.defined {
+        my $config_entry = %config{$section}{$key};
+        if !$config_entry.defined {
             my $msg = "Configuration entry not found for section: $section, key: $key";
             Util::Config.new.error($msg);
             Util::ConfigException.new(message => $msg).throw;
         } else {
-            Util::Config.new.LOGGER.debug("Loaded config entry: $section/$key - '$config-entry'");
-            return $config-entry;
+            Util::Config.new.LOGGER.debug("Loaded config entry: $section/$key - '$config_entry'");
+            return $config_entry;
         }
     }
 }

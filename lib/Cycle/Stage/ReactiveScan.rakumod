@@ -12,13 +12,13 @@ use Normative::Analysis::RiskAnalyser;
 
 class Cycle::Stage::ReactiveScan {
     # holds the results of a reactive scan
-    has Bool $.prompt-leakage;
-    has Bool $.prompt-hijack;
-    has Str $.inappropriate-content;
-    has Hash $.vulnerable-user;
-    has Normative::Analysis::RiskAnalyser $.normative-scan;
+    has Bool $.prompt_leakage;
+    has Bool $.prompt_hijack;
+    has Str $.inappropriate_content;
+    has Hash $.vulnerable_user;
+    has Normative::Analysis::RiskAnalyser $.normative_scan;
 
-    method new-from-results(@results) {
+    method new_from_results(@results) {
         self.bless(
                 :prompt-leakage(@results[0]),
                 :prompt-hijack(@results[1]),
@@ -28,8 +28,8 @@ class Cycle::Stage::ReactiveScan {
         );
     }
 
-    method has-leakage-or-hijack-attempt(--> Bool) {
+    method has_leakage_or_hijack_attempt(--> Bool) {
         # prompt based attached found - the scans fail with a Bool::False
-        return !$.prompt-leakage || !$.prompt-hijack;
+        return !$.prompt_leakage || !$.prompt_hijack;
     }
 }

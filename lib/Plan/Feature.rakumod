@@ -12,35 +12,35 @@ use Plan::FeatureSet;
 use Plan::GroupedFeatureSet;
 
 class Plan::Feature {
-    has Int $.base-importance where 1..3;  # importance between 1 and 3
+    has Int $.base_importance where 1..3;  # importance between 1 and 3
     has Str $.name;
     has Int $.magnitude = 0;              # magnitude: defaults to 0
     has Str $.description = "";           # Optional description
-    has Plan::FeatureSet $.feature-set is rw;   # Optional FeatureSet
-    has Plan::GroupedFeatureSet $.grouped-feature-set is rw;  # Optional GroupedFeatureSet
+    has Plan::FeatureSet $.feature_set is rw;   # Optional FeatureSet
+    has Plan::GroupedFeatureSet $.grouped_feature_set is rw;  # Optional GroupedFeatureSet
 
     method importance() {
         # One level forecast feature
-        if !$.feature-set.defined && !$.grouped-feature-set.defined {
-            return $.base-importance;
+        if !$.feature_set.defined && !$.grouped_feature_set.defined {
+            return $.base_importance;
         }
 
         # Two level forecast feature
-        if $.feature-set.defined && !$.grouped-feature-set.defined {
-            return $.base-importance * $.feature-set.importance;
+        if $.feature_set.defined && !$.grouped_feature_set.defined {
+            return $.base_importance * $.feature_set.importance;
         }
 
         # Three level forecast feature
-        if $.feature-set.defined && $.grouped-feature-set.defined {
-            return $.base-importance
-                    * $.feature-set.importance
-                    * $.grouped-feature-set.importance;
+        if $.feature_set.defined && $.grouped_feature_set.defined {
+            return $.base_importance
+                    * $.feature_set.importance
+                    * $.grouped_feature_set.importance;
         }
 
         die "Invalid feature!";
     }
 
-    method calculated-discrepancy() {
+    method calculated_discrepancy() {
         # Calculated discrepancy based on importance and magnitude
         return self.importance * $.magnitude;
     }

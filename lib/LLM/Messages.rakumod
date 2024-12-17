@@ -20,45 +20,45 @@ class LLM::Messages {
 
     has @!messages;
 
-    method get-messages() {
+    method get_messages() {
         return @!messages
     }
 
-    method set-messages(@new-messages) {
+    method set_messages(@new-messages) {
         @!messages = @new-messages>>.clone;
     }
 
-    method build-user-prompt(Str $content) {
+    method build_user_prompt(Str $content) {
         return { role => 'user', content => $content };
     }
 
-    method build-assistant-prompt(Str $content) {
+    method build_assistant_prompt(Str $content) {
         return { role => 'assistant', content => $content };
     }
 
-    method build-system-prompt(Str $content) {
+    method build_system_prompt(Str $content) {
         return { role => 'system', content => $content };
     }
 
-    method build-tool-prompt(Any $tool-call, Str $function-name, Str $content) {
+    method build_tool_prompt(Any $tool_call, Str $function_name, Str $content) {
         return {
-            tool_call_id => $tool-call.id,
+            tool_call_id => $tool_call.id,
             role         => 'tool',
-            name         => $function-name,
+            name         => $function_name,
             content      => $content
         };
     }
 
-    method build-messages(Str $content, Str $type) {
+    method build_messages(Str $content, Str $type) {
         my %message;
         if $type eq LLM::Messages.SYSTEM {
-            %message = self.build-system-prompt($content);
+            %message = self.build_system_prompt($content);
         }
         elsif $type eq LLM::Messages.USER {
-            %message = self.build-user-prompt($content);
+            %message = self.build_user_prompt($content);
         }
         elsif $type eq LLM::Messages.ASSISTANT {
-            %message = self.build-assistant-prompt($content);
+            %message = self.build_assistant_prompt($content);
         }
         @!messages.push(%message) if %message;
         return self;

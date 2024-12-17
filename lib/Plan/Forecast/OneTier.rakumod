@@ -20,14 +20,14 @@ class Plan::Forecast::OneTier is Plan::Forecast::Base {
     submethod BUILD($features = Set.new) {
         self.features = $features;
         # importance (3) x magnitude (3)
-        self.scaling-unit = 9;
+        self.scaling_unit = 9;
         self.validate;
     }
 
     # Validate features for OneTierForecast
     method validate() {
         for $.features -> $feature {
-            if $feature.feature-set.defined || $feature.grouped-feature-set.defined {
+            if $feature.feature_set.defined || $feature.grouped_feature_set.defined {
                 my Str $message = "Error - invalid feature for OneTier forecast: $_";
                 self.LOGGER.error($message);
                 Plan::Exception.new(message => $message).throw;

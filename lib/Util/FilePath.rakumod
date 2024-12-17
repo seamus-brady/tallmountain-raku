@@ -23,16 +23,16 @@ class Util::FilePath {
     my constant $NC_PROMPT = '/prompts/simplified-nc.prompt';
     my constant $SCORE_NP_PROMPT = '/prompts/norm-comparison-score.prompt';
 
-    method app-root(-->Str){
+    method app_root(-->Str){
         # get the root dir of the app
         return $?FILE.IO.parent(3).absolute;
     }
 
     method config-path(-->Str){
-        return self.app-root ~ $CONFIG_DIR;
+        return self.app_root ~ $CONFIG_DIR;
     }
 
-    method get-nc-prompt(-->Str){
+    method get_nc_prompt(-->Str){
         # get the prompt for the normative calculus
         try {
             my Str $nc = slurp Util::FilePath.new.config-path ~ $NC_PROMPT;
@@ -45,7 +45,7 @@ class Util::FilePath {
         }
     }
 
-    method get-norm-prop-score-prompt(-->Str){
+    method get_norm_prop_score_prompt(-->Str){
         # get the prompt for comparing normative propositions
         try {
             my Str $nc = slurp Util::FilePath.new.config-path ~ $SCORE_NP_PROMPT;

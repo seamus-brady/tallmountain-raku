@@ -29,7 +29,7 @@ class Memory::ConversationBuffer {
         self.buffer = @temp;
     }
 
-    method add-entry($entry) {
+    method add_entry($entry) {
         self.buffer.push($entry);
     }
 
@@ -37,11 +37,11 @@ class Memory::ConversationBuffer {
         return self.buffer;
     }
 
-    method get-last-n-entries(Int $n) {
+    method get_last_n_entries(Int $n) {
         return self.buffer[* - $n .. *];
     }
 
-    method get-recent() {
+    method get_recent() {
         my $n = RECENT_ENTRY_WINDOW;
         return self.buffer[* - $n .. *] if self.buffer.elems >= $n;
         return self.buffer; # If fewer than $n messages, return all

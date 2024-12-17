@@ -14,41 +14,41 @@ use LLM::AdaptiveRequestMode;
 plan 5;
 
 subtest 'LLM::AdaptiveRequestMode Precision Mode' => {
-    my $precision = LLM::AdaptiveRequestMode.precision-mode;
+    my $precision = LLM::AdaptiveRequestMode.precision_mode;
     is $precision.mode, LLM::AdaptiveRequestMode::Mode::PRECISION_MODE, 'Mode should be Precision Mode';
     is $precision.temperature, 0.2, 'Temperature should be 0.2';
-    is $precision.top-p, 0.1, 'Top-p should be 0.1';
-    is $precision.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $precision.top_p, 0.1, 'top_p should be 0.1';
+    is $precision.max_tokens, LLM::AdaptiveRequestMode::DEFAULT_MAX_TOKENS, 'Max tokens should be default';
 }
 
 subtest 'LLM::AdaptiveRequestMode Controlled Creative Mode' => {
-    my $creative = LLM::AdaptiveRequestMode.controlled-creative-mode;
+    my $creative = LLM::AdaptiveRequestMode.controlled_creative_mode;
     is $creative.mode, LLM::AdaptiveRequestMode::Mode::CONTROLLED_CREATIVE_MODE, 'Mode should be Controlled Creative Mode';
     is $creative.temperature, 0.2, 'Temperature should be 0.2';
-    is $creative.top-p, 0.9, 'Top-p should be 0.9';
-    is $creative.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $creative.top_p, 0.9, 'top_p should be 0.9';
+    is $creative.max_tokens, LLM::AdaptiveRequestMode::DEFAULT_MAX_TOKENS, 'Max tokens should be default';
 }
 
 subtest 'LLM::AdaptiveRequestMode Dynamic Focused Mode' => {
-    my $focused = LLM::AdaptiveRequestMode.dynamic-focused-mode;
+    my $focused = LLM::AdaptiveRequestMode.dynamic_focused_mode;
     is $focused.mode, LLM::AdaptiveRequestMode::Mode::DYNAMIC_FOCUSED_MODE, 'Mode should be Dynamic Focused Mode';
     is $focused.temperature, 0.9, 'Temperature should be 0.9';
-    is $focused.top-p, 0.2, 'Top-p should be 0.2';
-    is $focused.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $focused.top_p, 0.2, 'top_p should be 0.2';
+    is $focused.max_tokens, LLM::AdaptiveRequestMode::DEFAULT_MAX_TOKENS, 'Max tokens should be default';
 }
 
 subtest 'LLM::AdaptiveRequestMode Exploratory Mode' => {
-    my $exploratory = LLM::AdaptiveRequestMode.exploratory-mode;
+    my $exploratory = LLM::AdaptiveRequestMode.exploratory_mode;
     is $exploratory.mode, LLM::AdaptiveRequestMode::Mode::EXPLORATORY_MODE, 'Mode should be Exploratory Mode';
     is $exploratory.temperature, 0.9, 'Temperature should be 0.9';
-    is $exploratory.top-p, 0.9, 'Top-p should be 0.9';
-    is $exploratory.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $exploratory.top_p, 0.9, 'top_p should be 0.9';
+    is $exploratory.max_tokens, LLM::AdaptiveRequestMode::DEFAULT_MAX_TOKENS, 'Max tokens should be default';
 }
 
 subtest 'LLM::AdaptiveRequestMode Balanced Mode' => {
-    my $balanced = LLM::AdaptiveRequestMode.balanced-mode;
+    my $balanced = LLM::AdaptiveRequestMode.balanced_mode;
     is $balanced.mode, LLM::AdaptiveRequestMode::Mode::BALANCED_MODE, 'Mode should be Balanced Mode';
     is $balanced.temperature, 0.5, 'Temperature should be 0.5';
-    is $balanced.top-p, 0.5, 'Top-p should be 0.5';
-    is $balanced.max-tokens, LLM::AdaptiveRequestMode::DEFAULT-MAX-TOKENS, 'Max tokens should be default';
+    is $balanced.top_p, 0.5, 'top_p should be 0.5';
+    is $balanced.max_tokens, LLM::AdaptiveRequestMode::DEFAULT_MAX_TOKENS, 'Max tokens should be default';
 }

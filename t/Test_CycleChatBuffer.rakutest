@@ -16,7 +16,7 @@ plan 5;
 subtest 'Cycle::Buffer::Chat messages' => {
     my $chat-buffer = Cycle::Buffer::Chat.new();
     for 1..20 -> $i {
-        $chat-buffer.add-message("entry$i");
+        $chat-buffer.add_message("entry$i");
     }
     my @messages = $chat-buffer.messages();
     is @messages.elems, 15, 'Messages count is correct';
@@ -28,7 +28,7 @@ subtest 'Cycle::Buffer::Chat messages' => {
 
 subtest 'Cycle::Buffer::Chat add-message' => {
     my $chat-buffer = Cycle::Buffer::Chat.new();
-    $chat-buffer.add-message('test-message');
+    $chat-buffer.add_message('test-message');
     my @messages = $chat-buffer.messages();
     is @messages.elems, 1, 'Message added correctly';
     is @messages[0], 'test-message', 'Message content is correct';
@@ -36,16 +36,16 @@ subtest 'Cycle::Buffer::Chat add-message' => {
 
 subtest 'Cycle::Buffer::Chat add-message order' => {
     my $chat-buffer = Cycle::Buffer::Chat.new();
-    $chat-buffer.add-message('test-message 1');
-    $chat-buffer.add-message('test-message 2');
-    $chat-buffer.add-message('test-message 3');
+    $chat-buffer.add_message('test-message 1');
+    $chat-buffer.add_message('test-message 2');
+    $chat-buffer.add_message('test-message 3');
     my @messages = $chat-buffer.messages();
     is @messages[0], 'test-message 1', 'Message content is correct';
 }
 
 subtest 'Cycle::Buffer::Chat add-user-message' => {
     my $chat-buffer = Cycle::Buffer::Chat.new();
-    $chat-buffer.add-user-message('user_request');
+    $chat-buffer.add_user_message('user_request');
     my @messages = $chat-buffer.messages();
     is @messages.elems, 1, 'User message added correctly';
     like @messages[0], /user_request/, 'User message content is correct';
@@ -53,7 +53,7 @@ subtest 'Cycle::Buffer::Chat add-user-message' => {
 
 subtest 'Cycle::Buffer::Chat add-assistant-message' => {
     my $chat-buffer = Cycle::Buffer::Chat.new();
-    $chat-buffer.add-assistant-message('assistant_response');
+    $chat-buffer.add_assistant_message('assistant_response');
     my @messages = $chat-buffer.messages();
     is @messages.elems, 1, 'Assistant message added correctly';
     like @messages[0], /assistant_response/, 'Assistant message content is correct';

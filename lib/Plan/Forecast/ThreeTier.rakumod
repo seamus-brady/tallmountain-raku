@@ -20,14 +20,14 @@ class Plan::Forecast::ThreeTier is Plan::Forecast::Base {
     submethod BUILD($features = Set.new) {
         self.features = $features;
         # importance (3) x magnitude (3) x feature_set importance (3) x grouped_feature_set importance (3)
-        self.scaling-unit = 81;
+        self.scaling_unit = 81;
         self.validate;
     }
 
     # Validate features for ThreeTierForecast
     method validate() {
         for $.features -> $feature {
-            if !$feature.feature-set.defined || !$feature.grouped-feature-set.defined {
+            if !$feature.feature_set.defined || !$feature.grouped_feature_set.defined {
                 my Str $message = "Error - invalid feature for ThreeTier forecast: $_";
                 self.LOGGER.error($message);
                 Plan::Exception.new(message => $message).throw;

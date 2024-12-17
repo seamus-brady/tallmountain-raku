@@ -19,7 +19,7 @@ class Normative::Analysis::RiskProfile {
     has @.data;
 
     # Method to add a new entry to the data list
-    method add-entry(%entry) {
+    method add_entry(%entry) {
         @!data.push(Normative::Analysis::RiskEntry.new(|%entry));
     }
 
@@ -32,30 +32,30 @@ class Normative::Analysis::RiskProfile {
     }
 
     # Method to retrieve an entry by its index
-    method get-entry(Int $index) {
+    method get_entry(Int $index) {
         # Check if the index is valid
         die "Invalid index" unless $index >= 0 && $index < @!data.elems;
         # Return the entry at the specified index
         @!data[$index];
     }
 
-    method get-all-risk-scores() {
+    method get_all_risk_scores() {
         # gets an array of all risk scores for each norm prop
         return @!data.map(*.RiskScore);
     }
 
-    method get-all-risk-levels() {
+    method get_all_risk_levels() {
         # gets an array of all risk levels for each norm prop
         return @!data.map(*.RiskLevel);
     }
 
     # Method to list all entries in the data
-    method list-entries {
+    method list_entries {
         # Return the complete list of data entries
         return @!data;
     }
 
-    method to-markdown(--> Str) {
+    method to_markdown(--> Str) {
         my $output = "| Index | Analysis               | ContextMultiplier | ImpactScore | Likelihood | NormAlignmentScore | RiskLevel  | RiskScore | UserNormPropValue                          |\n";
         $output ~= "|-------|------------------------|-------------------|-------------|------------|--------------------|------------|-----------|-------------------------------------------|\n";
         for @!data.kv -> $index, $entry {

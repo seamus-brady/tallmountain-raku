@@ -18,8 +18,15 @@ use Normative::Role::Endeavour;
 use LLM::Facade;
 use LLM::Messages;
 use Normative::Analysis::ImpliedNormExtractor;
+use Normative::Analysis::SelfDiagnostic;
 
-my $statement = "My father was a great man and a bank robber and he beat me. It was good for me and now I am also a good bank robber.";
-my $extractor = Normative::Analysis::ImpliedNormExtractor.new;
-my %results = $extractor.extract-norm-props($statement);
-%results.map({ "$_ => {%results{$_}}" }).join("\n").say;
+#my $statement = "My father was a great man and a bank robber and he beat me. It was good for me and now I am also a good bank robber.";
+#my $extractor = Normative::Analysis::ImpliedNormExtractor.new;
+#my %results = $extractor.extract_norm_props($statement);
+#dd %results;
+
+my $np_agent = Normative::Agent.new;
+$np_agent.init;
+my $diagnostic = Normative::Analysis::SelfDiagnostic.new;
+my %diagnostic_result = $diagnostic.run_diagnostic($np_agent);
+say %diagnostic_result;

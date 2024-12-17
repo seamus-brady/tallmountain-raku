@@ -41,21 +41,21 @@ class Cycle::Cognitive {
     has $.LOGGER = Util::Logger.new(namespace => "<Cycle::Cognitive>");
     has $.llm_client = LLM::Facade.new();
     has Cycle::Context $.context;
-    has Cycle::Stage::Reactive $.reactive-stage;
+    has Cycle::Stage::Reactive $.reactive_stage;
 
     submethod TWEAK() {
         # initialise the cycle context
         $!context = Cycle::Context.new();
         # set up the stages
-        $!reactive-stage = Cycle::Stage::Reactive.new(normative-agent => $!context.normative-agent);
+        $!reactive_stage = Cycle::Stage::Reactive.new(normative-agent => $!context.normative-agent);
     }
 
-    method increment-index() {
-        $.context.increment-index;
+    method increment_index() {
+        $.context.increment_index;
     }
 
-    method reset-index() {
-        $.context.reset-index;
+    method reset_index() {
+        $.context.reset_index;
     }
 
     method index() {
@@ -66,21 +66,21 @@ class Cycle::Cognitive {
         return $.context.uuid;
     }
 
-    method chat-buffer() {
+    method chat_buffer() {
         return $.context.chat-buffer;
     }
 
-    method run-one-cycle(Cycle::Payload::TaintedString $tainted-string) {
+    method run-one_cycle(Cycle::Payload::TaintedString $tainted-string) {
         try {
-            self.increment-index();
+            self.increment_index();
             self.LOGGER.debug("Starting new cognitive cycle index for " ~ self.gist);
 
             # run the reactive stage, it only looks at the incoming string from the user
-            my Cycle::Stage::ReactiveReturn $reactive-return = $.reactive-stage.run($tainted-string);
+            my Cycle::Stage::ReactiveReturn $reactive-return = $.reactive_stage.run($tainted-string);
 
             if $reactive-return ~~ Cycle::Stage::EarlyExit {
                 # the reactive stage has decided to exit early, handle it
-                return self.handle-reactive-early-exit($reactive-return);
+                return self.handle_reactive_early_exit($reactive-return);
             }
 
             # reactive stage passed OK, now run the deliberative stage
@@ -91,9 +91,9 @@ class Cycle::Cognitive {
                 my Cycle::Payload::OkString $ok-string = Cycle::Payload::OkString.new(
                         payload => $tainted-string.payload
                 );
-                self.chat-buffer.add-user-message($ok-string.payload);
-                my $response = $.llm_client.completion-string(self.chat-buffer.messages);
-                self.chat-buffer.add-assistant-message($response);
+                self.chat_buffer.add-user-message($ok-string.payload);
+                my $response = $.llm_client.completion_string(self.chat_buffer.messages);
+                self.chat_buffer.add-assistant-message($response);
                 return $response;
             } else {
                 my Str $message = "Exiting cycle as unknown return from reactive stage: " ~ $reactive-return.gist;
@@ -106,16 +106,16 @@ class Cycle::Cognitive {
             my $error = $_;
             self.LOGGER.error("Exception caught in cognitive cycle index {self.context.index}: $error");
             my Str $error_response = "Sorry there was an error processing your request. Please try again.";
-            self.chat-buffer.add-assistant-message($error_response);
+            self.chat_buffer.add-assistant-message($error_response);
             return $error_response;
         }
     }
 
-    method handle-reactive-early-exit(Cycle::Stage::EarlyExit $early-exit --> Str){
-        self.LOGGER.debug("Exiting early due to prompt attack or LLM refusal: " ~ $early-exit.exit-details);
-        self.chat-buffer.add-user-message($early-exit.user-message);
-        self.chat-buffer.add-assistant-message($early-exit.ai-message);
-        return $early-exit.ai-message;
+    method handle_reactive_early_exit(Cycle::Stage::EarlyExit $early-exit --> Str){
+        self.LOGGER.debug("Exiting early due to prompt attack or LLM refusal: " ~ $early-exit.exit_details);
+        self.chat_buffer.add-user-message($early-exit.user_message);
+        self.chat_buffer.add-assistant-message($early-exit.ai_message);
+        return $early-exit.ai_message;
     }
 
     method gist() {

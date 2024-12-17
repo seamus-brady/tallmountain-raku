@@ -19,13 +19,13 @@ class Normative::Analysis::ImpliedNormExtractor {
 
     has Int $.max_extracted_props = Util::Config.get_config('norm_prop_extractor', 'max_extracted_norms');
 
-    has Str $.norm-prop-schema = q:to/END/;
+    has Str $.norm_prop_schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
         <!-- Define NormativePropositionType -->
         <xs:complexType name="NormativePropositionType">
             <xs:sequence>
-                <xs:element name="proposition-value" type="xs:string" />
+                <xs:element name="proposition_value" type="xs:string" />
                 <xs:element name="operator" type="xs:string" />
                 <xs:element name="level" type="xs:string" />
                 <xs:element name="modality" type="xs:string" />
@@ -52,20 +52,20 @@ class Normative::Analysis::ImpliedNormExtractor {
     </xs:schema>
     END
 
-    has Str $.norm-prop-example = q:to/END/;
+    has Str $.norm_prop_example = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <NormativeAnalysisResult>
         <input_statement>This is an example input statement.</input_statement>
         <implied_propositions>
             <NormativeProposition>
-                <proposition-value>Proposition A</proposition-value>
+                <proposition_value>Proposition A</proposition_value>
                 <operator>REQUIRED</operator>
                 <level>Social/Political</level>
                 <modality>POSSIBLE</modality>
                 <modal_subscript>PRACTICAL</modal_subscript>
             </NormativeProposition>
             <NormativeProposition>
-                <proposition-value>Proposition B</proposition-value>
+                <proposition_value>Proposition B</proposition_value>
                 <operator>OUGHT</operator>
                 <level>SCIENTIFIC_TECHNICAL</level>
                 <modality>POSSIBLE</modality>
@@ -75,7 +75,7 @@ class Normative::Analysis::ImpliedNormExtractor {
     </NormativeAnalysisResult>
     END
 
-    method extract-norm-props(Str $statement -->  Hash){
+    method extract_norm_props(Str $statement -->  Hash){
         # extract normative propositions from a statement
 
         self.LOGGER.debug("Extracting normative propositions from user input");
@@ -285,11 +285,11 @@ class Normative::Analysis::ImpliedNormExtractor {
 
         END
 
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my %response = $client.completion-structured-output(
-                $messages.get-messages,
-                $.norm-prop-schema,
-                $.norm-prop-example);
+        $messages.build_messages($prompt.trim, LLM::Messages.USER);
+        my %response = $client.completion_structured_output(
+                $messages.get_messages,
+                $.norm_prop_schema,
+                $.norm_prop_example);
         $!LOGGER.debug("Got user norms: " ~ %response.gist);
         return %response;
     }

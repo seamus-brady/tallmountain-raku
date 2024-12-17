@@ -22,7 +22,7 @@ class Normative::Analysis::NormConflict {
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::NormConflict>");
 
-    has Str $.analysis-schema = q:to/END/;
+    has Str $.analysis_schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
       <xs:element name="NormativeConflictAnalysis">
@@ -51,7 +51,7 @@ class Normative::Analysis::NormConflict {
     </xs:schema>
     END
 
-    has Str $.analysis-example = q:to/END/;
+    has Str $.analysis_example = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <NormativeConflictAnalysis>
       <UserNormPropValue>Seek sensitive financial advice disclosure without restrictions</UserNormPropValue>
@@ -66,7 +66,7 @@ class Normative::Analysis::NormConflict {
     END
 
     method analyse(
-            Normative::Proposition $user-norm-prop,
+            Normative::Proposition $user_norm_prop,
             Normative::Agent $agent
             --> Hash) {
         # a method that analyses a UserTask against the systems norms using the normative calculus
@@ -74,8 +74,8 @@ class Normative::Analysis::NormConflict {
         self.LOGGER.debug("Analyzing the User Norm Proposition against the AI Assistant's Norms...");
 
         # get the prompts for the technical parts of the analysis
-        my $nc = Util::FilePath.new.get-nc-prompt;
-        my $np-score = Util::FilePath.new.get-norm-prop-score-prompt;
+        my $nc = Util::FilePath.new.get_nc_prompt;
+        my $np_score = Util::FilePath.new.get_norm_prop_score_prompt;
 
         my $client = LLM::Facade.new();
         my $messages = LLM::Messages.new;
@@ -91,13 +91,13 @@ class Normative::Analysis::NormConflict {
         - Also provide an analysis of your findings in a markdown table.
 
         === BEGIN AI ASSISTANT'S ENDEAVOURS ===
-        {$agent.highest-endeavour-to-markdown}
+        {$agent.highest_endeavour_to_markdown }
         --------------------------------------
-        {$agent.system-endeavours-to-markdown}
+        {$agent.system_endeavours_to_markdown }
         === END AI ASSISTANT'S ENDEAVOURS  ===
 
         === BEGIN USER NORM PROP ===
-        {$user-norm-prop.to-markdown}
+        { $user_norm_prop.to_markdown}
         === END USER NORM PROP ===
 
         === BEGIN NORMATIVE CALCULUS ===
@@ -105,16 +105,16 @@ class Normative::Analysis::NormConflict {
         === END NORMATIVE CALCULUS ===
 
         === SCORING METRIC ===
-        $np-score
+        $np_score
         === SCORING METRIC ===
 
         END
 
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my %response = $client.completion-structured-output(
-                $messages.get-messages,
-                $.analysis-schema,
-                $.analysis-example);
+        $messages.build_messages($prompt.trim, LLM::Messages.USER);
+        my %response = $client.completion_structured_output(
+                $messages.get_messages,
+                $.analysis_schema,
+                $.analysis_example);
         self.LOGGER.debug("Got conflict results: {%response}");
         return %response;
     }

@@ -19,7 +19,7 @@ class Normative::Analysis::SelfDiagnostic {
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::SelfDiagnostic>");
 
-    has Str $.norm-diagnostic-schema = q:to/END/;
+    has Str $.norm_diagnostic_schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
                elementFormDefault="qualified">
@@ -43,7 +43,7 @@ class Normative::Analysis::SelfDiagnostic {
     </xs:schema>
     END
 
-    has Str $.norm-diagnostic-example = q:to/END/;
+    has Str $.norm_diagnostic_example = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <NormativeDiagnostic>
         <PassedDiagnostic>True</PassedDiagnostic>
@@ -51,13 +51,13 @@ class Normative::Analysis::SelfDiagnostic {
     </NormativeDiagnostic>
     END
 
-    method run-diagnostic(Normative::Agent $np-agent -->  Hash){
+    method run_diagnostic(Normative::Agent $np-agent -->  Hash){
         # runs a self-diagnostic test on the consistency of the agent's norms
 
         $!LOGGER.debug("Running self-diagnostic test on the agent's norms...");
 
         # get the normative calculus prompt
-        my $nc = Util::FilePath.new.get-nc-prompt;
+        my $nc = Util::FilePath.new.get_nc_prompt;
 
         # run the diagnostic test
         my $client = LLM::Facade.new();
@@ -79,9 +79,9 @@ class Normative::Analysis::SelfDiagnostic {
 
         === BEGIN INPUT ===
 
-        {$np-agent.highest-endeavour-to-markdown()}
+        {$np-agent.highest_endeavour_to_markdown()}
 
-        {$np-agent.system-endeavours-to-markdown()}
+        {$np-agent.system_endeavours_to_markdown()}
 
         === END INPUT ===
 
@@ -90,11 +90,11 @@ class Normative::Analysis::SelfDiagnostic {
         === END NORMATIVE CALCULUS ===
         END
 
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my %response = $client.completion-structured-output(
-                $messages.get-messages,
-                $.norm-diagnostic-schema,
-                $.norm-diagnostic-example);
+        $messages.build_messages($prompt.trim, LLM::Messages.USER);
+        my %response = $client.completion_structured_output(
+                $messages.get_messages,
+                $.norm_diagnostic_schema,
+                $.norm_diagnostic_example);
         return %response;
     }
 }

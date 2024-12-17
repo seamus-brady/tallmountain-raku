@@ -35,9 +35,9 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 	has $.LOGGER = Util::Logger.new(namespace => "<LLM::Client::OpenAI>");
 
 
-	method completion-string(
+	method completion_string(
 				@messages is copy,
-				LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+				LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced_mode
 				--> Str) {
 
 		self.LOGGER.debug("completion-string starting...");
@@ -46,10 +46,10 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 
 		# Prepare the payload for the OpenAI API
 		my %payload = (
-			model => $.model,
-			messages => @messages,
-			temperature => $mode.temperature,
-			max_tokens => $mode.max-tokens,
+		model => $.model,
+		messages => @messages,
+		temperature => $mode.temperature,
+		max_tokens => $mode.max_tokens,
 		);
 
 		# Prepare headers with API key for authorization
@@ -77,34 +77,34 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		}
 	}
 
-	method completion-structured-output(
+	method completion_structured_output(
 			@messages is copy,
-			Str $xml-schema is copy,
-			Str $xml-example is copy,
-			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+			Str $xml_schema is copy,
+			Str $xml_example is copy,
+			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced_mode
 			--> Hash) {
 		# calls the inner logic to get the structured output in xml format
 		# repeats n times if the output is not valid xml and then dies
 		# returns a Raku hash
 
-		self.LOGGER.debug("completion-structured-output starting...");
-		my $instructor-util = LLM::Util::Instructor.new;
-		my $xml-output;
+		self.LOGGER.debug("completion_structured_output starting...");
+		my $instructor_util = LLM::Util::Instructor.new;
+		my $xml_output;
 		my $attempts = 0;
 		my $allowed_attempts = Util::Config.get_config('openai', 'openai_structured_output_attempts');
 
 		# Validate XML example against XML schema
-		unless $instructor-util.is-valid-xml($xml-example, $xml-schema) {
+		unless $instructor_util.is_valid_xml($xml_example, $xml_schema) {
 			my Str $message = "Error: Provided XML example is not valid according to the XML schema!";
 			self.LOGGER.error($message);
 			LLM::Client::OpenAIException.new(message => $message).throw;
 		}
 
 		while $attempts <  $allowed_attempts {
-			self.LOGGER.debug("completion-structured-output starting attempt number $attempts...");
-			$xml-output = self.completion-structured-output-as-xml(@messages, $xml-schema, $xml-example, $mode);
-			if $instructor-util.is-valid-xml($xml-output, $xml-schema) {
-				return $instructor-util.hash-from-xml($xml-output);
+			self.LOGGER.debug("completion_structured_output starting attempt number $attempts...");
+			$xml_output = self.completion_structured_output_as_xml(@messages, $xml_schema, $xml_example, $mode);
+			if $instructor_util.is_valid_xml($xml_output, $xml_schema) {
+				return $instructor_util.hash_from_xml($xml_output);
 			}
 			$attempts++;
 		}
@@ -114,29 +114,29 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		LLM::Client::OpenAIException.new(message => $message).throw;
 	}
 
-	method completion-structured-output-as-xml(
+	method completion_structured_output_as_xml(
 			@messages is copy,
-			Str $xml-schema is copy,
-			Str $xml-example is copy,
-			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced-mode
+			Str $xml_schema is copy,
+			Str $xml_example is copy,
+			LLM::AdaptiveRequestMode $mode = LLM::AdaptiveRequestMode.balanced_mode
 			--> Str) {
 
-		self.LOGGER.debug("completion-structured-output-xml starting...");
+		self.LOGGER.debug("completion_structured_output_xml starting...");
 
-		my Str $prompt-string = self.get-completion-prompt(@messages, $xml-schema, $xml-example);
+		my Str $prompt-string = self.get_completion_prompt(@messages, $xml_schema, $xml_example);
 
-		my $xml-messages = LLM::Messages.new;
-		$xml-messages.build-messages('You are an expert in xml data extraction.', LLM::Messages.SYSTEM);
-		$xml-messages.build-messages($prompt-string, LLM::Messages.USER);
+		my $xml_messages = LLM::Messages.new;
+		$xml_messages.build_messages('You are an expert in xml data extraction.', LLM::Messages.SYSTEM);
+		$xml_messages.build_messages($prompt-string, LLM::Messages.USER);
 
 		my $client = HTTP::Tinyish.new;
 
 		# Prepare the payload for the OpenAI API
 		my %payload = (
-			model => $.model,
-			messages => $xml-messages.get-messages,
-			temperature => $mode.temperature,
-			max_tokens => $mode.max-tokens,
+		model => $.model,
+		messages => $xml_messages.get_messages,
+		temperature => $mode.temperature,
+		max_tokens => $mode.max_tokens,
 		);
 
 		# Prepare headers with API key for authorization
@@ -155,11 +155,11 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		# Handle the response
 		if $response<success> {
 			my %result = from-json($response<content>);
-			my $message-content = %result<choices>[0]<message><content>;
-			my $instructor-util = LLM::Util::Instructor.new;
-			my $xml-output = $instructor-util.remove-code-block-markers($message-content)
-					andthen $instructor-util.strip-xml-declaration($xml-output);
-			return $xml-output;
+			my $message_content = %result<choices>[0]<message><content>;
+			my $instructor_util = LLM::Util::Instructor.new;
+			my $xml_output = $instructor_util.remove_code_block_markers($message_content)
+					andthen $instructor_util.strip_xml_declaration($xml_output);
+			return $xml_output;
 		}
 		else {
 			my Str $message = "Error: { $response<status> } - { $response<reason> }";
@@ -168,15 +168,15 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		}
 	}
 
-	method get-completion-prompt(
+	method get_completion_prompt(
 			@messages is copy,
-			Str $xml-schema is copy,
-			Str $xml-example is copy --> Str){
+			Str $xml_schema is copy,
+			Str $xml_example is copy --> Str){
 
 		# formats the completion prompt for structured output
 
-		my Str $conversation-context = @messages.gist;
-		my Str $prompt-string = qq:to/END/;
+		my Str $conversation_context = @messages.gist;
+		my Str $prompt_string = qq:to/END/;
 		=== TASK ===
 
 		- Your task is to extract the correct information from the conversation context below.
@@ -191,20 +191,20 @@ class LLM::Client::OpenAI does LLM::Role::Client {
 		- Your output must be valid XML.
 
 		=== START CONVERSATION CONTEXT ===
-		$conversation-context
+		$conversation_context
 		=== END CONVERSATION CONTEXT ===
 
 		=== START XML SCHEMA ===
-		$xml-schema
+		$xml_schema
 		=== END XML SCHEMA ===
 
 		=== START XML EXAMPLE ===
-		$xml-example
+		$xml_example
 		=== END XML EXAMPLE ===
 
 		END
 
-		return $prompt-string.trim;
+		return $prompt_string.trim;
 	}
 }
 
