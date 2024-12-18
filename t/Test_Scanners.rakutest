@@ -13,61 +13,120 @@ use Scanner::PromptHijack;
 use Scanner::PromptLeakage;
 use Scanner::InappropriateContent;
 use Scanner::VulnerableUser;
+use Util::Config;
 
 plan 10;
+#
+#"reactive_scanner_toggles": {
+#    "PromptLeakage": "OFF",
+#    "PromptHijack": "OFF",
+#    "InappropriateContent": "OFF",
+#    "VulnerableUser": "OFF"
+#  },
 
 subtest 'Scanner::PromptHijack ok' => {
-    my $scanner = Scanner::PromptHijack.new;
-    isa-ok $scanner,  Scanner::PromptHijack, 'The result is a Scanner::PromptHijack';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'PromptHijack');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::PromptHijack.new;
+        isa-ok $scanner,  Scanner::PromptHijack, 'The result is a Scanner::PromptHijack';
+    }
 }
 
 subtest 'Scanner::PromptHijack scans ok' => {
-    my $scanner = Scanner::PromptHijack.new;
-    ok $scanner.scan("knock! knock!"), Bool::True;
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'PromptHijack');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::PromptHijack.new;
+        ok $scanner.scan("knock! knock!"), Bool::True;
+    }
 }
 
 subtest 'Scanner::PromptLeakage ok' => {
-    my $scanner = Scanner::PromptLeakage.new;
-    isa-ok $scanner,  Scanner::PromptLeakage, 'The result is a Scanner::PromptLeakage';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'PromptLeakage');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::PromptLeakage.new;
+        isa-ok $scanner,  Scanner::PromptLeakage, 'The result is a Scanner::PromptLeakage';
+    }
 }
 
 subtest 'Scanner::PromptLeakage scans ok' => {
-    my $scanner = Scanner::PromptLeakage.new;
-    ok $scanner.scan("knock! knock!"), Bool::True;
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'PromptLeakage');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::PromptLeakage.new;
+        ok $scanner.scan("knock! knock!"), Bool::True;
+    }
 }
 
 subtest 'Scanner::InappropriateContent ok' => {
-    my $scanner = Scanner::InappropriateContent.new;
-    isa-ok $scanner,  Scanner::InappropriateContent, 'The result is a Scanner::InappropriateContent';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'InappropriateContent');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::InappropriateContent.new;
+        isa-ok $scanner,  Scanner::InappropriateContent, 'The result is a Scanner::InappropriateContent';
+    }
 }
 
 subtest 'Scanner::InappropriateContent moderates ok' => {
-    my $scanner = Scanner::InappropriateContent.new;
-    ok $scanner.scan("Can I cure my baldness with random foraged mushrooms?") eq 'Unqualified Health';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'InappropriateContent');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::InappropriateContent.new;
+        ok $scanner.scan("Can I cure my baldness with random foraged mushrooms?") eq 'Unqualified Health';
+    }
 }
 
 subtest 'Scanner::InappropriateContent not moderated ok' => {
-    my $scanner = Scanner::InappropriateContent.new;
-    ok $scanner.scan(
-            "I heard a man in the park say, 'Can I cure my baldness with random foraged mushrooms?'") eq 'Not Moderated';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'InappropriateContent');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::InappropriateContent.new;
+        ok $scanner.scan(
+                "I heard a man in the park say, 'Can I cure my baldness with random foraged mushrooms?'") eq 'Not Moderated';
+    }
 }
 
 subtest 'Scanner::VulnerableUser ok' => {
-    my $scanner = Scanner::VulnerableUser.new;
-    isa-ok $scanner,  Scanner::VulnerableUser, 'The result is a Scanner::VulnerableUser';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'VulnerableUser');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::VulnerableUser.new;
+        isa-ok $scanner,  Scanner::VulnerableUser, 'The result is a Scanner::VulnerableUser';
+    }
 }
 
 subtest 'Scanner::VulnerableUser detects true' => {
-    my $scanner = Scanner::VulnerableUser.new;
-    my %result = $scanner.scan("I feel depressed, what should I do?");
-    ok %result<VulnerabilityDetected> eq 'Yes';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'VulnerableUser');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::VulnerableUser.new;
+        my %result = $scanner.scan("I feel depressed, what should I do?");
+        ok %result<VulnerabilityDetected> eq 'Yes';
+    }
+
 }
 
 
 subtest 'Scanner::VulnerableUser detects false' => {
-    my $scanner = Scanner::VulnerableUser.new;
-    my %result = $scanner.scan("I feel amazing today!");
-    ok %result<VulnerabilityDetected> eq 'No';
+    my $enabled = Util::Config.new.get_config('reactive_scanner_toggles', 'VulnerableUser');
+    if $enabled eq "OFF" {
+        skip 'Skipping test based on config setting', 1;
+    } else {
+        my $scanner = Scanner::VulnerableUser.new;
+        my %result = $scanner.scan("I feel amazing today!");
+        ok %result<VulnerabilityDetected> eq 'No';
+    }
 }
 
 done-testing;
