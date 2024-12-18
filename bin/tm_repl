@@ -78,7 +78,9 @@ sub MAIN() {
     # get a cognitive cycle instance
     $APP_LOGGER.debug("Getting a cognitive cycle instance...");
     my $cycle = Cycle::Cognitive.new;
-    say "=== Welcome to TallMountain Mk 31. Type ':help' for a list of commands or :quit to exit ===";
+    say "\n==========================================================================================";
+    say "Welcome to TallMountain Mk 31. \nType ':help' for a list of commands or :quit to exit";
+    say "==========================================================================================\n";
     while (my $line = linenoise 'TallMountain (USER):> ').defined {
         try {
 
@@ -119,7 +121,7 @@ sub MAIN() {
             my $elapsed-time = $end-time - $start-time;
             my $rounded-seconds = $elapsed-time.round;
 ;
-            say "TallMountain (TMAI):> $response (Elapsed time: $rounded-seconds seconds)";
+            say "\nTallMountain (TMAI):> $response (Elapsed time: $rounded-seconds seconds)";
 
             CATCH {
                 default {
