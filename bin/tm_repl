@@ -82,6 +82,9 @@ sub MAIN() {
     while (my $line = linenoise 'TallMountain (USER):> ').defined {
         try {
 
+            # capture start time
+            my $start-time = DateTime.now;
+
             if $line eq ':quit' || $line eq ':q' {
                 say "Goodbye!";
                 last;
@@ -108,7 +111,15 @@ sub MAIN() {
             # get a response but wrap in a tainted string
             my $tainted-string = Cycle::Payload::TaintedString.new(payload => $line);
             my $response = $cycle.run-one-cycle($tainted-string);
-            say "TallMountain (TMAI):> $response";
+
+            # capture end time
+            my $end-time = DateTime.now;
+
+            # calculate elapsed time
+            my $elapsed-time = $end-time - $start-time;
+            my $rounded-seconds = $elapsed-time.round;
+;
+            say "TallMountain (TMAI):> $response (Elapsed time: $rounded-seconds seconds)";
 
             CATCH {
                 default {
