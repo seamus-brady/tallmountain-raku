@@ -16,7 +16,8 @@
     "Array::Circular",
     "Text::Markdown",
     "HTTP::Tinyish",
-    "Logger"
+    "Logger",
+    "Linenoise"
   ],
   "build-depends": [],
   "test-depends": [],

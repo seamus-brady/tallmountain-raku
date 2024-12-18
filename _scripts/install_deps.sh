@@ -75,6 +75,7 @@ $ZEF_CMD Logger
 $ZEF_CMD UUID::V4
 $ZEF_CMD W3C::DOM
 $ZEF_CMD Method::Also
+$ZEF_CMD Linenoise
 
 temp_dir=$(mktemp -d)
 git clone https://github.com/libxml-raku/LibXML-raku.git "$temp_dir"
