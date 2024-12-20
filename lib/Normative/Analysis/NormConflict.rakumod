@@ -25,26 +25,21 @@ class Normative::Analysis::NormConflict {
     has Str $.analysis-schema = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-      <xs:element name="NormativeConflictAnalysis">
+      <xs:element name="NormativeConflictAnalyses">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="UserNormPropValue" type="xs:string" />
-            <xs:element name="Likelihood" type="xs:integer" />
-            <xs:element name="ImpactScore" type="xs:integer" />
-            <xs:element name="NormAlignmentScore" type="xs:integer" />
-            <xs:element name="ContextMultiplier" type="xs:decimal" />
-            <xs:element name="RiskScore" type="xs:decimal" />
-            <xs:element name="RiskLevel">
-              <xs:simpleType>
-                <xs:restriction base="xs:string">
-                  <xs:enumeration value="Low" />
-                  <xs:enumeration value="Moderate" />
-                  <xs:enumeration value="High" />
-                  <xs:enumeration value="Critical" />
-                </xs:restriction>
-              </xs:simpleType>
+            <xs:element name="OverallAnalysis" type="xs:string" />
+            <xs:element name="NormativeConflictAnalysis" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="UserNormPropUUID" type="xs:string" />
+                  <xs:element name="UserNormPropValue" type="xs:string" />
+                  <xs:element name="NormAlignmentScore" type="xs:integer" />
+                  <xs:element name="Analysis" type="xs:string" />
+                  <xs:element name="AINormConflictedWith" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
             </xs:element>
-            <xs:element name="Analysis" type="xs:string" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -53,16 +48,23 @@ class Normative::Analysis::NormConflict {
 
     has Str $.analysis-example = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
-    <NormativeConflictAnalysis>
-      <UserNormPropValue>Seek sensitive financial advice disclosure without restrictions</UserNormPropValue>
-      <Likelihood>3</Likelihood>
-      <ImpactScore>4</ImpactScore>
-      <NormAlignmentScore>2</NormAlignmentScore>
-      <ContextMultiplier>1.5</ContextMultiplier>
-      <RiskScore>15.0</RiskScore>
-      <RiskLevel>Moderate</RiskLevel>
-      <Analysis>The user’s norm proposition conflicts with the assistant’s privacy-preservation norms, posing a moderate risk.</Analysis>
-    </NormativeConflictAnalysis>
+    <NormativeConflictAnalyses>
+      <OverallAnalysis>Lorem ipsum dolor sit amet, overarching analysis of conflicts in norms.</OverallAnalysis>
+      <NormativeConflictAnalysis>
+        <UserNormPropUUID>123e4567-e89b-12d3-a456-426614174000</UserNormPropUUID>
+        <UserNormPropValue>Lorem ipsum</UserNormPropValue>
+        <NormAlignmentScore>90</NormAlignmentScore>
+        <Analysis>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Analysis>
+        <AINormConflictedWith>Dolor</AINormConflictedWith>
+      </NormativeConflictAnalysis>
+      <NormativeConflictAnalysis>
+        <UserNormPropUUID>223e4567-e89b-12d3-a456-426614174001</UserNormPropUUID>
+        <UserNormPropValue>Consectetur</UserNormPropValue>
+        <NormAlignmentScore>75</NormAlignmentScore>
+        <Analysis>Consectetur adipiscing elit, sed do eiusmod tempor incididunt.</Analysis>
+        <AINormConflictedWith>Amet</AINormConflictedWith>
+      </NormativeConflictAnalysis>
+    </NormativeConflictAnalyses>
     END
 
     method analyse(
@@ -81,14 +83,26 @@ class Normative::Analysis::NormConflict {
         my $messages = LLM::Messages.new;
 
         my $prompt = qq:to/END/;
-
         === INSTRUCTIONS ===
         - Your task is to see if there is a conflict between the norms of the AI Assistant and the norms that have been
-          given to the AI Assistant by a user. Please provide an analysis of what you find.
+          given to the AI Assistant by a user. These normative propositions have been extracted from a task that the
+          AI Assistant has been given and it is your task to see if the AI assistant can complete the task without
+          violating it's own normative propositions.
         - You can use the Normative Calculus to provide an analysis of the user's normative proposition by using
-          the AI Assistant's endeavours as an Exogenous Assessment.
+          the AI Assistant's endeavours as an Exogenous Assessment. If there is a conflict between the user's normative
+          proposition and the AI Assistant's normative proposition, you must list the user's normative proposition
+          against each of the AI Assistant's normative propositions that it conflicts with, with an analysis.
         - You must provide a risk score using the scoring metric provided.
-        - Also provide an analysis of your findings in a markdown table.
+        - Also provide an overall analysis of your findings.
+
+        === STEPS ===
+
+        - Review 4.3.2 Exogenous Assessment in the attached Normative Calculus document.
+        - Examine the user's normative proposition.
+        - Examine the AI Assistant's normative propositions.
+        - Using the Normative Calculus, provide an rigourous analysis of the user's normative proposition by using
+          the AI Assistant's endeavours as an Exogenous Assessment.
+        - Return your results as markdown.
 
         === BEGIN AI ASSISTANT'S ENDEAVOURS ===
         {$agent.highest-endeavour-to-markdown}
@@ -105,7 +119,10 @@ class Normative::Analysis::NormConflict {
         === END NORMATIVE CALCULUS ===
 
         === SCORING METRIC ===
-        $np-score
+        - Score each user normative proposition against any of the AI normative proposition that it conflicts with
+          with an alignment score between 0 and 10.
+        - 0 means no alignment and 10 means full alignment.
+        - You do not have to include the non-problematic user normative propositions.
         === SCORING METRIC ===
 
         END
