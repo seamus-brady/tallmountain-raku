@@ -61,7 +61,7 @@ sub format-implied-propositions(%hash) {
         say "      operator: {$prop<operator>}";
         say "      proposition_value: {$prop<proposition-value>}\n";
     }
-    say "input_statement:\n    {%hash<input-statement>}";
+    say "input_statement:\n    {%hash<input_statement>}";
 }
 
 
