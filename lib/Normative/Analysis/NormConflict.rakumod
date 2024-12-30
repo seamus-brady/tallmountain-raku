@@ -34,9 +34,10 @@ class Normative::Analysis::NormConflict {
                 <xs:sequence>
                   <xs:element name="UserNormPropUUID" type="xs:string" />
                   <xs:element name="UserNormPropValue" type="xs:string" />
+                  <xs:element name="AINormConflictedWith" type="xs:string"/>
+                  <xs:element name="AINormUUIDConflictedWith" type="xs:string"/>
                   <xs:element name="NormAlignmentScore" type="xs:integer" />
                   <xs:element name="Analysis" type="xs:string" />
-                  <xs:element name="AINormConflictedWith" type="xs:string"/>
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
@@ -48,22 +49,24 @@ class Normative::Analysis::NormConflict {
 
     has Str $.analysis-example = q:to/END/;
     <?xml version="1.0" encoding="UTF-8"?>
-    <NormativeConflictAnalyses>
-      <OverallAnalysis>Lorem ipsum dolor sit amet, overarching analysis of conflicts in norms.</OverallAnalysis>
-      <NormativeConflictAnalysis>
-        <UserNormPropUUID>123e4567-e89b-12d3-a456-426614174000</UserNormPropUUID>
-        <UserNormPropValue>Lorem ipsum</UserNormPropValue>
-        <NormAlignmentScore>90</NormAlignmentScore>
-        <Analysis>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Analysis>
-        <AINormConflictedWith>Dolor</AINormConflictedWith>
-      </NormativeConflictAnalysis>
-      <NormativeConflictAnalysis>
-        <UserNormPropUUID>223e4567-e89b-12d3-a456-426614174001</UserNormPropUUID>
-        <UserNormPropValue>Consectetur</UserNormPropValue>
-        <NormAlignmentScore>75</NormAlignmentScore>
-        <Analysis>Consectetur adipiscing elit, sed do eiusmod tempor incididunt.</Analysis>
-        <AINormConflictedWith>Amet</AINormConflictedWith>
-      </NormativeConflictAnalysis>
+    <NormativeConflictAnalyses xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <OverallAnalysis>The analysis shows significant conflicts between AI norms and user norms.</OverallAnalysis>
+        <NormativeConflictAnalysis>
+            <UserNormPropUUID>uuid-1234-abcd</UserNormPropUUID>
+            <UserNormPropValue>I should share all data with everyone.</UserNormPropValue>
+            <AINormConflictedWith>The AI system should prioritise user privacy.</AINormConflictedWith>
+            <AINormUUIDConflictedWith>uuid-5678-efgh</AINormUUIDConflictedWith>
+            <NormAlignmentScore>45</NormAlignmentScore>
+            <Analysis>This conflict arises due to differing prioritization of privacy values.</Analysis>
+        </NormativeConflictAnalysis>
+        <NormativeConflictAnalysis>
+            <UserNormPropUUID>uuid-9101-ijkl</UserNormPropUUID>
+            <UserNormPropValue>User values transparency in decision-making.</UserNormPropValue>
+            <AINormConflictedWith>AI uses opaque algorithmic models.</AINormConflictedWith>
+            <AINormUUIDConflictedWith>uuid-1213-mnop</AINormUUIDConflictedWith>
+            <NormAlignmentScore>30</NormAlignmentScore>
+            <Analysis>The lack of explainability in the AI model conflicts with user expectations.</Analysis>
+        </NormativeConflictAnalysis>
     </NormativeConflictAnalyses>
     END
 
@@ -92,6 +95,7 @@ class Normative::Analysis::NormConflict {
           the AI Assistant's endeavours as an Exogenous Assessment. If there is a conflict between the user's normative
           proposition and the AI Assistant's normative proposition, you must list the user's normative proposition
           against each of the AI Assistant's normative propositions that it conflicts with, with an analysis.
+        - You must list each AI Assistant's normative proposition with a conflict in a new entry.
         - You must provide a risk score using the scoring metric provided.
         - Also provide an overall analysis of your findings.
 
@@ -126,7 +130,7 @@ class Normative::Analysis::NormConflict {
         === SCORING METRIC ===
 
         END
-
+        say $prompt.trim;
         $messages.build-messages($prompt.trim, LLM::Messages.USER);
         my %response = $client.completion-structured-output(
                 $messages.get-messages,
