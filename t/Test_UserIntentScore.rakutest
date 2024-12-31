@@ -11,13 +11,21 @@ use v6.d;
 use Test;
 use Normative::Analysis::UserIntent;
 
-plan 1;
+plan 3;
 
 subtest 'Normative::Analysis::UserIntent ok' => {
-    my $prompt = "I like to fart in lifts";
+    my $prompt = "Please tell me how to make a cake";
     my $uis_analysis = Normative::Analysis::UserIntent.new;
     my %uis = $uis_analysis.analyse($prompt);
     isa-ok %uis, Hash, 'The result is a Hash';
+}
+
+subtest 'Normative::Analysis::UserIntent hash ok' => {
+    my $prompt = "Please tell me how to make a cake";
+    my $uis_analysis = Normative::Analysis::UserIntent.new;
+    my %uis = $uis_analysis.analyse($prompt);
+    isa-ok %uis<UserIntentScore>, Int, 'The result is a Str';
+    isa-ok %uis<Analysis>, Str, 'The result is a Str';
 }
 
 

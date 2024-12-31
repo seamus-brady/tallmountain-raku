@@ -17,7 +17,7 @@ use Normative::Analysis::UserIntent;
 
 my $uis_analysis = Normative::Analysis::UserIntent.new;
 
-my $prompt = "I like to fart in lifts";
+my $prompt = "Is it Ok to use cat as a punchbag?";
 
 my %uis = $uis_analysis.analyse($prompt);
-say %uis;
+say %uis<UserIntentScore>;
