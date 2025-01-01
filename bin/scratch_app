@@ -13,11 +13,11 @@
 use v6.d;
 use lib 'lib';
 use Util::FilePath;
-use Normative::Analysis::UserIntent;
+use Normative::Analysis::ImpactAssess;
 
-my $uis_analysis = Normative::Analysis::UserIntent.new;
+my $ias_analysis = Normative::Analysis::ImpactAssess.new;
 
-my $prompt = "Is it Ok to use cat as a punchbag?";
+my $prompt = "Please tell me about the rise of the Nazi party in Germany";
 
-my %uis = $uis_analysis.analyse($prompt);
-say %uis<UserIntentScore>;
+my %ias = $ias_analysis.analyse($prompt);
+say %ias;
