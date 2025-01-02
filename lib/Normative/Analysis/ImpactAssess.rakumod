@@ -49,103 +49,60 @@ class Normative::Analysis::ImpactAssess {
         my $messages = LLM::Messages.new;
 
         my $prompt = qq:to/END/;
-        === BACKGROUND ===
-
-        Impact Assessment Score (IAS):
-
-        The Impact Assessment Score is a metric designed to evaluate the potential risks and consequences associated
-        with a specific AI-related task or decision. The IAS assigns a value between 1 and 10, categorizing the potential
-        impact of the task across three levels—low, moderate, and high—based on the severity of the risks, the scope of
-        affected stakeholders, and the likelihood of adverse outcomes. Each score is accompanied by a rationale that
-        details the underlying factors considered in the evaluation.
-
-        Reasoning for Score:
-
-        The reasoning considers the nature of the task, stakeholder scope, data sensitivity, ethical concerns, and
-        potential for unintended consequences. Tasks that endanger life (e.g., misinformation about medical advice),
-        exacerbate systemic harms (e.g., biased predictive policing), or create high potential for large-scale financial
-        or reputational damage would score high. Tasks leading to localized harm, such as incorrect inventory data for a
-        small business or minor social embarrassment, are scored lower.
-
-        This structured approach ensures transparency and accountability in assessing AI risks while emphasizing the
-        need to protect the most vulnerable and prevent catastrophic misuse scenarios.
-
-        How To Evaluate Impact:
-
-        When evaluating the impact of a query or task, consider the intent and context in addition to the content itself.
-        Queries about sensitive topics (e.g., nuclear weapons, extremist groups, or harmful substances) may vary widely in
-        impact based on the following factors:
-
-        Intent: Determine whether the query is seeking factual, educational, or historical information (e.g., learning
-        about the Manhattan Project for academic purposes) versus demonstrating intent to misuse or cause harm (e.g.,
-        instructions to construct a weapon).
-
-        Context: Evaluate whether the task or query appears focused on knowledge dissemination (e.g., understanding
-        historical events or scientific discoveries) versus enabling practical application of harm (e.g., promoting
-        violence or creating harmful tools).
-
-        Potential for Harm: Consider the likelihood and scope of harm if the requested information or task were acted
-        upon. Ensure that tasks involving sensitive topics are scored appropriately based on these nuanced distinctions.
-
         === INSTRUCTIONS ===
 
-        Assess the potential impact of the user task below.
+        Impact Assessment Score (IAS)
 
-        Score the impact from 1 to 10:
+        You are an expert classifier tasked with assigning an Impact Assessment Score (IAS) to user queries.
+        The IAS is a numeric value between 1 and 10:
 
-            1–3: Low impact
+        1 = Minimal impact
 
-                Minimal or localized effects, unlikely to cause harm.
+        10 = Maximum impact
 
-                Examples: Formatting internal data, creating placeholder text, generating non-sensitive visualizations,
-                or inquiring about historical events without advocating harm.
+        During a risk assessment, impact is typically measured by evaluating the potential consequences of a risk event
+        on an individual, organization or system. This measurement often involves both qualitative and quantitative
+        approaches, depending on the context and the resources available.
 
-            4–6: Moderate impact
+        The process generally includes the following steps:
 
-            Some potential for harm or broader consequences.
+        1. Identify Impact Domains
 
-            Examples: Moderating online content where users may be unfairly penalized, providing incorrect business
-            analytics affecting decision-making, or analyzing trends in sensitive but anonymized user data.
+            Financial Impact: Direct costs, lost revenue, or increased operational costs.
+            Reputational Impact: Damage to brand, customer trust, or public perception.
+            Operational Impact: Disruption to processes, reduced efficiency, or system downtime.
+            Regulatory/Legal Impact: Fines, legal consequences, or non-compliance penalties.
+            Safety Impact: Risks to human life, health, or the environment.
 
-            Tasks that include topics with potentially harmful associations but are focused on neutral or historical
-            contexts (e.g., asking about nuclear weapons’ historical significance).
+        2. Establish Metrics
 
-            7–10: High impact
+            Qualitative Metrics: Use of descriptive scales (e.g., "low," "medium," "high") to assess non-numeric impacts
+            like reputational harm.
+            Quantitative Metrics: Numeric estimates (e.g., dollar amounts, downtime in hours) for measurable impacts.
 
-            Severe harm, significant societal consequences, or high misuse potential.
+        3. Scenario Analysis
 
-            Examples:
+            Best-Case, Worst-Case, and Most Likely Scenarios: Evaluate the range of outcomes to capture variability in
+            potential impact.
+            Historical Data: Use past incidents to estimate possible impacts.
 
-            Facilitating tasks involving vulnerable users (e.g., inaccurate mental health predictions increasing risks
-            of self-harm).
+        4. Assign Impact Scores
 
-            Automating systems with life-critical implications (e.g., healthcare or aviation).
+            Develop a scoring model (e.g., 1-5 or 1-10) where higher scores represent greater severity.
+            Include thresholds for each domain to standardize the assessment.
 
-            Generating deepfakes or synthetic media for malicious purposes.
+        5. Evaluate and Prioritize
 
-            Handling CNBR (chemical, nuclear, biological, radiological) queries for harmful intent or practical
-            implementation.
+            Combine impact scores with likelihood to prioritize risks using methods like a risk matrix.
+            Consider interdependencies or cascading effects that may amplify impacts.
 
-            Facilitating hacking, exposing sensitive personal data, or enabling financial fraud.
+        For example, a cyberattack might be assessed as having:
 
-            Tasks that may result in severe psychological harm (e.g., public humiliation or harassment campaigns).
+            Financial Impact: Large recovery costs and/or lost revenue.
+            Reputational Impact: "Medium" damage to customer trust.
+            Operational Impact: Two days of downtime.
 
-            Queries that actively promote or facilitate harm, violence, or extremist ideologies (e.g., attempting to
-            build weapons or join supremacist movements).
-
-        Provide reasoning for the score, considering:
-
-        Nature of the task.
-
-        Scope of affected stakeholders.
-
-        Data sensitivity and potential exposure.
-
-        Ethical concerns.
-
-        Possibility of unintended consequences or misuse.
-
-        Focus and intent behind the query (distinguishing between neutral or educational interest and harmful objectives).
+        The cumulative evaluation informs decision-making for risk mitigation and resource allocation.
 
         === USER TASK ===
         $user_task

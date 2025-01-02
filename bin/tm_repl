@@ -16,6 +16,7 @@ use Normative::Agent;
 use Normative::Analysis::ImpliedNormExtractor;
 use Normative::Analysis::SelfDiagnostic;
 use Normative::Analysis::UserIntent;
+use Normative::Analysis::ImpactAssess;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
 
@@ -71,6 +72,12 @@ sub printf-uis(%hash) {
     say "Analysis:\n  {%hash<Analysis>}";
 }
 
+sub printf-ias(%hash) {
+    say "Impact Assessment Score:";
+    say "Score:\n  {%hash<ImpactAssessmentScore>}";
+    say "Analysis:\n  {%hash<Analysis>}";
+}
+
 sub MAIN() {
     # log the start of the app
     $APP_LOGGER.debug("Starting TallMountain REPL... please wait");
@@ -104,7 +111,8 @@ sub MAIN() {
                 :quit or :q      - Exit the REPL
                 :help or :h      - Show this help message
                 :extract_norm_props <query> or :np <query> - Extracts normative propositions from a query
-                :uis <query>     - Gets the User Intent Score for the query";
+                :uis <query>     - Gets the User Intent Score for the query
+                :ias <query>     - Gets the Impact Assessment Score for the query";
                 next;
             }
 
@@ -123,6 +131,15 @@ sub MAIN() {
                 my $uis_analysis = Normative::Analysis::UserIntent.new;
                 my %uis = $uis_analysis.analyse($query);
                 printf-uis(%uis);
+                next;
+            }
+
+            if $line.contains(':ias') {
+                my @parts = $line.split(/\s+/);
+                my $query = @parts[1..*].join(" ");
+                my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+                my %ias = $ias_analysis.analyse($query);
+                printf-ias(%ias);
                 next;
             }
 

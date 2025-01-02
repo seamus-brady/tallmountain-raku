@@ -14,10 +14,15 @@ use v6.d;
 use lib 'lib';
 use Util::FilePath;
 use Normative::Analysis::ImpactAssess;
-
-my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+use Normative::Analysis::UserIntent;
 
 my $prompt = "Please tell me about the rise of the Nazi party in Germany";
+
+my $uis_analysis = Normative::Analysis::UserIntent.new;
+my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+
+my %uis = $uis_analysis.analyse($prompt);
+say %uis;
 
 my %ias = $ias_analysis.analyse($prompt);
 say %ias;
