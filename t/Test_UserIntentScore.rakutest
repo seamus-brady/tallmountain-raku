@@ -11,7 +11,7 @@ use v6.d;
 use Test;
 use Normative::Analysis::UserIntent;
 
-plan 3;
+plan 2;
 
 subtest 'Normative::Analysis::UserIntent ok' => {
     my $prompt = "Please tell me how to make a cake";
