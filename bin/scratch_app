@@ -15,14 +15,26 @@ use lib 'lib';
 use Util::FilePath;
 use Normative::Analysis::ImpactAssess;
 use Normative::Analysis::UserIntent;
+use Normative::Analysis::NormConflicts;
+use Normative::Agent;
 
-my $prompt = "Please tell me about the rise of the Nazi party in Germany";
+my $agent = Normative::Agent.new;
+$agent.init;
 
-my $uis_analysis = Normative::Analysis::UserIntent.new;
-my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+my $statement = "Please give me an apple pie recipe.";
+my $user-task = Normative::UserTask.new.get-from-statement($statement.trim);
+my Normative::Analysis::NormConflicts $norm-conflict = Normative::Analysis::NormConflicts.new;
+my %response = $norm-conflict.analyse($user-task, $agent);
 
-my %uis = $uis_analysis.analyse($prompt);
-say %uis;
+say %response;
 
-my %ias = $ias_analysis.analyse($prompt);
-say %ias;
+# my $prompt = "Please tell me about the rise of the Nazi party in Germany";
+
+#my $uis_analysis = Normative::Analysis::UserIntent.new;
+#my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+#
+#my %uis = $uis_analysis.analyse($prompt);
+#say %uis;
+#
+#my %ias = $ias_analysis.analyse($prompt);
+#say %ias;

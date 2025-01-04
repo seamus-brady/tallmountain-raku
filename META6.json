@@ -30,6 +30,7 @@
     "Cycle::Stage::ReactiveScan": "lib/Cycle/Stage/ReactiveScan.rakumod",
     "Normative::Analysis::ImpactAssess": "lib/Normative/Analysis/ImpactAssess.rakumod",
     "Normative::Analysis::NormConflict": "lib/Normative/Analysis/NormConflict.rakumod",
+    "Normative::Analysis::NormConflicts": "lib/Normative/Analysis/NormConflicts.rakumod",
     "Normative::Analysis::RiskAnalyser": "lib/Normative/Analysis/RiskAnalyser.rakumod",
     "Normative::Analysis::RiskEntry": "lib/Normative/Analysis/RiskEntry.rakumod",
     "Normative::Analysis::UserIntent": "lib/Normative/Analysis/UserIntent.rakumod",
