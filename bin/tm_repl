@@ -15,6 +15,8 @@ use Util::Logger;
 use Normative::Agent;
 use Normative::Analysis::ImpliedNormExtractor;
 use Normative::Analysis::SelfDiagnostic;
+use Normative::Analysis::UserIntent;
+use Normative::Analysis::ImpactAssess;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
 
@@ -52,7 +54,7 @@ sub perform-self-diagnosis {
     }
 }
 
-sub format-implied-propositions(%hash) {
+sub printf-implied-propositions(%hash) {
     say "implied_propositions:";
     for %hash<implied_propositions><NormativeProposition>.list -> $prop {
         say "    - level: {$prop<level>}";
@@ -61,9 +63,20 @@ sub format-implied-propositions(%hash) {
         say "      operator: {$prop<operator>}";
         say "      proposition_value: {$prop<proposition-value>}\n";
     }
-    say "input_statement:\n    {%hash<input-statement>}";
+    say "input_statement:\n    {%hash<input_statement>}";
 }
 
+sub printf-uis(%hash) {
+    say "User Intent Score:";
+    say "Score:\n  {%hash<UserIntentScore>}";
+    say "Analysis:\n  {%hash<Analysis>}";
+}
+
+sub printf-ias(%hash) {
+    say "Impact Assessment Score:";
+    say "Score:\n  {%hash<ImpactAssessmentScore>}";
+    say "Analysis:\n  {%hash<Analysis>}";
+}
 
 sub MAIN() {
     # log the start of the app
@@ -97,7 +110,9 @@ sub MAIN() {
                 say "Available commands:
                 :quit or :q      - Exit the REPL
                 :help or :h      - Show this help message
-                :extract_norm_props <query> or :np <query> - Extracts normative propositions from a query";
+                :extract_norm_props <query> or :np <query> - Extracts normative propositions from a query
+                :uis <query>     - Gets the User Intent Score for the query
+                :ias <query>     - Gets the Impact Assessment Score for the query";
                 next;
             }
 
@@ -106,7 +121,25 @@ sub MAIN() {
                 my $query = @parts[1..*].join(" ");
                 my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
                 my %norm_props = $norm_extractor.extract-norm-props($query);
-                format-implied-propositions(%norm_props);
+                printf-implied-propositions(%norm_props);
+                next;
+            }
+
+            if $line.contains(':uis') {
+                my @parts = $line.split(/\s+/);
+                my $query = @parts[1..*].join(" ");
+                my $uis_analysis = Normative::Analysis::UserIntent.new;
+                my %uis = $uis_analysis.analyse($query);
+                printf-uis(%uis);
+                next;
+            }
+
+            if $line.contains(':ias') {
+                my @parts = $line.split(/\s+/);
+                my $query = @parts[1..*].join(" ");
+                my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+                my %ias = $ias_analysis.analyse($query);
+                printf-ias(%ias);
                 next;
             }
 
@@ -120,7 +153,7 @@ sub MAIN() {
             # calculate elapsed time
             my $elapsed-time = $end-time - $start-time;
             my $rounded-seconds = $elapsed-time.round;
-;
+
             say "\nTallMountain (TMAI):> $response (Elapsed time: $rounded-seconds seconds)";
 
             CATCH {
