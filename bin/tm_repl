@@ -78,6 +78,22 @@ sub printf-ias(%hash) {
     say "Analysis:\n  {%hash<Analysis>}";
 }
 
+sub printf-nrp($risk_profile) {
+    say "Normative Risk Profile:";
+    for $risk_profile.data -> $entry {
+        say "Risk Entry:";
+        say "    Analysis            : { $entry.Analysis }";
+        say "    Context Multiplier : { $entry.ContextMultiplier }";
+        say "    Impact Score       : { $entry.ImpactScore }";
+        say "    Likelihood         : { $entry.Likelihood }";
+        say "    Norm Alignment     : { $entry.NormAlignmentScore }";
+        say "    Risk Level         : { $entry.RiskLevel }";
+        say "    Risk Score         : { $entry.RiskScore }";
+        say "    User Norm Prop     : { $entry.UserNormPropValue }";
+        say ""; # Blank line for separation
+    }
+}
+
 sub MAIN() {
     # log the start of the app
     $APP_LOGGER.debug("Starting TallMountain REPL... please wait");
@@ -110,13 +126,14 @@ sub MAIN() {
                 say "Available commands:
                 :quit or :q      - Exit the REPL
                 :help or :h      - Show this help message
-                :extract_norm_props <query> or :np <query> - Extracts normative propositions from a query
+                :np <query> - Extracts normative propositions from a query
                 :uis <query>     - Gets the User Intent Score for the query
-                :ias <query>     - Gets the Impact Assessment Score for the query";
+                :ias <query>     - Gets the Impact Assessment Score for the query
+                :nrp <query>     - Get a Normative Risk Profile for the query";
                 next;
             }
 
-            if $line.contains(':extract_np') || $line.contains(':np') {
+            if $line.contains(':np') {
                 my @parts = $line.split(/\s+/);
                 my $query = @parts[1..*].join(" ");
                 my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
@@ -140,6 +157,18 @@ sub MAIN() {
                 my $ias_analysis = Normative::Analysis::ImpactAssess.new;
                 my %ias = $ias_analysis.analyse($query);
                 printf-ias(%ias);
+                next;
+            }
+
+            if $line.contains(':nrp') {
+                my @parts = $line.split(/\s+/);
+                my $query = @parts[1..*].join(" ");
+                my $user_task = Normative::UserTask.new.get-from-statement($query);
+                my $agent = Normative::Agent.new;
+                $agent.init;
+                my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
+                my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+                printf-nrp($risk-profile);
                 next;
             }
 

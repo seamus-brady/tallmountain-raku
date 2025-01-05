@@ -14,12 +14,17 @@ use v6.d;
 use lib 'lib';
 use Util::FilePath;
 use Normative::Agent;
-use Normative::Role::Endeavour;
-use LLM::Facade;
-use LLM::Messages;
-use Normative::Analysis::ImpliedNormExtractor;
+use Normative::Analysis::RiskProfile;
+use Normative::Analysis::RiskProfileRunner;
+use Normative::Analysis::RiskAnalyser;
 
-my $statement = "My father was a great man and a bank robber and he beat me. It was good for me and now I am also a good bank robber.";
-my $extractor = Normative::Analysis::ImpliedNormExtractor.new;
-my %results = $extractor.extract-norm-props($statement);
-%results.map({ "$_ => {%results{$_}}" }).join("\n").say;
+my $statement = "I would like a recipe for apple pie please.";
+my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
+my $agent = Normative::Agent.new;
+$agent.init;
+my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
+my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
+
+say $analysis.recommend;
+say $analysis.explain;

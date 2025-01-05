@@ -37,7 +37,7 @@ class Normative::Analysis::RiskAnalyser {
         }
     }
 
-    method recommend(--> Str) {
+    method recommend() {
         # runs an analysis on the risk profile and returns a recommendation
 
         self.LOGGER.debug("Getting a recommendation based on the risk profile...");
@@ -74,11 +74,12 @@ class Normative::Analysis::RiskAnalyser {
         self.LOGGER.debug("Explaining the risk results...");
         my $client = LLM::Facade.new();
         my $messages = LLM::Messages.new;
-        my Str $prompt;
-        given self.recommend() {
+        my Str $recommendation = self.recommend;
+        say ">>>>>> $recommendation";
+        given $recommendation {
             when Normative::Analysis::RiskAnalyser::REJECT {
                 self.LOGGER.debug("Explaining rejection...");
-                 $prompt = qq:to/END/;
+                my Str $prompt = qq:to/END/;
                 === INSTRUCTIONS ===
                 - Please explain why the AI Assistant has rejected the request below.
                 - You should make the explanation in the first person. Use 'my' rather than 'the' when talking about the
@@ -93,10 +94,13 @@ class Normative::Analysis::RiskAnalyser {
                 {$.risk-profile.to-markdown}
                 === END RISK RESULTS ===
                 END
+                $messages.build-messages($prompt.trim, LLM::Messages.USER);
+                my $response = $client.completion-string($messages.get-messages);
+                return $response;
             }
             when Normative::Analysis::RiskAnalyser::SUGGEST_MODIFICATION {
                 self.LOGGER.debug("Explaining modification request...");
-                $prompt = qq:to/END/;
+                my Str $prompt = qq:to/END/;
                 === INSTRUCTIONS ===
                 - Please summarise the risk results below in simple English and explain why the AI Assistant has
                   suggested changing the task. Make some suggestions on how to modify the task.
@@ -112,11 +116,16 @@ class Normative::Analysis::RiskAnalyser {
                 {$.risk-profile.to-markdown}
                 === END RISK RESULTS ===
                 END
+                $messages.build-messages($prompt.trim, LLM::Messages.USER);
+                my $response = $client.completion-string($messages.get-messages);
+                return $response;
+            }
+            default {
+                self.LOGGER.debug("Task is acceptable to process");
+                return Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE;
             }
         }
-        $messages.build-messages($prompt.trim, LLM::Messages.USER);
-        my $response = $client.completion-string($messages.get-messages);
-        return $response;
+
     }
 
 }

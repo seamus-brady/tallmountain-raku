@@ -218,6 +218,7 @@ subtest 'RiskAnalyser accepts and executes' => {
                 ContextMultiplier => 1.0,
                 ImpactScore => 2.0,
                 Likelihood => 3.0,
+
                 NormAlignmentScore => 4.0,
                 RiskLevel => 'Low',
                 RiskScore => 5.0,
