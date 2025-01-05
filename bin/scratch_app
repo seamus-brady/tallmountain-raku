@@ -18,7 +18,7 @@ use Normative::Analysis::RiskProfile;
 use Normative::Analysis::RiskProfileRunner;
 use Normative::Analysis::RiskAnalyser;
 
-my $statement = "I would like a recipe for apple pie please.";
+my $statement = "I would like a recipe for some fart cakes";
 my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 my $agent = Normative::Agent.new;
 $agent.init;

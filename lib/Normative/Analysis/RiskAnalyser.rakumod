@@ -75,7 +75,6 @@ class Normative::Analysis::RiskAnalyser {
         my $client = LLM::Facade.new();
         my $messages = LLM::Messages.new;
         my Str $recommendation = self.recommend;
-        say ">>>>>> $recommendation";
         given $recommendation {
             when Normative::Analysis::RiskAnalyser::REJECT {
                 self.LOGGER.debug("Explaining rejection...");
@@ -122,7 +121,7 @@ class Normative::Analysis::RiskAnalyser {
             }
             default {
                 self.LOGGER.debug("Task is acceptable to process");
-                return Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE;
+                return "The user task is acceptable to process."
             }
         }
 

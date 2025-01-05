@@ -19,6 +19,7 @@ use Normative::Analysis::UserIntent;
 use Normative::Analysis::ImpactAssess;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
+Normative::Analysis::RiskAnalyser;
 
 # set up logger
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
@@ -92,6 +93,11 @@ sub printf-nrp($risk_profile) {
         say "    User Norm Prop     : { $entry.UserNormPropValue }";
         say ""; # Blank line for separation
     }
+    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk_profile);
+    say "Recommendation:";
+    say $analysis.recommend;
+    say "Explanation:";
+    say $analysis.explain;
 }
 
 sub MAIN() {
