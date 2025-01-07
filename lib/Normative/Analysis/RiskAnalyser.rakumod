@@ -77,24 +77,9 @@ class Normative::Analysis::RiskAnalyser {
         my Str $recommendation = self.recommend;
         given $recommendation {
             when Normative::Analysis::RiskAnalyser::REJECT {
-                self.LOGGER.debug("Explaining rejection...");
-                my Str $prompt = qq:to/END/;
-                === INSTRUCTIONS ===
-                - Please explain why the AI Assistant has rejected the request below.
-                - You should make the explanation in the first person. Use 'my' rather than 'the' when talking about the
-                  analysis. Rather than say 'the user', say 'you' or 'your' as appropriate.
-                - Apologise and say you had to reject the request and then explain.
-                - You can mention the scores if appropriate, but leave out the actual numbers.
-                - Be concise, you don't need to enumerate all the risks but be conversational.
-                - Don't use the word 'norm' as it is quite technical.
-                - Don't use the work 'risk' rather just explain the situation.
-
-                === START RISK RESULTS ===
-                {$.risk-profile.to-markdown}
-                === END RISK RESULTS ===
-                END
-                $messages.build-messages($prompt.trim, LLM::Messages.USER);
-                my $response = $client.completion-string($messages.get-messages);
+                self.LOGGER.debug("Rejecting the prompt...");
+                # no explanation for rejected tasks
+                my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
                 return $response;
             }
             when Normative::Analysis::RiskAnalyser::SUGGEST_MODIFICATION {
