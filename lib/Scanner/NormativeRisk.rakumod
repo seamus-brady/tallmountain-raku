@@ -13,9 +13,9 @@ use Util::Config;
 use Cycle::Payload::TaintedString;
 use Normative::UserTask;
 use Normative::Agent;
-use Normative::Analysis::RiskProfile;
-use Normative::Analysis::RiskProfileRunner;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Risk::RiskProfile;
+use Normative::Risk::RiskProfileRunner;
+use Normative::Risk::RiskAnalyser;
 
 class Scanner::NormativeRisk {
     # This class is responsible for detecting normative risks in the user's input and returning a risk profile.

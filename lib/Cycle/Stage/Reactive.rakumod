@@ -21,7 +21,7 @@ use Scanner::PromptLeakage;
 use Scanner::PromptHijack;
 use Scanner::InappropriateContent;
 use Scanner::NormativeRisk;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Risk::RiskAnalyser;
 
 
 

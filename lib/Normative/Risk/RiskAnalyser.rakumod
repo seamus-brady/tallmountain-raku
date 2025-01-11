@@ -11,7 +11,7 @@ use v6.d;
 use Util::Config;
 use Util::Logger;
 use Normative::UserTask;
-use Normative::Analysis::RiskProfile;
+use Normative::Risk::RiskProfile;
 use LLM::Messages;
 use LLM::Facade;
 

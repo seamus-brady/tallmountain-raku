@@ -10,7 +10,7 @@
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
-use Normative::Analysis::RiskEntry;
+use Normative::Risk::RiskEntry;
 
 class Normative::Analysis::RiskProfile {
     # a class to hold a list of RiskEntry objects

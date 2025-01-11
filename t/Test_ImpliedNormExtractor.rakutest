@@ -9,7 +9,7 @@
 
 use v6.d;
 use Test;
-use Normative::Analysis::NormativeAnalysisResult;
+use Normative::Analysis::NormativeExtractionResult;
 use Normative::Analysis::ImpliedNormExtractor;
 
 plan 2;
@@ -29,8 +29,8 @@ subtest 'Normative::NormativeAnalysisResult ok' => {
     I once used a cat as a hat.
     END
     my %result = $norm_extractor.extract-norm-props($statement);
-    my $analysis_result = Normative::Analysis::NormativeAnalysisResult.new-from-data(%result);
-    isa-ok $analysis_result, Normative::Analysis::NormativeAnalysisResult, 'The result is a NormativeAnalysisResult';
+    my $analysis_result = Normative::Analysis::NormativeExtractionResult.new-from-data(%result);
+    isa-ok $analysis_result, Normative::Analysis::NormativeExtractionResult, 'The result is a NormativeAnalysisResult';
 }
 
 done-testing;

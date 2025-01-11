@@ -10,7 +10,7 @@
 use v6.d;
 use Test;
 use Normative::Agent;
-use Normative::Analysis::NormConflict;
+use Normative::Risk::NormConflict;
 
 plan 2;
 
