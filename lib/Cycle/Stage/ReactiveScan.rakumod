@@ -16,7 +16,7 @@ class Cycle::Stage::ReactiveScan {
     has Bool $.prompt-hijack;
     has Str $.inappropriate-content;
     has Hash $.vulnerable-user;
-    has Normative::Analysis::RiskAnalyser $.normative-scan;
+    has Normative::Risk::RiskAnalyser $.normative-scan;
 
     method new-from-results(@results) {
         self.bless(

@@ -22,9 +22,9 @@ my $statement = "I would like a recipe for some fart cakes";
 my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 my $agent = Normative::Agent.new;
 $agent.init;
-my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
-my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
+my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+my Normative::Risk::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
 
 say $analysis.recommend;
 say $analysis.explain;

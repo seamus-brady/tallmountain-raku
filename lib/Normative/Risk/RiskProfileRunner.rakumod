@@ -14,7 +14,7 @@ use Normative::Agent;
 use Normative::Risk::RiskProfile;
 use Normative::Risk::NormConflict;
 
-class Normative::Analysis::RiskProfileRunner {
+class Normative::Risk::RiskProfileRunner {
     # takes an endeavour and returns a profile for the normative risk
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::RiskProfileRunner>");
@@ -22,7 +22,7 @@ class Normative::Analysis::RiskProfileRunner {
     method profile(
             Normative::Role::Endeavour $endeavour,
             Normative::Agent $agent
-            --> Normative::Analysis::RiskProfile) {
+            --> Normative::Risk::RiskProfile) {
         # runs the analysis and returns the profile
 
         $!LOGGER.debug("Profile analysis started on the endeavour: $endeavour");
@@ -30,13 +30,13 @@ class Normative::Analysis::RiskProfileRunner {
         # Start timer
         my $start-time = now;
 
-        my Normative::Analysis::RiskProfile $risks = Normative::Analysis::RiskProfile.new;
+        my Normative::Risk::RiskProfile $risks = Normative::Risk::RiskProfile.new;
 
         # Collect promises for all asynchronous tasks
         my @promises = $endeavour.normative-propositions.map: -> $user-norm-prop {
             start {
                 # Perform analysis
-                my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
+                my Normative::Risk::NormConflict $norm-conflict = Normative::Risk::NormConflict.new;
                 my %response = $norm-conflict.analyse($user-norm-prop, $agent);
 
                 # Add response to risks and output the result

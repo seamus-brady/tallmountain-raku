@@ -17,7 +17,7 @@ use LLM::Messages;
 use Normative::UserTask;
 
 
-class Normative::Analysis::NormConflict {
+class Normative::Risk::NormConflict {
     # a class to find if an incoming norm conflicts with the system norms
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::NormConflict>");

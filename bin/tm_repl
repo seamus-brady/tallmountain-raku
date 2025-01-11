@@ -13,13 +13,13 @@ use v6.d;
 use lib 'lib';
 use Util::Logger;
 use Normative::Agent;
-use Normative::Analysis::ImpliedNormExtractor;
+use Normative::Extraction::ImpliedNormExtractor;
 use Normative::Analysis::SelfDiagnostic;
 use Normative::Analysis::UserIntent;
 use Normative::Analysis::ImpactAssess;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
-Normative::Analysis::RiskAnalyser;
+Normative::Risk::RiskAnalyser;
 
 # set up logger
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
@@ -93,7 +93,7 @@ sub printf-nrp($risk_profile) {
         say "    User Norm Prop     : { $entry.UserNormPropValue }";
         say ""; # Blank line for separation
     }
-    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk_profile);
+    my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk_profile);
     say "Recommendation:";
     say $analysis.recommend;
     say "Explanation:";
@@ -142,7 +142,7 @@ sub MAIN() {
             if $line.contains(':np') {
                 my @parts = $line.split(/\s+/);
                 my $query = @parts[1..*].join(" ");
-                my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
+                my $norm_extractor = Normative::Extraction::ImpliedNormExtractor.new;
                 my %norm_props = $norm_extractor.extract-norm-props($query);
                 printf-implied-propositions(%norm_props);
                 next;
@@ -172,8 +172,8 @@ sub MAIN() {
                 my $user_task = Normative::UserTask.new.get-from-statement($query);
                 my $agent = Normative::Agent.new;
                 $agent.init;
-                my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-                my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+                my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+                my Normative::Risk::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
                 printf-nrp($risk-profile);
                 next;
             }

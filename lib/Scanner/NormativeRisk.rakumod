@@ -21,13 +21,13 @@ class Scanner::NormativeRisk {
     # This class is responsible for detecting normative risks in the user's input and returning a risk profile.
     has $.LOGGER = Util::Logger.new(namespace => "<Scanner::NormativeRisk>");
 
-    method scan(Str $user-query, Normative::Agent $normative-agent --> Normative::Analysis::RiskAnalyser) {
+    method scan(Str $user-query, Normative::Agent $normative-agent --> Normative::Risk::RiskAnalyser) {
         $.LOGGER.error("Doing a normative risk scan...");
         # create the user task
         my $user_task = Normative::UserTask.new.get-from-statement($user-query.trim);
-        my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-        my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $normative-agent);
-        my $analysis = Normative::Analysis::RiskAnalyser.new(
+        my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+        my Normative::Risk::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $normative-agent);
+        my $analysis = Normative::Risk::RiskAnalyser.new(
                 risk-profile => $risk-profile,
                 user-task => $user_task,
         );

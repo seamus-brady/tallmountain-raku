@@ -21,12 +21,12 @@ my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
 my $user-norm-prop = $user_task.normative-propositions[0];
 
 subtest 'Normative::Analysis::NormConflict loads' => {
-    my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
-    isa-ok $norm-conflict, Normative::Analysis::NormConflict;
+    my Normative::Risk::NormConflict $norm-conflict = Normative::Risk::NormConflict.new;
+    isa-ok $norm-conflict, Normative::Risk::NormConflict;
 }
 
 subtest 'Normative::Analysis::NormConflict gets a correct level' => {
-    my Normative::Analysis::NormConflict $norm-conflict = Normative::Analysis::NormConflict.new;
+    my Normative::Risk::NormConflict $norm-conflict = Normative::Risk::NormConflict.new;
     my %response = $norm-conflict.analyse($user-norm-prop, $agent);
     ok %response<RiskLevel> eq 'Low';
 }
