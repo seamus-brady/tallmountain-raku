@@ -24,6 +24,7 @@ my $feature = Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency")
 $desired_future.add-feature($feature);
 $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
 $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+say $desired_future.discrepancy;
 
 my Plan::Forecast::OneTier $mustang_option = $desired_future.option();
 
@@ -34,4 +35,5 @@ $mustang_option.update(name => "Fuel Efficiency",  magnitude => 3);
 $mustang_option.update(name => "Safety",  magnitude =>2);
 $mustang_option.update(name => "Coolness",  magnitude =>0);
 
+say $desired_future.discrepancy;
 say $mustang_option.discrepancy;

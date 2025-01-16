@@ -21,6 +21,7 @@ class Plan::Forecast::Base {
     method discrepancy() {
         my $total-discrepancies = 0;
         for @.features -> $feature {
+            say $feature;
             $total-discrepancies += $feature.calculated-discrepancy;
         }
         return $total-discrepancies / self.scaling-unit;
@@ -28,7 +29,8 @@ class Plan::Forecast::Base {
 
     # Deep copy of the object
     method option() {
-        return self.clone;
+        my @copied-features = @.features.map({ $_.clone });
+        return self.clone(features => @copied-features);
     }
 
     # Get a feature by name
@@ -36,7 +38,6 @@ class Plan::Forecast::Base {
         for @.features -> $feature {
             return $feature if $feature.name eq $name;
         }
-        die "No feature with name '$name' found";
     }
 
     method add-feature(Plan::Feature $feature) {

@@ -29,9 +29,9 @@ subtest 'Plan::Forecast::OneTier no discrepancy' => {
     is($mustang_option.discrepancy, $desired_future.discrepancy, 'Mustang option has same discrepancy as desired future');
 
     # update the option and it should not have the same discrepancy
-    $mustang_option.update("Fuel Efficiency", magnitude => 3);
-    $mustang_option.update("Safety", magnitude => 2);
-    $mustang_option.update("Coolness", magnitude => 0);
+    $mustang_option.update(name => "Fuel Efficiency", magnitude => 3);
+    $mustang_option.update(name => "Safety", magnitude => 2);
+    $mustang_option.update(name => "Coolness", magnitude => 0);
     isnt($mustang_option.discrepancy, $desired_future.discrepancy, 'Mustang option has different discrepancy after update');
 
     # create a new option
@@ -39,9 +39,9 @@ subtest 'Plan::Forecast::OneTier no discrepancy' => {
     is($fiat_option.discrepancy, $desired_future.discrepancy, 'Fiat option has same discrepancy as desired future');
 
     # update the option and it should not have the same discrepancy
-    $fiat_option.update("Fuel Efficiency", magnitude => 0);
-    $fiat_option.update("Safety", magnitude => 3);
-    $fiat_option.update("Coolness", magnitude => 3);
+    $fiat_option.update(name => "Fuel Efficiency", magnitude => 0);
+    $fiat_option.update(name => "Safety", magnitude => 3);
+    $fiat_option.update(name => "Coolness", magnitude => 3);
     isnt($fiat_option.discrepancy, $desired_future.discrepancy, 'Fiat option has different discrepancy after update');
 
     # a mustang is a better option :)
