@@ -12,19 +12,26 @@
 
 use v6.d;
 use lib 'lib';
-use Util::FilePath;
-use Normative::Agent;
-use Normative::Risk::RiskProfile;
-use Normative::Risk::RiskProfileRunner;
-use Normative::Risk::RiskAnalyser;
+use Plan::Feature;
+use Plan::Forecast::OneTier;
 
-my $statement = "I would like a recipe for some fart cakes";
-my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
-my $agent = Normative::Agent.new;
-$agent.init;
-my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
-my Normative::Risk::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
-my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+#my $feature1 = Plan::Feature.new(base-importance => 3, name => "Fuel Efficiency");
+#say $feature1;
+#say $feature1.calculated-discrepancy;
 
-say $analysis.recommend;
-say $analysis.explain;
+my $desired_future = Plan::Forecast::OneTier.new();
+my $feature = Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency");
+$desired_future.add-feature($feature);
+$desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
+$desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+
+my Plan::Forecast::OneTier $mustang_option = $desired_future.option();
+
+say $mustang_option;
+
+# update the option and it should not have the same discrepancy
+$mustang_option.update(name => "Fuel Efficiency",  magnitude => 3);
+$mustang_option.update(name => "Safety",  magnitude =>2);
+$mustang_option.update(name => "Coolness",  magnitude =>0);
+
+say $mustang_option.discrepancy;

@@ -37,6 +37,7 @@ class Normative::Risk::RiskAnalyser {
         }
     }
 
+
     method recommend() {
         # runs an analysis on the risk profile and returns a recommendation
 

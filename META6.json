@@ -38,6 +38,7 @@
     "Plan::Exception": "lib/Plan/Exception.rakumod",
     "Plan::Feature": "lib/Plan/Feature.rakumod",
     "Plan::FeatureSet": "lib/Plan/FeatureSet.rakumod",
+    "Plan::Forecast::Base": "lib/Plan/Forecast/Base.rakumod",
     "Plan::Forecast::OneTier": "lib/Plan/Forecast/OneTier.rakumod",
     "Plan::Forecast::ThreeTier": "lib/Plan/Forecast/ThreeTier.rakumod",
     "Plan::GroupedFeatureSet": "lib/Plan/GroupedFeatureSet.rakumod",

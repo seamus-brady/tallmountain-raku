@@ -12,7 +12,7 @@ use Plan::FeatureSet;
 use Plan::GroupedFeatureSet;
 
 class Plan::Feature {
-    has Int $.base-importance where 1..3;  # importance between 1 and 3
+    has Int $.base-importance where 1..3 = 1;  # importance between 1 and 3
     has Str $.name;
     has Int $.magnitude = 0;              # magnitude: defaults to 0
     has Str $.description = "";           # Optional description
