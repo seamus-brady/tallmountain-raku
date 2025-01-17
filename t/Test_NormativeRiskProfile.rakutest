@@ -9,16 +9,16 @@
 
 use v6.d;
 use Test;
-use Normative::Analysis::NormConflict;
-use Normative::Analysis::RiskProfile;
-use Normative::Analysis::RiskProfileRunner;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Risk::NormConflict;
+use Normative::Risk::RiskProfile;
+use Normative::Risk::RiskProfileRunner;
+use Normative::Risk::RiskAnalyser;
 
 plan 9;
 
 subtest 'Normative::Analysis::RiskProfileRunner loads' => {
-    my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-    isa-ok $norm-risk-profiler, Normative::Analysis::RiskProfileRunner;
+    my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+    isa-ok $norm-risk-profiler, Normative::Risk::RiskProfileRunner;
 }
 
 subtest 'Normative::Analysis::RiskProfile created correctly' => {
@@ -26,13 +26,13 @@ subtest 'Normative::Analysis::RiskProfile created correctly' => {
     my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
     my $agent = Normative::Agent.new;
     $agent.init;
-    my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-    my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
-    isa-ok $risk-profile, Normative::Analysis::RiskProfile;
+    my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+    my Normative::Risk::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+    isa-ok $risk-profile, Normative::Risk::RiskProfile;
 }
 
 subtest 'RiskProfile can add an entry' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -49,7 +49,7 @@ subtest 'RiskProfile can add an entry' => {
 
 
 subtest 'RiskProfile can get all risk scores' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -66,7 +66,7 @@ subtest 'RiskProfile can get all risk scores' => {
 }
 
 subtest 'RiskProfile can get all risk levels' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -84,7 +84,7 @@ subtest 'RiskProfile can get all risk levels' => {
 }
 
 subtest 'RiskAnalyser rejects critical' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -121,13 +121,13 @@ subtest 'RiskAnalyser rejects critical' => {
                 UserNormPropValue => 'Test Value')
             );
 
-    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
-    is $analysis.recommend, Normative::Analysis::RiskAnalyser::REJECT, 'Correctly identified critical risk';
+    my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+    is $analysis.recommend, Normative::Risk::RiskAnalyser::REJECT, 'Correctly identified critical risk';
 }
 
 
 subtest 'RiskAnalyser rejects high' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -164,12 +164,12 @@ subtest 'RiskAnalyser rejects high' => {
                 UserNormPropValue => 'Test Value')
             );
 
-    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
-    is $analysis.recommend, Normative::Analysis::RiskAnalyser::REJECT, 'Correctly identified high risk';
+    my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+    is $analysis.recommend, Normative::Risk::RiskAnalyser::REJECT, 'Correctly identified high risk';
 }
 
 subtest 'RiskAnalyser suggests modification' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -206,12 +206,12 @@ subtest 'RiskAnalyser suggests modification' => {
                 UserNormPropValue => 'Test Value')
             );
 
-    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
-    is $analysis.recommend, Normative::Analysis::RiskAnalyser::SUGGEST_MODIFICATION, 'Correctly suggested modification';
+    my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+    is $analysis.recommend, Normative::Risk::RiskAnalyser::SUGGEST_MODIFICATION, 'Correctly suggested modification';
 }
 
 subtest 'RiskAnalyser accepts and executes' => {
-    my Normative::Analysis::RiskProfile $risk-profile = Normative::Analysis::RiskProfile.new;
+    my Normative::Risk::RiskProfile $risk-profile = Normative::Risk::RiskProfile.new;
     $risk-profile.add-entry(
             %(
                 Analysis => 'Test Analysis',
@@ -249,8 +249,8 @@ subtest 'RiskAnalyser accepts and executes' => {
                 UserNormPropValue => 'Test Value')
             );
 
-    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
-    is $analysis.recommend, Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE, 'Correctly accepted';
+    my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+    is $analysis.recommend, Normative::Risk::RiskAnalyser::ACCEPT_AND_EXECUTE, 'Correctly accepted';
 }
 
 done-testing;

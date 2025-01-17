@@ -1,3 +1,4 @@
+
 #  Copyright (c) 2024. Prediction By Invention https://predictionbyinvention.com/
 #
 #  THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
@@ -12,7 +13,7 @@ use LLM::Facade;
 use LLM::Messages;
 use Util::Config;
 
-class Normative::Analysis::ImpliedNormExtractor {
+class Normative::Extraction::ImpliedNormExtractor {
     # a class to extract implied normative propositions from a statement
 
     has $.LOGGER = Util::Logger.new(namespace => "<Normative::ImpliedNormExtractor>");

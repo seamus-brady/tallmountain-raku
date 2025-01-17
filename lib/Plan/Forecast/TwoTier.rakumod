@@ -8,6 +8,7 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
+use Util::Logger;
 use Plan::Forecast::Base;
 use Plan::Exception;
 
@@ -17,8 +18,8 @@ class Plan::Forecast::TwoTier is Plan::Forecast::Base {
     has $.LOGGER = Util::Logger.new(namespace => "<Plan::Forecast::TwoTier>");
 
     # Constructor
-    submethod BUILD($features = Set.new) {
-        self.features = $features;
+    submethod BUILD(@features = ()) {
+        self.features = @features;
         # importance (3) x magnitude (3) x feature_set importance (3)
         self.scaling-unit = 27;
         self.validate;
@@ -26,11 +27,13 @@ class Plan::Forecast::TwoTier is Plan::Forecast::Base {
 
     # Validate features for TwoTierForecast
     method validate() {
-        for $.features -> $feature {
-            if !$feature.feature-set.defined || $feature.grouped-feature-set.defined {
-                my Str $message = "Error - invalid feature for TwoTier forecast: $_";
-                self.LOGGER.error($message);
-                Plan::Exception.new(message => $message).throw;
+        if @.features.elems != 0 {
+            for @.features -> $feature {
+                if !$feature.feature-set.defined || $feature.grouped-feature-set.defined {
+                    my Str $message = "Error - invalid feature for TwoTier forecast: $_";
+                    self.LOGGER.error($message);
+                    Plan::Exception.new(message => $message).throw;
+                }
             }
         }
     }

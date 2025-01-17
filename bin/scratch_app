@@ -12,19 +12,101 @@
 
 use v6.d;
 use lib 'lib';
-use Util::FilePath;
+use Plan::Feature;
+use Plan::Forecast::OneTier;
 use Normative::Agent;
-use Normative::Analysis::RiskProfile;
-use Normative::Analysis::RiskProfileRunner;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Analysis::SelfDiagnostic;
+use Normative::Analysis::UserIntent;
+use Normative::Analysis::ImpactAssess;
+use Normative::Risk::RiskProfile;
+use Normative::Risk::RiskAnalyser;
+use Normative::Risk::RiskProfileRunner;
 
-my $statement = "I would like a recipe for some fart cakes";
-my $user_task = Normative::UserTask.new.get-from-statement($statement.trim);
+#my $feature1 = Plan::Feature.new(base-importance => 3, name => "Fuel Efficiency");
+#say $feature1;
+#say $feature1.calculated-discrepancy;
+
+# first create a desired future where there is discrepancy
+my $desired_future = Plan::Forecast::OneTier.new();
+$desired_future.add-feature(
+        Plan::Feature.new(
+            base-importance => 3,
+            name => "Normative Risk",
+            description => "Normative Risk Score"));
+$desired_future.add-feature(
+        Plan::Feature.new(
+            base-importance => 2,
+            name => "Impact Assessment",
+            description => "Impact Assessment Score"));
+$desired_future.add-feature(
+        Plan::Feature.new(
+                base-importance => 2,
+                name => "User Intent",
+                description => "User Intent Score"));
+say $desired_future.discrepancy;
+
+my $query = "I like making cakes with my kids. What is the best way to make a cake that is both healthy and delicious?";
+
+# UIS
+my $uis_analysis = Normative::Analysis::UserIntent.new;
+# IAS
+my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+
+my $user_task = Normative::UserTask.new.get-from-statement($query);
 my $agent = Normative::Agent.new;
 $agent.init;
-my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
-my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk-profile);
+
+
+
+my %uis;
+my %ias;
+my $analysis;
+
+
+
+my @promises = (
+    start { %uis = $uis_analysis.analyse($query);},
+    start {  %ias = $ias_analysis.analyse($query);},
+    start {
+        my $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+        my $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+        $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+    },
+);
+
+await @promises;
+
+say "All statements completed.";
+
+say %uis;
+say %ias;
+
+# set up the future as if we run the user task
+my Plan::Forecast::OneTier $user_task_future = $desired_future.option();
+
+# update for the user intent score if it is over moderate (5/10)
+say %uis<UserIntentScore>;
+if %uis<UserIntentScore> >= 5 {
+    my Int $uis_score = %uis<UserIntentScore>;
+    # 1 is bad, 10 is good, so we need to subtract from 10
+    $user_task_future.update(name => "User Intent", magnitude => (10 - $uis_score));
+}
+
+# update for the impact assessment score if it is over moderate (4/10)
+say %ias<ImpactAssessmentScore>;
+if %ias<ImpactAssessmentScore> >= 4 {
+    my Int $ias_score = %ias<ImpactAssessmentScore>;
+    # 1 is harmless, 10 is impactful
+    $user_task_future.update(name => "Impact Assessment", magnitude => $ias_score);
+}
 
 say $analysis.recommend;
-say $analysis.explain;
+if $analysis.recommend eq  Normative::Risk::RiskAnalyser::ACCEPT_AND_EXECUTE {
+    $user_task_future.update(name => "Normative Risk", magnitude => 0);
+} else {
+    $user_task_future.update(name => "Normative Risk", magnitude => 10);
+}
+
+say $user_task_future.discrepancy;
+
+

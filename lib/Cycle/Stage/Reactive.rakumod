@@ -21,7 +21,7 @@ use Scanner::PromptLeakage;
 use Scanner::PromptHijack;
 use Scanner::InappropriateContent;
 use Scanner::NormativeRisk;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Risk::RiskAnalyser;
 
 
 
@@ -50,9 +50,9 @@ class Cycle::Stage::Reactive {
         }
 
         # check the normative scan
-        my Normative::Analysis::RiskAnalyser $analysis = $scan_results.normative-scan;
+        my Normative::Risk::RiskAnalyser $analysis = $scan_results.normative-scan;
         my $recommendation = $analysis.recommend;
-        if $recommendation eq Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE {
+        if $recommendation eq Normative::Risk::RiskAnalyser::ACCEPT_AND_EXECUTE {
             # all good, accept and execute
             return $scan_results;
         } else {
@@ -77,7 +77,7 @@ class Cycle::Stage::Reactive {
 
     method handle-early-exit-for-normative-risk(
             Str $prompt,
-            Normative::Analysis::RiskAnalyser $analysis --> Cycle::Stage::EarlyExit) {
+            Normative::Risk::RiskAnalyser $analysis --> Cycle::Stage::EarlyExit) {
         self.LOGGER.debug("Prompt contains a normative risk!");
         # get the explanation from the analysis
         my Str $ai-message = $analysis.explain;

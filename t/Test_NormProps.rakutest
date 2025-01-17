@@ -10,7 +10,7 @@
 use v6.d;
 use Test;
 use Normative::Proposition;
-use Normative::Analysis::NormativeAnalysisResult;
+use Normative::Extraction::NormativeExtractionResult;
 
 plan 2;
 
@@ -41,7 +41,7 @@ subtest 'Normative::NormativeAnalysisResult Test from-hash' => {
         },
         input_statement => 'The French were right to guillotine the aristocracy';
     # Create an instance using the new-from-hash method
-    my $analysis_result = Normative::Analysis::NormativeAnalysisResult.new-from-data(%test-hash);
+    my $analysis_result = Normative::Extraction::NormativeExtractionResult.new-from-data(%test-hash);
 
     # Verify the object properties
     is $analysis_result.input_statement, %test-hash<input_statement>, 'Input statement is correct';

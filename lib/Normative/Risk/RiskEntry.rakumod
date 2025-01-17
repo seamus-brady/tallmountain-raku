@@ -9,7 +9,7 @@
 
 use v6.d;
 
-class Normative::Analysis::RiskEntry {
+class Normative::Risk::RiskEntry {
     # a class to represent individual norm risk score entries
 
     has $.Analysis;
