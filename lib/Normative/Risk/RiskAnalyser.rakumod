@@ -57,12 +57,11 @@ class Normative::Risk::RiskAnalyser {
                 return Normative::Risk::RiskAnalyser::REJECT;
             }
             when %.counts{'Moderate'} >= $config.get_config('normative_analysis', 'number_moderate_risks_allowed') {
-                say "Too many Moderates found";
-                self.LOGGER.debug("Too many Moderates found - suggesting modification");
+                self.LOGGER.debug("Suggesting modification");
                 return Normative::Risk::RiskAnalyser::SUGGEST_MODIFICATION
             }
             default {
-                self.LOGGER.debug("No Critical or High risks found, nor too many Moderate - accepting and executing");
+                self.LOGGER.debug("Accepting and executing");
                 return Normative::Risk::RiskAnalyser::ACCEPT_AND_EXECUTE;
             }
         }

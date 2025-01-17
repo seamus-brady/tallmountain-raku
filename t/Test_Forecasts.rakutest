@@ -11,39 +11,255 @@ use v6.d;
 use Test;
 use lib 'lib';
 use Plan::Forecast::OneTier;
+use Plan::Forecast::TwoTier;
+use Plan::Forecast::ThreeTier;
 use Plan::Feature;
+use Plan::FeatureSet;
+use Plan::GroupedFeatureSet;
 
-plan 1;
+use Test;
 
-subtest 'Plan::Forecast::OneTier no discrepancy' => {
+plan 13;
+
+subtest 'Plan::Forecast::OneTier- No discrepancy in desired future' => {
+
     my $desired_future = Plan::Forecast::OneTier.new();
     $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency"));
     $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
     $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
 
-    # no discrepancy as it is what we want
     is($desired_future.discrepancy, 0, 'No discrepancy in desired future');
+};
 
-    # create an option and it should have the same discrepancy
+subtest 'Plan::Forecast::OneTier - Mustang option has same discrepancy as desired future' => {
+
+    my $desired_future = Plan::Forecast::OneTier.new();
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+
     my $mustang_option = $desired_future.option();
     is($mustang_option.discrepancy, $desired_future.discrepancy, 'Mustang option has same discrepancy as desired future');
+};
 
-    # update the option and it should not have the same discrepancy
+subtest 'Plan::Forecast::OneTier - Mustang option has different discrepancy after update' => {
+
+    my $desired_future = Plan::Forecast::OneTier.new();
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+
+    my $mustang_option = $desired_future.option();
     $mustang_option.update(name => "Fuel Efficiency", magnitude => 3);
     $mustang_option.update(name => "Safety", magnitude => 2);
     $mustang_option.update(name => "Coolness", magnitude => 0);
-    isnt($mustang_option.discrepancy, $desired_future.discrepancy, 'Mustang option has different discrepancy after update');
 
-    # create a new option
+    isnt($mustang_option.discrepancy, $desired_future.discrepancy, 'Mustang option has different discrepancy after update');
+};
+
+subtest 'Plan::Forecast::OneTier - Fiat option has same discrepancy as desired future' => {
+
+    my $desired_future = Plan::Forecast::OneTier.new();
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+
     my $fiat_option = $desired_future.option();
     is($fiat_option.discrepancy, $desired_future.discrepancy, 'Fiat option has same discrepancy as desired future');
+};
 
-    # update the option and it should not have the same discrepancy
+subtest 'Plan::Forecast::OneTier - Fiat option has different discrepancy after update' => {
+
+    my $desired_future = Plan::Forecast::OneTier.new();
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+
+    my $fiat_option = $desired_future.option();
     $fiat_option.update(name => "Fuel Efficiency", magnitude => 0);
     $fiat_option.update(name => "Safety", magnitude => 3);
     $fiat_option.update(name => "Coolness", magnitude => 3);
-    isnt($fiat_option.discrepancy, $desired_future.discrepancy, 'Fiat option has different discrepancy after update');
 
-    # a mustang is a better option :)
+    isnt($fiat_option.discrepancy, $desired_future.discrepancy, 'Fiat option has different discrepancy after update');
+};
+
+subtest 'Plan::Forecast::OneTier - Mustang is a better option than Fiat' => {
+
+    my $desired_future = Plan::Forecast::OneTier.new();
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => "Fuel Efficiency"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => "Safety"));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => "Coolness"));
+
+    my $mustang_option = $desired_future.option();
+    $mustang_option.update(name => "Fuel Efficiency", magnitude => 3);
+    $mustang_option.update(name => "Safety", magnitude => 2);
+    $mustang_option.update(name => "Coolness", magnitude => 0);
+
+    my $fiat_option = $desired_future.option();
+    $fiat_option.update(name => "Fuel Efficiency", magnitude => 0);
+    $fiat_option.update(name => "Safety", magnitude => 3);
+    $fiat_option.update(name => "Coolness", magnitude => 3);
+
     ok($fiat_option.discrepancy > $mustang_option.discrepancy, 'Mustang is a better option than Fiat');
-}
+};
+
+# Plan::Forecast::TwoTier - No discrepancy in desired future
+subtest 'Plan::Forecast::TwoTier - No discrepancy in desired future' => {
+
+    my $desired_future = Plan::Forecast::TwoTier.new();
+    my $climate = Plan::FeatureSet.new(name => 'Climate', importance => 2);
+    my $location = Plan::FeatureSet.new(name => 'Location', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Cold', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => 'Wind', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Shops', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'Restaurants', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Solitude', feature-set => $location));
+
+    is($desired_future.discrepancy, 0, 'No discrepancy in desired future');
+};
+
+# Plan::Forecast::TwoTier - Cavan option has different discrepancy
+subtest 'Plan::Forecast::TwoTier - Cavan option has different discrepancy' => {
+
+    my $desired_future = Plan::Forecast::TwoTier.new();
+    my $climate = Plan::FeatureSet.new(name => 'Climate', importance => 2);
+    my $location = Plan::FeatureSet.new(name => 'Location', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Cold', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => 'Wind', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Shops', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'Restaurants', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Solitude', feature-set => $location));
+
+    my $cavan_option = $desired_future.option();
+
+    $cavan_option.update( name => 'Cold', magnitude => 1);
+    $cavan_option.update( name => 'Wind', magnitude => 1);
+    $cavan_option.update( name => 'Shops', magnitude => 1);
+    $cavan_option.update( name => 'Restaurants', magnitude => 1);
+    $cavan_option.update( name => 'Solitude', magnitude => 3);
+
+    isnt($cavan_option.discrepancy, $desired_future.discrepancy, 'Cavan option has different discrepancy');
+};
+
+# Plan::Forecast::TwoTier - Antarctica option has different discrepancy
+subtest 'Plan::Forecast::TwoTier - Antarctica option has different discrepancy' => {
+
+    my $desired_future = Plan::Forecast::TwoTier.new();
+    my $climate = Plan::FeatureSet.new(name => 'Climate', importance => 2);
+    my $location = Plan::FeatureSet.new(name => 'Location', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Cold', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => 'Wind', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Shops', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'Restaurants', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Solitude', feature-set => $location));
+
+    my $antarctica_option = $desired_future.option();
+
+    $antarctica_option.update( name => 'Cold', magnitude => 3);
+    $antarctica_option.update( name => 'Wind', magnitude => 3);
+    $antarctica_option.update( name => 'Shops', magnitude => 3);
+    $antarctica_option.update( name => 'Restaurants', magnitude => 3);
+    $antarctica_option.update( name => 'Solitude', magnitude => 1);
+
+    isnt($antarctica_option.discrepancy, $desired_future.discrepancy, 'Antarctica option has different discrepancy');
+};
+
+# Plan::Forecast::TwoTier - Cavan is a better option than Antarctica
+subtest 'Plan::Forecast::TwoTier - Cavan is a better option than Antarctica' => {
+
+    my $desired_future = Plan::Forecast::TwoTier.new();
+    my $climate = Plan::FeatureSet.new(name => 'Climate', importance => 2);
+    my $location = Plan::FeatureSet.new(name => 'Location', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Cold', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 3, name => 'Wind', feature-set => $climate));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Shops', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'Restaurants', feature-set => $location));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'Solitude', feature-set => $location));
+
+    my $cavan_option = $desired_future.option();
+    my $antarctica_option = $desired_future.option();
+
+    $cavan_option.update( name => 'Cold', magnitude => 1);
+    $cavan_option.update( name => 'Wind', magnitude => 1);
+    $cavan_option.update( name => 'Shops', magnitude => 1);
+    $cavan_option.update( name => 'Restaurants', magnitude => 1);
+    $cavan_option.update( name => 'Solitude', magnitude => 3);
+
+    $antarctica_option.update( name => 'Cold', magnitude => 3);
+    $antarctica_option.update( name => 'Wind', magnitude => 3);
+    $antarctica_option.update( name => 'Shops', magnitude => 3);
+    $antarctica_option.update( name => 'Restaurants', magnitude => 3);
+    $antarctica_option.update( name => 'Solitude', magnitude => 1);
+
+    ok($antarctica_option.discrepancy > $cavan_option.discrepancy, 'Cavan is a better option than Antarctica');
+};
+
+# Plan::Forecast::ThreeTier - No discrepancy in desired future
+subtest 'Plan::Forecast::ThreeTier - No discrepancy in desired future' => {
+
+    my $desired_future = Plan::Forecast::ThreeTier.new();
+
+    my $joe = Plan::GroupedFeatureSet.new(importance => 2, name => 'joe');
+    my $mary = Plan::GroupedFeatureSet.new(importance => 1, name => 'mary');
+
+    my $toppings = Plan::FeatureSet.new(name => 'Toppings', importance => 2);
+    my $crust = Plan::FeatureSet.new(name => 'Crust', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'tomato_sauce', feature-set => $toppings, grouped-feature-set => $joe));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'olives', feature-set => $toppings, grouped-feature-set => $mary));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'thick', feature-set => $crust, grouped-feature-set => $joe));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'thin', feature-set => $crust, grouped-feature-set => $mary));
+
+    is($desired_future.discrepancy, 0, 'No discrepancy in desired future');
+};
+
+# Plan::Forecast::ThreeTier - Thin crust option has different discrepancy
+subtest 'Plan::Forecast::ThreeTier - Thin crust option has different discrepancy' => {
+
+    my $desired_future = Plan::Forecast::ThreeTier.new();
+
+    my $joe = Plan::GroupedFeatureSet.new(importance => 2, name => 'joe');
+    my $mary = Plan::GroupedFeatureSet.new(importance => 1, name => 'mary');
+
+    my $toppings = Plan::FeatureSet.new(name => 'Toppings', importance => 2);
+    my $crust = Plan::FeatureSet.new(name => 'Crust', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'tomato_sauce', feature-set => $toppings, grouped-feature-set => $joe));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'olives', feature-set => $toppings, grouped-feature-set => $mary));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'thick', feature-set => $crust, grouped-feature-set => $joe));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'thin', feature-set => $crust, grouped-feature-set => $mary));
+
+    my $thin_crust_option = $desired_future.option();
+
+    $thin_crust_option.update( name => 'thick', magnitude => 3);
+
+    isnt($thin_crust_option.discrepancy, $desired_future.discrepancy, 'Thin crust option has different discrepancy');
+};
+
+# Plan::Forecast::ThreeTier - Different pizzas have different discrepancies
+subtest 'Plan::Forecast::ThreeTier - Different pizzas have different discrepancies' => {
+    my $desired_future = Plan::Forecast::ThreeTier.new();
+
+    my $joe = Plan::GroupedFeatureSet.new(importance => 2, name => 'joe');
+    my $mary = Plan::GroupedFeatureSet.new(importance => 1, name => 'mary');
+
+    my $toppings = Plan::FeatureSet.new(name => 'Toppings', importance => 2);
+    my $crust = Plan::FeatureSet.new(name => 'Crust', importance => 1);
+
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'tomato_sauce', feature-set => $toppings, grouped-feature-set => $joe));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 2, name => 'olives', feature-set => $toppings, grouped-feature-set => $mary));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'thick', feature-set => $crust, grouped-feature-set => $joe));
+    $desired_future.add-feature(Plan::Feature.new(base-importance => 1, name => 'thin', feature-set => $crust, grouped-feature-set => $mary));
+
+    my $no_olives_option = $desired_future.option();
+    my $thin_crust_option = $desired_future.option();
+
+    $no_olives_option.update( name => 'olives', magnitude => 3);
+    $thin_crust_option.update( name => 'thick', magnitude => 3);
+
+    isnt($no_olives_option.discrepancy, $thin_crust_option.discrepancy, 'Different pizzas have different discrepancies');
+};

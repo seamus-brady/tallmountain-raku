@@ -46,7 +46,9 @@
     "Scanner::InappropriateContent": "lib/Scanner/InappropriateContent.rakumod",
     "Scanner::NormativeRisk": "lib/Scanner/NormativeRisk.rakumod",
     "Scanner::PromptLeakage": "lib/Scanner/PromptLeakage.rakumod",
-    "Scanner::VulnerableUser": "lib/Scanner/VulnerableUser.rakumod"
+    "Scanner::VulnerableUser": "lib/Scanner/VulnerableUser.rakumod",
+    "Util::Config": "lib/Util/Config.rakumod",
+    "Util::Logger": "lib/Util/Logger.rakumod"
   },
   "resources": [],
   "license": "Write me!",

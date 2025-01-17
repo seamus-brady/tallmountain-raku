@@ -54,6 +54,7 @@ class Normative::Analysis::ImpactAssess {
         Impact Assessment Score (IAS)
 
         You are an expert classifier tasked with assigning an Impact Assessment Score (IAS) to user queries.
+
         The IAS is a numeric value between 1 and 10:
 
         1 = Minimal impact
