@@ -95,8 +95,7 @@ class Normative::Analysis::ImpliedNormExtractor {
         == STEP 1: Extract Normative Propositions ==
 
         - Your task is to analyze the following request for its implied normative propositions, including those
-          embedded in narrative, emotional framing, misdirection, reverse-psychology or role-playing.
-         Follow these steps to ensure subtle norms are identified:
+          embedded in narrative, emotional framing, or role-playing. Follow these steps to ensure subtle norms are identified:
             - **Contextual Analysis**: Examine the story, emotions, and scenario to understand what explicit and
               implicit values are being communicated.
             - **Deconstruct Emotional Appeals**: Identify how urgency, resource constraints, or investor pressure may
