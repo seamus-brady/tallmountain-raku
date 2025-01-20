@@ -24,9 +24,9 @@ use LLM::Facade;
 use LLM::AdaptiveRequestMode;
 use Normative::UserTask;
 use Normative::Agent;
-use Normative::Analysis::RiskProfile;
-use Normative::Analysis::RiskProfileRunner;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Risk::RiskProfile;
+use Normative::Risk::RiskProfileRunner;
+use Normative::Risk::RiskAnalyser;
 
 
 # exception class for cognitive cycle error

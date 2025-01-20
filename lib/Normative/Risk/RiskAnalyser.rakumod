@@ -11,20 +11,20 @@ use v6.d;
 use Util::Config;
 use Util::Logger;
 use Normative::UserTask;
-use Normative::Analysis::RiskProfile;
+use Normative::Risk::RiskProfile;
 use LLM::Messages;
 use LLM::Facade;
 
-class Normative::Analysis::RiskAnalyser {
+class Normative::Risk::RiskAnalyser {
     # This class is responsible for analysing the risk profile and providing a recommendation
 
-    has $.LOGGER = Util::Logger.new(namespace => "<Normative::Analysis::RiskAnalyser>");
+    has $.LOGGER = Util::Logger.new(namespace => "<Normative::Risk::RiskAnalyser>");
 
     our constant ACCEPT_AND_EXECUTE = "Accept and Execute";
     our constant SUGGEST_MODIFICATION = "Suggest Modification";
     our constant REJECT = "Reject";
 
-    has Normative::Analysis::RiskProfile $.risk-profile;
+    has Normative::Risk::RiskProfile $.risk-profile;
     # store the user task so we can pass it to the next stage
     has Normative::UserTask $.user-task;
     has %.counts = ('Low' => 0, 'Moderate' => 0, 'High' => 0, 'Critical' => 0);
@@ -36,6 +36,7 @@ class Normative::Analysis::RiskAnalyser {
             %!counts{$level}++ if %!counts{$level}:exists;
         }
     }
+
 
     method recommend() {
         # runs an analysis on the risk profile and returns a recommendation
@@ -49,20 +50,19 @@ class Normative::Analysis::RiskAnalyser {
         given %.counts {
             when %.counts{'Critical'} > $config.get_config('normative_analysis', 'number_critical_risks_allowed') {
                 self.LOGGER.debug("Critical found - rejecting");
-                return Normative::Analysis::RiskAnalyser::REJECT;
+                return Normative::Risk::RiskAnalyser::REJECT;
             }
             when %.counts{'High'} > $config.get_config('normative_analysis', 'number_high_risks_allowed') {
                 self.LOGGER.debug("High found - rejecting");
-                return Normative::Analysis::RiskAnalyser::REJECT;
+                return Normative::Risk::RiskAnalyser::REJECT;
             }
             when %.counts{'Moderate'} >= $config.get_config('normative_analysis', 'number_moderate_risks_allowed') {
-                say "Too many Moderates found";
-                self.LOGGER.debug("Too many Moderates found - suggesting modification");
-                return Normative::Analysis::RiskAnalyser::SUGGEST_MODIFICATION
+                self.LOGGER.debug("Suggesting modification");
+                return Normative::Risk::RiskAnalyser::SUGGEST_MODIFICATION
             }
             default {
-                self.LOGGER.debug("No Critical or High risks found, nor too many Moderate - accepting and executing");
-                return Normative::Analysis::RiskAnalyser::ACCEPT_AND_EXECUTE;
+                self.LOGGER.debug("Accepting and executing");
+                return Normative::Risk::RiskAnalyser::ACCEPT_AND_EXECUTE;
             }
         }
     }
@@ -76,13 +76,13 @@ class Normative::Analysis::RiskAnalyser {
         my $messages = LLM::Messages.new;
         my Str $recommendation = self.recommend;
         given $recommendation {
-            when Normative::Analysis::RiskAnalyser::REJECT {
+            when Normative::Risk::RiskAnalyser::REJECT {
                 self.LOGGER.debug("Rejecting the prompt...");
                 # no explanation for rejected tasks
                 my Str $response = Util::Config.get_config('reactive_stage', 'threat_detected_error');
                 return $response;
             }
-            when Normative::Analysis::RiskAnalyser::SUGGEST_MODIFICATION {
+            when Normative::Risk::RiskAnalyser::SUGGEST_MODIFICATION {
                 self.LOGGER.debug("Explaining modification request...");
                 my Str $prompt = qq:to/END/;
                 === INSTRUCTIONS ===

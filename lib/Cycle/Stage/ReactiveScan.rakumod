@@ -8,7 +8,7 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
-use Normative::Analysis::RiskAnalyser;
+use Normative::Risk::RiskAnalyser;
 
 class Cycle::Stage::ReactiveScan {
     # holds the results of a reactive scan
@@ -16,7 +16,7 @@ class Cycle::Stage::ReactiveScan {
     has Bool $.prompt-hijack;
     has Str $.inappropriate-content;
     has Hash $.vulnerable-user;
-    has Normative::Analysis::RiskAnalyser $.normative-scan;
+    has Normative::Risk::RiskAnalyser $.normative-scan;
 
     method new-from-results(@results) {
         self.bless(

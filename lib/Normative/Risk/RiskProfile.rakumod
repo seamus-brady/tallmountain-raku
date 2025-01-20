@@ -10,9 +10,9 @@
 use v6.d;
 use LLM::Facade;
 use LLM::Messages;
-use Normative::Analysis::RiskEntry;
+use Normative::Risk::RiskEntry;
 
-class Normative::Analysis::RiskProfile {
+class Normative::Risk::RiskProfile {
     # a class to hold a list of RiskEntry objects
 
     # Declare an attribute to hold a list of RiskEntry objects
@@ -20,7 +20,7 @@ class Normative::Analysis::RiskProfile {
 
     # Method to add a new entry to the data list
     method add-entry(%entry) {
-        @!data.push(Normative::Analysis::RiskEntry.new(|%entry));
+        @!data.push(Normative::Risk::RiskEntry.new(|%entry));
     }
 
     # Method to remove an entry at a specific index

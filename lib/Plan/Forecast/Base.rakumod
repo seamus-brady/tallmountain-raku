@@ -8,53 +8,62 @@
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 use v6.d;
+use Plan::Feature;
 
 class Plan::Forecast::Base {
     # Base class for forecasts
 
     # Features as a set and an optional scaling unit
-    has Set $.features is rw = Set.new;
+    has @.features is rw;
     has Int $.scaling-unit is rw;
-
-    # Abstract method for scaling unit
-    method scaling-unit() {
-        die "This method must be implemented by subclasses";
-    }
 
     # Calculate the discrepancy for this forecast
     method discrepancy() {
-        my $total-discrepancies = [+] $.features.map(*.calculated-discrepancy);
+        my $total-discrepancies = 0;
+        for @.features -> $feature {
+            say $feature;
+            $total-discrepancies += $feature.calculated-discrepancy;
+        }
         return $total-discrepancies / self.scaling-unit;
     }
 
     # Deep copy of the object
     method option() {
-        return self.clone;
+        my @copied-features = @.features.map({ $_.clone });
+        return self.clone(features => @copied-features);
     }
 
     # Get a feature by name
     method get-feature(Str $name) {
-        for $.features -> $feature {
+        for @.features -> $feature {
             return $feature if $feature.name eq $name;
         }
-        die "No feature with name '$name' found";
+    }
+
+    method add-feature(Plan::Feature $feature) {
+        if self.get-feature($feature.name) {
+            die "Feature with name '$feature.name' already exists";
+        }
+        @.features.push($feature);
     }
 
     # Update a feature's magnitude
-    method update(Str $name, Int $magnitude) {
+    method update(Str :$name!, Int :$magnitude!) {
         my $feature = self.get-feature($name);
 
         # Remove the old feature
-        $.features -= $feature;
+        @.features .= grep(* !=== $feature);
 
         # Add the updated feature
-        $.features += Feature.new(
+        self.add-feature( Plan::Feature.new(
                 base-importance => $feature.base-importance,
                 name            => $feature.name,
                 magnitude       => $magnitude,
                 description     => $feature.description,
                 feature-set     => $feature.feature-set,
                 grouped-feature-set => $feature.grouped-feature-set
+            )
         );
+
     }
 }

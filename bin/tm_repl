@@ -12,14 +12,19 @@
 use v6.d;
 use lib 'lib';
 use Util::Logger;
+use Util::Config;
 use Normative::Agent;
-use Normative::Analysis::ImpliedNormExtractor;
+use Normative::Extraction::ImpliedNormExtractor;
 use Normative::Analysis::SelfDiagnostic;
 use Normative::Analysis::UserIntent;
 use Normative::Analysis::ImpactAssess;
+use Normative::Risk::RiskAnalyser;
+use  Normative::Risk::RiskProfileRunner;
+use Plan::Feature;
+use Plan::Forecast::OneTier;
 use Cycle::Cognitive;
 use Cycle::Payload::TaintedString;
-Normative::Analysis::RiskAnalyser;
+
 
 # set up logger
 my $APP_LOGGER = Util::Logger.new(namespace => "<TallMountain App>");
@@ -93,7 +98,7 @@ sub printf-nrp($risk_profile) {
         say "    User Norm Prop     : { $entry.UserNormPropValue }";
         say ""; # Blank line for separation
     }
-    my $analysis = Normative::Analysis::RiskAnalyser.new(risk-profile => $risk_profile);
+    my $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk_profile);
     say "Recommendation:";
     say $analysis.recommend;
     say "Explanation:";
@@ -135,14 +140,15 @@ sub MAIN() {
                 :np <query> - Extracts normative propositions from a query
                 :uis <query>     - Gets the User Intent Score for the query
                 :ias <query>     - Gets the Impact Assessment Score for the query
-                :nrp <query>     - Get a Normative Risk Profile for the query";
+                :nrp <query>     - Get a Normative Risk Profile for the query
+                :rta <query>     - Get a Reactive Threat Analysis for the query";
                 next;
             }
 
             if $line.contains(':np') {
                 my @parts = $line.split(/\s+/);
                 my $query = @parts[1..*].join(" ");
-                my $norm_extractor = Normative::Analysis::ImpliedNormExtractor.new;
+                my $norm_extractor = Normative::Extraction::ImpliedNormExtractor.new;
                 my %norm_props = $norm_extractor.extract-norm-props($query);
                 printf-implied-propositions(%norm_props);
                 next;
@@ -172,9 +178,87 @@ sub MAIN() {
                 my $user_task = Normative::UserTask.new.get-from-statement($query);
                 my $agent = Normative::Agent.new;
                 $agent.init;
-                my Normative::Analysis::RiskProfileRunner $norm-risk-profiler = Normative::Analysis::RiskProfileRunner.new;
-                my Normative::Analysis::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+                my Normative::Risk::RiskProfileRunner $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+                my Normative::Risk::RiskProfile $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
                 printf-nrp($risk-profile);
+                next;
+            }
+
+            if $line.contains(':rta') {
+                my @parts = $line.split(/\s+/);
+                my $query = @parts[1..*].join(" ");
+
+                my $uis_analysis = Normative::Analysis::UserIntent.new;
+                my $ias_analysis = Normative::Analysis::ImpactAssess.new;
+                my $user_task = Normative::UserTask.new.get-from-statement($query);
+                my $agent = Normative::Agent.new;
+                $agent.init;
+
+                my %uis;
+                my %ias;
+                my $analysis;
+
+                my @promises = (
+                    start { %uis = $uis_analysis.analyse($query);},
+                    start {  %ias = $ias_analysis.analyse($query);},
+                    start {
+                        my $norm-risk-profiler = Normative::Risk::RiskProfileRunner.new;
+                        my $risk-profile = $norm-risk-profiler.profile($user_task, $agent);
+                        $analysis = Normative::Risk::RiskAnalyser.new(risk-profile => $risk-profile);
+                    },
+                );
+                await @promises;
+
+                # first create a desired future where there is discrepancy
+                my $desired_future = Plan::Forecast::OneTier.new();
+                $desired_future.add-feature(
+                        Plan::Feature.new(
+                                base-importance => 3,
+                                name => "Normative Risk",
+                                description => "Normative Risk Score"));
+                $desired_future.add-feature(
+                        Plan::Feature.new(
+                                base-importance => 2,
+                                name => "Impact Assessment",
+                                description => "Impact Assessment Score"));
+                $desired_future.add-feature(
+                        Plan::Feature.new(
+                                base-importance => 2,
+                                name => "User Intent",
+                                description => "User Intent Score"));
+                say $desired_future.discrepancy;
+
+
+                # set up the future as if we run the user task
+                my Plan::Forecast::OneTier $user_task_future = $desired_future.option();
+
+                # update for the user intent score if it is over moderate (5/10)
+                if %uis<UserIntentScore> >= 5 {
+                    my Int $uis_score = %uis<UserIntentScore>;
+                    # 1 is bad, 10 is good, so we need to subtract from 10
+                    $user_task_future.update(name => "User Intent", magnitude => (10 - $uis_score));
+                }
+
+                # update for the impact assessment score if it is over moderate (4/10)
+                if %ias<ImpactAssessmentScore> >= 4 {
+                    my Int $ias_score = %ias<ImpactAssessmentScore>;
+                    # 1 is harmless, 10 is impactful
+                    $user_task_future.update(name => "Impact Assessment", magnitude => $ias_score);
+                }
+
+                if $analysis.recommend eq  Normative::Risk::RiskAnalyser::ACCEPT_AND_EXECUTE {
+                    $user_task_future.update(name => "Normative Risk", magnitude => 0);
+                } else {
+                    $user_task_future.update(name => "Normative Risk", magnitude => 10);
+                }
+                my $reactive-threat-threshold = Util::Config.get_config('reactive_stage', 'threat_detected_threshold');
+                say "The current Reactive Threat Threshold is $reactive-threat-threshold";
+                say "This task has been classified as Reactive Threat Threshold {$user_task_future.discrepancy}";
+                if $user_task_future.discrepancy >= $reactive-threat-threshold {
+                    say "The system will not run this user task.";
+                } else {
+                        say "The system will run this user task.";
+                }
                 next;
             }
 
