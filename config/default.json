@@ -1,6 +1,14 @@
 {
   "llm": {
-    "default_llm_provider": "openai"
+    "default_llm_provider": "ubicloud"
+  },
+  "openai": {
+    "openai_chat_completion_model": "gpt-4o-mini",
+    "openai_structured_output_attempts": 4
+  },
+  "ubicloud": {
+    "ubicloud_chat_completion_model": "llama-3-3-70b-it",
+    "stream_support": "false"
   },
   "norm_prop_extractor": {
     "max_extracted_norms": 5
@@ -12,10 +20,6 @@
   "chat_ui": {
     "chat_ui_server": "0.0.0.0",
     "chat_ui_port": 10000
-  },
-  "openai": {
-    "openai_chat_completion_model": "gpt-4o-mini",
-    "openai_structured_output_attempts": 4
   },
   "reactive_scanner_toggles": {
     "PromptLeakage": "OFF",

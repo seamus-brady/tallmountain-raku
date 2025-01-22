@@ -19,11 +19,19 @@ class LLM::Facade {
     has Str $.default_client = Util::Config.get_config('llm', 'default_llm_provider');
     has LLM::Role::Client $.client;
 
+    my Str $OPENAI = "open_ai";
+    my Str $UBICLOUD = "ubicloud";
+
+
     has $.LOGGER = Util::Logger.new(namespace => "<LLM::Facade>");
 
     submethod TWEAK() {
         given $!default_client {
-            when "open_ai" {
+            when $OPENAI {
+                $!LOGGER.info("Using OpenAI as the default provider");
+                $!client = LLM::Client::OpenAI.new();
+            }
+            when $UBICLOUD {
                 $!LOGGER.info("Using OpenAI as the default provider");
                 $!client = LLM::Client::OpenAI.new();
             }
