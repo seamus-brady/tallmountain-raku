@@ -2,7 +2,7 @@
 
 TallMountain-Raku is an **AI agent framework in Raku** designed around a formal **machine ethics system**. At its core is a **normative calculus** inspired by Lawrence C. Becker’s *A New Stoicism*, adapted into a computable decision procedure. The framework integrates with a **Large Language Model (LLM)** to provide natural language understanding and generation, while ensuring that all outputs are filtered through its ethical reasoning system.
 
-The name **TallMountain** comes from **TalLLMounttain**, symbolizing layered ethical reasoning and high-level guidance.
+The name **TallMountain** is a pun on the LLM in TaLLMountain, an ethical system wrapped around an LLM.
 
 ---
 
