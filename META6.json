@@ -44,6 +44,6 @@
     "Util::Logger": "lib/Util/Logger.rakumod"
   },
   "resources": [],
-  "license": "Write me!",
+  "license": "MIT",
   "source-url": "Write me!"
 }
