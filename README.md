@@ -11,6 +11,7 @@ The name **TallMountain** is a pun on the LLM in TaLLMountain, an ethical system
 ## Table of Contents
 
 * [Executive Summary](#executive-summary)
+* [Vision](vision.md)
 * [Explanation](#explanation)
 * [Background & Inspirations](#background-inspirations)
 * [Philosophical Foundations](#philosophical-foundations)
@@ -29,7 +30,9 @@ The name **TallMountain** is a pun on the LLM in TaLLMountain, an ethical system
 
 * TallMountain is a scaffolding framework for language models that gives them a primitive form of *virtue ethics*. It consistently applies a fixed “code of conduct.”
 * When a user makes a request, TallMountain extracts the implied values, compares them against its own internal norms, and performs a risk assessment. If the request aligns, it proceeds; if not, it refuses, ensuring predictable and ethically consistent behavior.
-* The long-term vision is a dependable, trustworthy synthetic individual—more like a guide dog than a human-like AI—useful within narrow, safe boundaries.
+* The long-term vision is a dependable, trustworthy synthetic individual—more like a guide dog than a human-like AI—useful within narrow, safe boundaries.  
+* For a detailed statement of this vision, see [vision.md](vision.md).
+
 
 ---
 
